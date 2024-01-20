@@ -73,11 +73,10 @@ jobs:
                   echo "current_tag=refs/tags/${TAG}" >> $GITHUB_ENV
 
             # ----------------------------------------------
-            #    Create empty configuration file at
-            #    /home/runner/.config/halp/config.toml
+            #    copy config file to runner
             # ----------------------------------------------
             - name: Create empty configuration file
-              run: mkdir -p /home/runner/.config/halp && touch /home/runner/.config/halp/config.toml
+              run: mkdir -p /home/runner/.config/halp && cp ./src/halp/config/default_config.toml /home/runner/.config/halp/config.toml
 
             # ----------------------------------------------
             # Test and then build the package
