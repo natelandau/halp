@@ -7,9 +7,9 @@ from typing import cast
 from loguru import logger
 from parsy import ParseError
 
-from halp.constants import CONFIG, UNKNOWN_CATEGORY_NAME
-from halp.models import Category, File
-from halp.utils.text_parsers import parse_file
+from halper.constants import CONFIG, UNKNOWN_CATEGORY_NAME
+from halper.models import Category, File
+from halper.utils.text_parsers import parse_file
 
 
 class Parser:

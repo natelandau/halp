@@ -5,7 +5,7 @@ from collections.abc import Generator
 
 from parsy import generate, regex, string
 
-from halp.constants import CommandType
+from halper.constants import CommandType
 
 # Define shared grammar elements for parsing.
 WS = regex(r"[ \t]+").desc("whitespace")
@@ -32,7 +32,7 @@ def parse_alias() -> Generator[None, None, dict[str, str]]:
                         values extracted from the alias definition.
     """
     # Grammar
-    alias_identifier = WS.optional() >> regex(r"alias", flags=re.I) << WS
+    alias_identifier = WS.optional() >> regex(r"alias", flags=re.IGNORECASE) << WS
     alias_name = regex(r"[^=\s\\\$`]+") << string("=")
 
     # Parse
@@ -68,7 +68,7 @@ def parse_export() -> Generator[None, None, dict[str, str]]:
                         extracted from the export definition.
     """
     # Grammar
-    export_identifier = WS.optional() >> regex(r"export", flags=re.I) << WS
+    export_identifier = WS.optional() >> regex(r"export", flags=re.IGNORECASE) << WS
     export_name = regex(r"[^=\s\"'\$\\`]+") << string("=")
 
     # Parse
@@ -102,7 +102,7 @@ def parse_function() -> Generator[None, None, dict[str, str]]:
         dict[str, str]: A dictionary with 'name', 'args', 'code', and 'description' keys, representing the function's name, arguments, body, and comment respectively.
     """
     # Grammar
-    func_identifier = WS.optional() >> regex(r"func(tion)?", flags=re.I).optional() << WS
+    func_identifier = WS.optional() >> regex(r"func(tion)?", flags=re.IGNORECASE).optional() << WS
     func_name = WS.optional() >> regex(r"[\w-]+") << string("(")
     func_args = regex(r"[^)]*") << string(")")
     func_start = string("{")
@@ -167,9 +167,9 @@ def parse_file() -> Generator[None, None, dict[str, str | CommandType]]:
     # Grammar
 
     # Match any line that does not start with 'alias', 'export', or 'function' and does not contain a function definition
-    not_alias = regex(r"(?!alias)", flags=re.I).desc("not_alias")
-    not_export = regex(r"(?!export [\w-]+=)", flags=re.I).desc("not_export")
-    not_function = regex(r"(?!(func(tion)? )?[\w-]+\(\))", flags=re.I).desc("not_function")
+    not_alias = regex(r"(?!alias)", flags=re.IGNORECASE).desc("not_alias")
+    not_export = regex(r"(?!export [\w-]+=)", flags=re.IGNORECASE).desc("not_export")
+    not_function = regex(r"(?!(func(tion)? )?[\w-]+\(\))", flags=re.IGNORECASE).desc("not_function")
 
     non_matching_line = (
         WS.optional() >> (not_alias + not_export + not_function) << regex(r".*") << NEWLINE

@@ -6,7 +6,7 @@
     authors     = ["Nate Landau <github@natenate.org>"]
     description = "One stop shop for command line help."
     homepage    = "https://github.com/natelandau/halp"
-    keywords    = []
+    keywords    = ["bash", "cli", "dotfiles", "shell", "zsh"]
     license     = "GNU AFFERO"
     name        = "halper"
     readme      = "README.md"
@@ -14,7 +14,7 @@
     version     = "0.0.2"
 
     [tool.poetry.scripts] # https://python-poetry.org/docs/pyproject/#scripts
-        halp = "halp.cli:app"
+        halp = "halper.cli:app"
 
     [tool.poetry.dependencies]
         loguru = "^0.7.2"
@@ -54,7 +54,7 @@
     tag_format                 = "v$version"
     update_changelog_on_bump   = true
     version                    = "0.0.2"
-    version_files              = ["pyproject.toml:version", "src/halp/__version__.py:__version__"]
+    version_files              = ["pyproject.toml:version", "src/halper/__version__.py:__version__"]
 
 [tool.coverage.report] # https://coverage.readthedocs.io/en/latest/config.html#report
     exclude_lines = [
@@ -74,7 +74,7 @@
         'raise typer\.Exit',
     ]
     fail_under = 50
-    omit = ["src/halp/utils/errors.py"]
+    omit = ["src/halper/utils/errors.py"]
     precision = 1
     show_missing = true
     skip_covered = true

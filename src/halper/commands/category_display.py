@@ -5,8 +5,8 @@ import typer
 from loguru import logger
 from rich.columns import Columns
 
-from halp.models import Category
-from halp.utils import console, list_commands
+from halper.models import Category
+from halper.utils import console, list_commands
 
 
 def category_display(

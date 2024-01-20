@@ -6,8 +6,8 @@ from unittest.mock import MagicMock
 import pytest
 from typer.testing import CliRunner
 
-from halp.cli import app
-from halp.models import Category, Command, CommandCategory, Database, File
+from halper.cli import app
+from halper.models import Category, Command, CommandCategory, Database, File
 from tests.helpers import strip_ansi
 
 runner = CliRunner()
@@ -247,7 +247,7 @@ class TestIndexing:
         self._clear_test_data()
 
         # GIVEN a mock configuration
-        mock_get = mocker.patch("halp.models.indexer.CONFIG.get")
+        mock_get = mocker.patch("halper.models.indexer.CONFIG.get")
 
         mock_get.side_effect = lambda key, default=None, pass_none=False: {
             "file_globs": [f"{fixtures}/{glob}" for glob in globs],
@@ -286,7 +286,7 @@ class TestIndexing:
         test_file = fixture_file("alias one='echo one'\nalias two='echo two'\n")
 
         # GIVEN a mock configuration
-        mock_get = mocker.patch("halp.models.indexer.CONFIG.get")
+        mock_get = mocker.patch("halper.models.indexer.CONFIG.get")
         mock_get.side_effect = lambda key, default=None, pass_none=False: {
             "file_globs": [f"{test_file}"],  # Example values
             "file_exclude_regex": "",

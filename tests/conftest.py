@@ -7,8 +7,8 @@ from pathlib import Path
 import pytest
 from peewee import SqliteDatabase
 
-from halp.utils import console  # isort:skip
-from halp.models import (
+from halper.utils import console  # isort:skip
+from halper.models import (
     Category,
     Command,
     CommandCategory,
@@ -138,9 +138,9 @@ def mock_config_get(mocker, tmp_path):
         if not config:
             config = default_mock_config
         # Mock the CONFIG.get method
-        mock_get = mocker.patch("halp.models.indexer.CONFIG.get")
-        # mock_get = mocker.patch("halp.models.parser.CONFIG.get")
-        # mock_get = mocker.patch("halp.cli.CONFIG.get")
+        mock_get = mocker.patch("halper.models.indexer.CONFIG.get")
+        # mock_get = mocker.patch("halper.models.parser.CONFIG.get")
+        # mock_get = mocker.patch("halper.cli.CONFIG.get")
         # Configure the mock to return specific values based on the called arguments
         mock_get.side_effect = lambda key, default=None, pass_none=False: config.get(key, default)
 

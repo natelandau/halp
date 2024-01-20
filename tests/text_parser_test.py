@@ -3,8 +3,8 @@
 
 import pytest
 
-from halp.constants import CommandType
-from halp.utils.text_parsers import parse_alias, parse_export, parse_file, parse_function
+from halper.constants import CommandType
+from halper.utils.text_parsers import parse_alias, parse_export, parse_file, parse_function
 
 SAMPLE_FILE = """
 
