@@ -11,7 +11,7 @@
     name        = "halper"
     readme      = "README.md"
     repository  = "https://github.com/natelandau/halp"
-    version     = "0.0.3"
+    version     = "0.0.4"
 
     [tool.poetry.scripts] # https://python-poetry.org/docs/pyproject/#scripts
         halp = "halper.cli:app"
@@ -53,7 +53,7 @@
     changelog_merge_prerelease = true
     tag_format                 = "v$version"
     update_changelog_on_bump   = true
-    version                    = "0.0.3"
+    version                    = "0.0.4"
     version_files              = ["pyproject.toml:version", "src/halper/__version__.py:__version__"]
 
 [tool.coverage.report] # https://coverage.readthedocs.io/en/latest/config.html#report
