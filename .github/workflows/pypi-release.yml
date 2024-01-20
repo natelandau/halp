@@ -44,6 +44,12 @@ jobs:
               uses: actions/checkout@v4
 
             # ----------------------------------------------
+            #    copy config file to runner
+            # ----------------------------------------------
+            - name: Create empty configuration file
+              run: mkdir -p /home/runner/.config/halp && cp ./src/halp/config/default_config.toml /home/runner/.config/halp/config.toml
+
+            # ----------------------------------------------
             # Test before building and uploading the package
             # ----------------------------------------------
             - name: run poetry checks
