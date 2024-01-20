@@ -4,13 +4,13 @@
 
 [tool.poetry]
     authors     = ["Nate Landau <github@natenate.org>"]
-    description = "One stop shop for command line help"
-    homepage    = "https://some.url/to/the/package.git"
+    description = "One stop shop for command line help."
+    homepage    = "https://github.com/natelandau/halp"
     keywords    = []
-    license     = ""
-    name        = "halp"
+    license     = "GNU AFFERO"
+    name        = "halper"
     readme      = "README.md"
-    repository  = "https://some.url/to/the/package.git"
+    repository  = "https://github.com/natelandau/halp"
     version     = "0.0.1"
 
     [tool.poetry.scripts] # https://python-poetry.org/docs/pyproject/#scripts
