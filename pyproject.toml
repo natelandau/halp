@@ -6,7 +6,7 @@
     authors     = ["Nate Landau <github@natenate.org>"]
     description = "One stop shop for command line help."
     homepage    = "https://github.com/natelandau/halp"
-    keywords    = []
+    keywords    = ["bash", "cli", "dotfiles", "shell", "zsh"]
     license     = "GNU AFFERO"
     name        = "halper"
     readme      = "README.md"
