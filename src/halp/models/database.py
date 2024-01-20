@@ -170,14 +170,9 @@ class Database:
             msg = f"Directory does not exist: {DB_PATH.parent}"
             raise errors.AppDirectoryError(msg)
 
-        # Check if the file exists (if it's supposed to)
-        if not DB_PATH.exists():
-            msg = f"Directory does not exist: {DB_PATH.parent}"
-            raise errors.AppDirectoryError(msg)
-
         # Check file permissions
-        if not os.access(DB_PATH, os.W_OK):
-            msg = f"Write permission is not available on {DB_PATH}"
+        if not os.access(DB_PATH.parent, os.W_OK):
+            msg = f"Write permission is not available on {DB_PATH.parent}"
             raise errors.AppDirectoryError(msg)
 
         self.db.connect()
