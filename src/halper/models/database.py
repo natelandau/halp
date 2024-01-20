@@ -7,8 +7,8 @@ from peewee import BooleanField, ForeignKeyField, Model, PeeweeException, Sqlite
 from rich.syntax import Syntax
 from rich.table import Table
 
-from halp.constants import APP_DIR, DB, DB_PATH, CommandType
-from halp.utils import errors
+from halper.constants import APP_DIR, DB, DB_PATH, CommandType
+from halper.utils import errors
 
 
 class BaseModel(Model):

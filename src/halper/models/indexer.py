@@ -10,8 +10,8 @@ from peewee import PeeweeException
 from rich.progress import track
 from rich.table import Table
 
-from halp.constants import CONFIG, DB
-from halp.models import (
+from halper.constants import CONFIG, DB
+from halper.models import (
     Category,
     Command,
     CommandCategory,
@@ -23,7 +23,7 @@ from halp.models import (
     TempCommandCategory,
     TempFile,
 )
-from halp.utils import console, errors
+from halper.utils import console, errors
 
 
 class Indexer:

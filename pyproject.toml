@@ -14,7 +14,7 @@
     version     = "0.0.2"
 
     [tool.poetry.scripts] # https://python-poetry.org/docs/pyproject/#scripts
-        halp = "halp.cli:app"
+        halp = "halper.cli:app"
 
     [tool.poetry.dependencies]
         loguru = "^0.7.2"

@@ -7,10 +7,10 @@ import peewee
 import typer
 from loguru import logger
 
-from halp.__version__ import __version__
+from halper.__version__ import __version__
 
-from halp.utils import console, errors, instantiate_logger  # isort:skip
-from halp.commands import (
+from halper.utils import console, errors, instantiate_logger  # isort:skip
+from halper.commands import (
     category_display,
     command_display,
     command_list,
@@ -20,8 +20,8 @@ from halp.commands import (
     unhide_commands,
     view_config,
 )
-from halp.constants import APP_DIR, CONFIG, DB, UNKNOWN_CATEGORY_NAME
-from halp.models import Database, Indexer
+from halper.constants import APP_DIR, CONFIG, DB, UNKNOWN_CATEGORY_NAME
+from halper.models import Database, Indexer
 
 app = typer.Typer(add_completion=False, rich_markup_mode="rich")
 
@@ -32,7 +32,7 @@ typer.rich_utils.STYLE_HELPTEXT = ""
 def version_callback(value: bool) -> None:
     """Print version and exit."""
     if value:
-        console.print(f"{__package__} version: {__version__}")
+        console.print(f"halp version: {__version__}")
         raise typer.Exit()
 
 

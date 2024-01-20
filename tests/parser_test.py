@@ -3,8 +3,8 @@
 
 import pytest
 
-from halp.constants import UNKNOWN_CATEGORY_NAME, CommandType
-from halp.models import Category, Command, CommandCategory, File, Parser
+from halper.constants import UNKNOWN_CATEGORY_NAME, CommandType
+from halper.models import Category, Command, CommandCategory, File, Parser
 
 
 @pytest.mark.usefixtures("mock_db")
@@ -26,7 +26,7 @@ class TestParserClass:
         test_file = fixture_file()
         mock_config_file = {"case_sensitive": True}
         mocker.patch(
-            "halp.models.parser.CONFIG.get",
+            "halper.models.parser.CONFIG.get",
             side_effect=lambda k, d=None, **kwargs: mock_config_file.get(k, d),
         )
 
@@ -167,7 +167,7 @@ class TestParserClass:
             "command_name_ignore_regex": "_",
         }
         mocker.patch(
-            "halp.models.parser.CONFIG.get",
+            "halper.models.parser.CONFIG.get",
             side_effect=lambda k, d=None, **kwargs: mock_config_file.get(k, d),
         )
 
@@ -179,7 +179,6 @@ class TestParserClass:
         if not expected:
             assert result == expected
         else:
-            # debug("result", result[0])
             assert result[0]["code"] == expected[0]["code"]
             assert result[0]["description"] == expected[0]["description"]
             assert result[0]["name"] == expected[0]["name"]

@@ -3,8 +3,8 @@
 import typer
 from rich.syntax import Syntax
 
-from halp.constants import CONFIG
-from halp.utils import console
+from halper.constants import CONFIG
+from halper.utils import console
 
 
 def view_config() -> None:

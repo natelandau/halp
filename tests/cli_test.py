@@ -5,7 +5,7 @@ import re
 
 from typer.testing import CliRunner
 
-from halp.cli import app
+from halper.cli import app
 from tests.helpers import strip_ansi
 
 runner = CliRunner()

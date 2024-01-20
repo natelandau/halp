@@ -3,8 +3,8 @@
 import typer
 from loguru import logger
 
-from halp.models import Command
-from halp.utils import console, list_commands
+from halper.models import Command
+from halper.utils import console, list_commands
 
 
 def list_hidden_commands(full_output: bool = False, only_exports: bool = False) -> None:

@@ -8,7 +8,7 @@ from pathlib import Path
 import pytest
 import typer
 
-from halp.config.config import PATH_CONFIG_DEFAULT, Config
+from halper.config.config import PATH_CONFIG_DEFAULT, Config
 
 
 def test_init_config_1():

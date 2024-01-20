@@ -10,7 +10,7 @@ import typer
 from loguru import logger
 from rich import print as rprint
 
-from halp.utils import errors
+from halper.utils import errors
 
 PATH_CONFIG_DEFAULT = Path(__file__).parent / "default_config.toml"
 

@@ -6,7 +6,7 @@ from pathlib import Path
 import typer
 from peewee import SqliteDatabase
 
-from halp.config import Config
+from halper.config import Config
 
 
 class CommandType(Enum):

@@ -9,9 +9,9 @@ import typer
 from loguru import logger
 from rich.columns import Columns
 
-from halp.constants import CommandType
-from halp.models import Command
-from halp.utils import console, get_tldr_command
+from halper.constants import CommandType
+from halper.models import Command
+from halper.utils import console, get_tldr_command
 
 
 def command_list(

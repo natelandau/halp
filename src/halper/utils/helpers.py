@@ -4,8 +4,8 @@ import sh
 from rich import box
 from rich.table import Table
 
-from halp.constants import CommandType
-from halp.models.database import Category, Command, CommandCategory
+from halper.constants import CommandType
+from halper.models.database import Category, Command, CommandCategory
 
 
 def list_commands(  # noqa: PLR0917
