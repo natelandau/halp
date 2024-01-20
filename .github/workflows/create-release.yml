@@ -6,11 +6,9 @@ on:
         tags:
             - "v*"
 
-
 concurrency:
     group: ${{ github.workflow }}-${{ github.ref }}
     cancel-in-progress: true
-
 
 permissions:
     contents: write
@@ -75,6 +73,13 @@ jobs:
                   echo "current_tag=refs/tags/${TAG}" >> $GITHUB_ENV
 
             # ----------------------------------------------
+            #    Create empty configuration file at
+            #    /home/runner/.config/halp/config.toml
+            # ----------------------------------------------
+            - name: Create empty configuration file
+              run: mkdir -p /home/runner/.config/halp && touch /home/runner/.config/halp/config.toml
+
+            # ----------------------------------------------
             # Test and then build the package
             # ----------------------------------------------
 
@@ -96,7 +101,6 @@ jobs:
                   TAG=$(git describe HEAD --tags --abbrev=0)
                    echo "CURRENT_TAG=refs/tags/${TAG}" >> $GITHUB_ENV
 
-
             - name: Get notes
               id: generate_notes
               uses: anmarkoulis/commitizen-changelog-reader@master
@@ -104,11 +108,9 @@ jobs:
                   tag_name: ${{ env.CURRENT_TAG }}
                   changelog: CHANGELOG.md
 
-
             # ----------------------------------------------
             # Build draft release (Note: Will need to manually publish)
             # ----------------------------------------------
-
 
             - name: Create Release Draft
               uses: softprops/action-gh-release@v1

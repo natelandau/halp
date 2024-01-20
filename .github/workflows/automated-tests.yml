@@ -68,6 +68,13 @@ jobs:
               uses: actions/checkout@v4
 
             # ----------------------------------------------
+            #    Create empty configuration file at
+            #    /home/runner/.config/halp/config.toml
+            # ----------------------------------------------
+            - name: Create empty configuration file
+              run: mkdir -p /home/runner/.config/halp && touch /home/runner/.config/halp/config.toml
+
+            # ----------------------------------------------
             #    Install poetry and project dependencies
             # ----------------------------------------------
 
