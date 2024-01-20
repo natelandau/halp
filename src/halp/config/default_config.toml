@@ -1,0 +1,13 @@
+case_sensitive            = false # Whether or not to match case sensitively with regexes
+command_name_ignore_regex = ''    # Exclude commands who's names match this regex
+file_exclude_regex        = ''    # Exclude files who's paths match this regex
+file_globs                = []    # Absolute path globs to files to parse for commands
+
+[categories] # Commands are matched against these categories
+    # [categories.example]
+    #     category_name = "" # The name of the category
+    #     code_regex    = '' # Regex to match within the code
+    #     comment_regex = '' # Regex to match a comment on the same line as an alias/function definition or a comment on the first line of a function
+    #     description   = "" # The description of this category
+    #     name_regex    = '' # Regex to match the name of the command
+    #     path_regex    = '' # Regex to match the path of the file

@@ -1,0 +1,10 @@
+[default]
+    default.locale = "en_us"
+
+    [default.extend-words]
+		halp = "halp" # Package name
+        # curren = "curren" # Used in the context of '¤100'
+        # nd     = "nd"     # Used in the context of '2nd'
+
+[files]
+    extend-exclude = ["*_cache", ".venv"]
