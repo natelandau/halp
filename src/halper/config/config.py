@@ -83,7 +83,7 @@ class Config:
 
         msg = (
             "[bold]halp requires a configuration file to run.[/bold]",
-            "Empty file created, edit file before continuing",
+            "Empty configuration created, edit before continuing",
         )
 
         rprint("\n".join(msg))
