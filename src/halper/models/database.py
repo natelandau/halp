@@ -187,6 +187,10 @@ class Database:
         """Close database."""
         self.db.close()
 
+    def is_empty(self) -> bool:
+        """Check if database is empty."""
+        return not self.has_data([Category, Command, CommandCategory, File])
+
     @staticmethod
     def clear_data(tables: list[Model]) -> None:
         """Clear all data from the specified Peewee ORM tables.

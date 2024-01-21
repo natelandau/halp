@@ -168,6 +168,12 @@ def main(  # noqa: PLR0917, C901
         logger.exception(f"Unable to instantiate database: {e}")
         raise typer.Exit(code=1) from e
 
+    if db.is_empty() and (not index and not index_full):
+        console.print(
+            "No commands found.\nMake sure your configuration file is up to date and run [code]halp --index[/code] to index your commands."
+        )
+        raise typer.Exit(code=1)
+
     if index or index_full:
         indexer = Indexer(rebuild=index_full)
         indexer.do_index()
@@ -202,6 +208,10 @@ def main(  # noqa: PLR0917, C901
 
     if input_string:
         command_display(input_string, full_output=full_output)
+
+    if not input_string:
+        typer.echo(typer.style("No command specified", fg="red", bold=True))
+        raise typer.Exit(code=1)
 
 
 if __name__ == "__main__":

@@ -1,7 +1,5 @@
 # Halp
 
-Your one stop shop for command line help.
-
 If you're anything like me, you have numerous shell aliases and functions in your dotfiles that you've written to make your life easier. You've also probably forgotten what half of them are called and how to use them. Halper aims to solve that problem by providing a single command that will print all your custom commands with a brief description of what they do.
 
 Point Halp at the appropriate dotfiles and it will index all your custom commands and add them to categories you specify. Then you can query it to find your commands and their usage.
@@ -12,7 +10,6 @@ Key features:
 -   Customizable categories
 -   Customizable regexes for matching commands
 -   Uses a SQLite database for fast querying
--   Integrates with [TLDR pages](https://tldr.sh/) (If installed)
 
 As an added bonus, it will also query [TLDR pages](https://tldr.sh/) for any commands that you don't have a custom command for. To enable this feature you must have a TLDR client installed and in your PATH. I recommend [TealDeer](https://github.com/dbrgn/tealdeer)
 
@@ -22,6 +19,12 @@ Remind yourself what a command does
 
 ```bash
 halp <command>
+```
+
+See full output of a command
+
+```bash
+halp --full  <command>
 ```
 
 List all your custom commands
@@ -46,6 +49,12 @@ Hide a command that you don't want to see
 
 ```bash
 halp --hide <command ID>
+```
+
+Edit the configuration file
+
+```bash
+halp --edit-config
 ```
 
 See all options
