@@ -1,7 +1,7 @@
 """Halp CLI."""
 
 from pathlib import Path
-from typing import Annotated, Optional, cast
+from typing import Annotated, Optional
 
 import peewee
 import typer
@@ -14,11 +14,9 @@ from halper.commands import (
     category_display,
     command_display,
     command_list,
-    # create_index,
     hide_commands,
     list_hidden_commands,
     unhide_commands,
-    view_config,
 )
 from halper.constants import APP_DIR, CONFIG, DB, UNKNOWN_CATEGORY_NAME
 from halper.models import Database, Indexer
@@ -81,11 +79,11 @@ def main(  # noqa: PLR0917, C901
             show_default=False,
         ),
     ] = None,
-    print_configuration: Annotated[
+    edit_configuration: Annotated[
         bool,
         typer.Option(
-            "--view-config",
-            help="View the current configuration",
+            "--edit-config",
+            help="Edit the configuration file",
             show_default=True,
         ),
     ] = False,
@@ -115,7 +113,7 @@ def main(  # noqa: PLR0917, C901
             exists=False,
             rich_help_panel="Output Settings",
         ),
-    ] = cast(Path, CONFIG.get("log_file", default=f"{APP_DIR}/halp.log")),
+    ] = Path(f"{APP_DIR}/halp.log"),
     log_to_file: Annotated[
         bool,
         typer.Option(
@@ -124,7 +122,7 @@ def main(  # noqa: PLR0917, C901
             show_default=True,
             rich_help_panel="Output Settings",
         ),
-    ] = CONFIG.get("log_to_file", default=False),
+    ] = False,
     verbosity: Annotated[
         int,
         typer.Option(
@@ -175,8 +173,8 @@ def main(  # noqa: PLR0917, C901
         indexer.do_index()
         raise typer.Exit(0)
 
-    if print_configuration:
-        view_config()
+    if edit_configuration:
+        CONFIG.edit_config()
         return
 
     if list_hidden:
