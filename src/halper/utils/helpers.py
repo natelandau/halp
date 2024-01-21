@@ -1,5 +1,7 @@
 """Helper functions for the halp package."""
 
+import sys
+
 import sh
 from rich import box
 from rich.table import Table
@@ -118,3 +120,12 @@ def get_tldr_command() -> sh.Command | None:
         return sh.Command(tldr_path).bake("-q")
     except sh.ErrorReturnCode:
         return None
+
+
+def check_python_version() -> bool:
+    """Check the Python version.
+
+    Returns:
+        bool: True if the Python version is >= 3.9, False otherwise.
+    """
+    return sys.version_info >= (3, 10)
