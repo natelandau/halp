@@ -1,7 +1,6 @@
 # type: ignore
 """Test configuration model."""
 
-import filecmp
 import shutil
 from pathlib import Path
 
@@ -20,20 +19,6 @@ def test_validate_1():
     """
     with pytest.raises(typer.Exit):
         Config().validate()
-
-
-def test_validate_2(tmp_path):
-    """Test validation a configuration file.
-
-    GIVEN a request to validate a configuration file
-    WHEN a path to a non-existent file is provided
-    THEN create the default configuration file and exit
-    """
-    config_path = Path(tmp_path / "config.toml")
-    with pytest.raises(SystemExit):
-        Config(config_path=config_path).validate()
-    assert config_path.exists()
-    assert filecmp.cmp(config_path, PATH_CONFIG_DEFAULT) is True
 
 
 def test_init_config_3(tmp_path):

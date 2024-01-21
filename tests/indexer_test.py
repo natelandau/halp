@@ -7,6 +7,7 @@ import pytest
 from typer.testing import CliRunner
 
 from halper.cli import app
+from halper.config.config import Config
 from halper.models import Category, Command, CommandCategory, Database, File
 from tests.helpers import strip_ansi
 
@@ -247,8 +248,8 @@ class TestIndexing:
         self._clear_test_data()
 
         # GIVEN a mock configuration
+        mocker.patch.object(Config, "validate", MagicMock())  # Pass validation
         mock_get = mocker.patch("halper.models.indexer.CONFIG.get")
-
         mock_get.side_effect = lambda key, default=None, pass_none=False: {
             "file_globs": [f"{fixtures}/{glob}" for glob in globs],
             "file_exclude_regex": exclude_regex,
@@ -286,6 +287,7 @@ class TestIndexing:
         test_file = fixture_file("alias one='echo one'\nalias two='echo two'\n")
 
         # GIVEN a mock configuration
+        mocker.patch.object(Config, "validate", MagicMock())  # Pass validation
         mock_get = mocker.patch("halper.models.indexer.CONFIG.get")
         mock_get.side_effect = lambda key, default=None, pass_none=False: {
             "file_globs": [f"{test_file}"],  # Example values

@@ -1,7 +1,6 @@
 """Instantiate Configuration class and set default values."""
 
 import shutil
-import sys
 from pathlib import Path
 from typing import Any, Optional, TypeVar
 
@@ -84,12 +83,11 @@ class Config:
 
         msg = (
             "[bold]halp requires a configuration file to run.[/bold]",
-            f"[dim]Default created at:[/dim] '{self.config_path}'",
-            "[dim]Edit file before continuing[/dim]",
+            "Empty file created, edit file before continuing",
         )
 
         rprint("\n".join(msg))
-        sys.exit(1)
+        self.edit_config(exit_code=1)
 
     def _load_config(self) -> dict[str, Any]:
         """Load the configuration data from the file.
@@ -109,13 +107,43 @@ class Config:
 
         return {**config, **self.context}
 
-    def validate(self) -> None:
+    def edit_config(self, exit_code: int = 0) -> None:
+        """Attempt to open the configuration file for the user to edit.
+
+        Args:
+            exit_code (int): The exit code to use when exiting the application.
+
+        Raises:
+            typer.Exit: Raised after attempting to open the configuration file.
+        """
+        if not self.config_path.exists():
+            self._create_empty_config()
+
+        msg = f"""
+Config file: '{self.config_path}'
+[dim]Attempting to open file...[/dim]
+    """
+        rprint(msg)
+        typer.launch(str(self.config_path), locate=True)
+        raise typer.Exit(exit_code)
+
+    def validate(self) -> bool:
         """Validate and load the configuration file.
 
         Ensure the file exists and is not empty. Validate the 'categories' section, if present. Load the configuration data into self.config.
+
+        Returns:
+            bool: True if the configuration file is valid, False otherwise.
+
+        Raises:
+            InvalidConfigError: Raised if the configuration file is empty.
+            InvalidConfigError: Raised if the 'categories' section is not a dictionary.
+            InvalidConfigError: Raised if a category is not a dictionary.
+            InvalidConfigError: Raised if a category is missing a 'category_name' value.
         """
         if not self.config_path or not self.config_path.exists():
             self._create_empty_config()
+
         self.config = self._load_config()
 
         with PATH_CONFIG_DEFAULT.open("rb") as f:
@@ -123,9 +151,9 @@ class Config:
 
         if self.config == default_config:
             rprint(
-                "[bold]halp requires a configuration file to run.[/bold] Edit file before continuing"
+                "Configuration file is using default values. Please edit the file before continuing.\nRun [code]halp --edit-config[/code] to open the file."
             )
-            sys.exit(1)
+            raise typer.Exit(code=1)
 
         # No empty config files
         if not self.config:
@@ -145,6 +173,8 @@ class Config:
                 if "category_name" not in category_value:
                     msg = f"Category '{category_key}' is missing a 'category_name' value. Config file: {self.config_path}"
                     raise errors.InvalidConfigError(msg)
+
+        return True
 
     def get(self, key: str, default: Optional[T] = None, pass_none: bool = False) -> Optional[T]:
         """Retrieve a configuration value by key.

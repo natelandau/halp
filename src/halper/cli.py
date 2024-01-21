@@ -14,11 +14,9 @@ from halper.commands import (
     category_display,
     command_display,
     command_list,
-    # create_index,
     hide_commands,
     list_hidden_commands,
     unhide_commands,
-    view_config,
 )
 from halper.constants import APP_DIR, CONFIG, DB, UNKNOWN_CATEGORY_NAME
 from halper.models import Database, Indexer
@@ -81,11 +79,11 @@ def main(  # noqa: PLR0917, C901
             show_default=False,
         ),
     ] = None,
-    print_configuration: Annotated[
+    edit_configuration: Annotated[
         bool,
         typer.Option(
-            "--view-config",
-            help="View the current configuration",
+            "--edit-config",
+            help="Edit the configuration file",
             show_default=True,
         ),
     ] = False,
@@ -175,8 +173,8 @@ def main(  # noqa: PLR0917, C901
         indexer.do_index()
         raise typer.Exit(0)
 
-    if print_configuration:
-        view_config()
+    if edit_configuration:
+        CONFIG.edit_config()
         return
 
     if list_hidden:
