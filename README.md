@@ -1,4 +1,4 @@
-[![PyPI version](https://badge.fury.io/py/halper.svg)](https://badge.fury.io/py/halper) ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/halper) [![Python Code Checker](https://github.com/natelandau/halp/actions/workflows/automated-tests.yml/badge.svg)](https://github.com/natelandau/halp/actions/workflows/automated-tests.yml) [![codecov](https://codecov.io/gh/natelandau/halp/branch/main/graph/badge.svg?token=Y11Z883PMI)](https://codecov.io/gh/natelandau/halp)
+[![PyPI version](https://badge.fury.io/py/halper.svg)](https://badge.fury.io/py/halper) ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/halper) [![Python Code Checker](https://github.com/natelandau/halp/actions/workflows/automated-tests.yml/badge.svg)](https://github.com/natelandau/halp/actions/workflows/automated-tests.yml) [![codecov](https://codecov.io/gh/natelandau/halp/graph/badge.svg?token=GQ0UO3YCJO)](https://codecov.io/gh/natelandau/halp)
 
 # Halp
 
