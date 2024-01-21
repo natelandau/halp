@@ -4,11 +4,7 @@ import shutil
 from pathlib import Path
 from typing import Any, Optional, TypeVar
 
-try:
-    import tomllib
-except ModuleNotFoundError:  # pragma: no cover
-    import tomli as tomllib  # type: ignore [no-redef]
-
+import tomllib
 import typer
 from loguru import logger
 from rich import print as rprint
