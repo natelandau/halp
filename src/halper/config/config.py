@@ -19,60 +19,86 @@ T = TypeVar("T")
 
 
 class Config:
-    """Representation of a configuration file.
+    """Manage the configuration file operations for an application.
+
+    This class facilitates the loading, validation, and retrieval of configuration data from a specified file, and integrates additional context into the configuration when necessary.
 
     Attributes:
-        config_path (Path | None): The path to the configuration file.
-        context (dict[str, Any]): Additional values to add to the configuration.
-        config (dict[str, Any]): Loaded configuration data.
+        config_path (Optional[Path]): The path to the configuration file.
+        context (dict[str, Any]): Additional context to merge with the configuration.
+        config (dict[str, Any]): The configuration data loaded from the file.
     """
 
     def __init__(
         self, config_path: Path | None = None, context: dict[str, Any] | None = None
     ) -> None:
-        """Initialize configuration file.
+        """Initialize the Config instance.
+
+        Determine the configuration file path and store the additional context. If no path is provided, set it to None.
 
         Args:
-            config_path (Path | None): The path to the configuration file.
-            context (dict[str, Any] | None): Additional values to add to the configuration.
+            config_path (Optional[Path]): The path to the configuration file.
+            context (Optional[dict[str, Any]]): Additional context to integrate into the configuration.
         """
         self.config_path = self._resolve_path(config_path)
         self.context = context or {}
 
-        if not self.config_path or not self.config_path.exists():
-            self._create_config()
-
-        self.config = self._load_config()
+        self.config: dict[str, Any] = {}
 
     def __repr__(self) -> str:
-        """Return string representation of Config.
+        """Return the string representation of the Config instance.
 
         Returns:
-            str: The string representation of the Config object.
+            str: The string representation of the configuration data.
         """
         return f"{self.config}"
 
     @staticmethod
     def _resolve_path(config_path: Path | None) -> Path | None:
-        """Resolve the given path to an absolute path."""
+        """Resolve the given file path to an absolute path.
+
+        If a path is provided, expand the user (~) and resolve it to an absolute path. Return None if no path is provided.
+
+        Args:
+            config_path (Optional[Path]): The path to be resolved.
+
+        Returns:
+            Optional[Path]: The resolved absolute path, or None if no path was provided.
+        """
         if config_path:
             return config_path.expanduser().resolve()
+
         return None
 
-    def _create_config(self) -> None:
-        """Create a configuration file from the default when it does not exist."""
+    def _create_empty_config(self) -> None:
+        """Create a default configuration file if it does not exist.
+
+        Check if the configuration path is set. If not, log an error and exit. If the path is set, create the required directories and copy the default configuration file to this location. Then exit the application.
+        """
         if self.config_path is None:
             logger.error("No configuration file specified")
             raise typer.Exit(code=1)
 
         self.config_path.parent.mkdir(parents=True, exist_ok=True)
         shutil.copy(PATH_CONFIG_DEFAULT, self.config_path)
-        logger.success(f"Created default configuration file at {self.config_path}")
-        rprint(f"{self.config_path} created. Please edit before continuing.")
+
+        msg = (
+            "[bold]halp requires a configuration file to run.[/bold]",
+            f"[dim]Default created at:[/dim] '{self.config_path}'",
+            "[dim]Edit file before continuing[/dim]",
+        )
+
+        rprint("\n".join(msg))
         sys.exit(1)
 
     def _load_config(self) -> dict[str, Any]:
-        """Load the configuration file."""
+        """Load the configuration data from the file.
+
+        Open and read the configuration file, parsing its contents. Log any exceptions and exit if an error occurs.
+
+        Returns:
+            dict[str, Any]: The loaded configuration data.
+        """
         logger.trace(f"Loading configuration from {self.config_path}")
         try:
             with self.config_path.open("rb") as f:
@@ -84,11 +110,23 @@ class Config:
         return {**config, **self.context}
 
     def validate(self) -> None:
-        """Validate the configuration file.
+        """Validate and load the configuration file.
 
-        Ensures that the configuration file is not empty and that the 'categories' section,
-        if present, is properly formatted.
+        Ensure the file exists and is not empty. Validate the 'categories' section, if present. Load the configuration data into self.config.
         """
+        if not self.config_path or not self.config_path.exists():
+            self._create_empty_config()
+        self.config = self._load_config()
+
+        with PATH_CONFIG_DEFAULT.open("rb") as f:
+            default_config = tomllib.load(f)
+
+        if self.config == default_config:
+            rprint(
+                "[bold]halp requires a configuration file to run.[/bold] Edit file before continuing"
+            )
+            sys.exit(1)
+
         # No empty config files
         if not self.config:
             msg = f"Configuration file is empty\nConfig file: {self.config_path}"
@@ -108,33 +146,18 @@ class Config:
                     msg = f"Category '{category_key}' is missing a 'category_name' value. Config file: {self.config_path}"
                     raise errors.InvalidConfigError(msg)
 
-    def rebuild(self) -> None:
-        """Rebuild the configuration file from the default.
-
-        This method deletes the existing configuration file, if present,
-        and then creates a new one from the default configuration.
-        """
-        try:
-            if self.config_path and self.config_path.exists():
-                logger.info(f"Deleting existing configuration file: {self.config_path}")
-                self.config_path.unlink()
-            self._create_config()
-            logger.info("Configuration file rebuilt from the default.")
-        except (FileNotFoundError, PermissionError) as e:
-            logger.exception(f"Failed to rebuild configuration: {e}")
-            msg = f"Error rebuilding configuration: {e}"
-            raise errors.ConfigRebuildError(msg) from e
-
     def get(self, key: str, default: Optional[T] = None, pass_none: bool = False) -> Optional[T]:
-        """Get a value from the configuration file.
+        """Retrieve a configuration value by key.
+
+        Fetch the value associated with the given key. Return None or a default value if the key is not found.
 
         Args:
-            key (str): The name of the config variable.
-            default (Optional[T]): The default value if the key is not set. Type is generic.
-            pass_none (bool): If True, returns None if the key does not exist; otherwise, returns the default.
+            key (str): The key of the configuration item to retrieve.
+            default (Optional[T]): The default value to return if the key is not found.
+            pass_none (bool): If True, return None when the key is not found; otherwise, return the default value.
 
         Returns:
-            Optional[T]: The value of the config variable, or the default value if not set. Type is generic.
+            Optional[T]: The configuration value or default.
         """
         value = self.config.get(key)
 

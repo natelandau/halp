@@ -1,7 +1,7 @@
 """Halp CLI."""
 
 from pathlib import Path
-from typing import Annotated, Optional, cast
+from typing import Annotated, Optional
 
 import peewee
 import typer
@@ -115,7 +115,7 @@ def main(  # noqa: PLR0917, C901
             exists=False,
             rich_help_panel="Output Settings",
         ),
-    ] = cast(Path, CONFIG.get("log_file", default=f"{APP_DIR}/halp.log")),
+    ] = Path(f"{APP_DIR}/halp.log"),
     log_to_file: Annotated[
         bool,
         typer.Option(
@@ -124,7 +124,7 @@ def main(  # noqa: PLR0917, C901
             show_default=True,
             rich_help_panel="Output Settings",
         ),
-    ] = CONFIG.get("log_to_file", default=False),
+    ] = False,
     verbosity: Annotated[
         int,
         typer.Option(
