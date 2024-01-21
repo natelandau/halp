@@ -1,3 +1,5 @@
+[![PyPI version](https://badge.fury.io/py/halper.svg)](https://badge.fury.io/py/halper) ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/halper) [![Python Code Checker](https://github.com/natelandau/halp/actions/workflows/automated-tests.yml/badge.svg)](https://github.com/natelandau/halp/actions/workflows/automated-tests.yml) [![codecov](https://codecov.io/gh/natelandau/halp/graph/badge.svg?token=GQ0UO3YCJO)](https://codecov.io/gh/natelandau/halp)
+
 # Halp
 
 If you're anything like me, you have numerous shell aliases and functions in your dotfiles that you've written to make your life easier. You've also probably forgotten what half of them are called and how to use them. Halper aims to solve that problem by providing a single command that will print all your custom commands with a brief description of what they do.
@@ -65,7 +67,7 @@ halp --help
 
 ## Installation
 
-You must have SQLite installed on your system. If you're on a Mac, it's already installed.
+Halp requires Python 3.10 or higher.
 
 Install with Pip
 

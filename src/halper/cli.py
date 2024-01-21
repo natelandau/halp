@@ -9,7 +9,7 @@ from loguru import logger
 
 from halper.__version__ import __version__
 
-from halper.utils import console, errors, instantiate_logger  # isort:skip
+from halper.utils import console, errors, instantiate_logger, check_python_version  # isort:skip
 from halper.commands import (
     category_display,
     command_display,
@@ -152,6 +152,10 @@ def main(  # noqa: PLR0917, C901
     """  # noqa: D301
     # Instantiate Logging
     instantiate_logger(verbosity, log_file, log_to_file)
+
+    if not check_python_version():
+        logger.error("Python version must be >= 3.10")
+        raise typer.Exit(code=1)
 
     # Validate config
     try:
