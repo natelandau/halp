@@ -188,8 +188,8 @@ class Database:
         self.db.close()
 
     def is_empty(self) -> bool:
-        """Check if database is empty."""
-        return not self.has_data([Category, Command, CommandCategory, File])
+        """Check if database has no commands."""
+        return not self.has_data([Command])
 
     @staticmethod
     def clear_data(tables: list[Model]) -> None:
