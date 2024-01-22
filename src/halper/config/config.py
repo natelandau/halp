@@ -1,6 +1,8 @@
 """Instantiate Configuration class and set default values."""
 
-from confz import BaseConfig, FileSource
+from typing import ClassVar
+
+from confz import BaseConfig, ConfigSources, FileSource
 from pydantic import BaseModel
 
 from halper.constants import CONFIG_PATH
@@ -26,4 +28,4 @@ class HalpConfig(BaseConfig):  # type: ignore [misc]
     file_globs: tuple[str, ...] = ()
     categories: dict[str, CategoryConfig] = None
 
-    CONFIG_SOURCES = FileSource(file=CONFIG_PATH)
+    CONFIG_SOURCES: ClassVar[ConfigSources | None] = FileSource(file=CONFIG_PATH)
