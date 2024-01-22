@@ -54,7 +54,7 @@ jobs:
             #    copy config file to runner
             # ----------------------------------------------
             - name: Create empty configuration file
-              run: mkdir -p /home/runner/.config/halp && cp ./src/halper/config/default_config.toml /home/runner/.config/halp/config.toml
+              run: mkdir -p /home/runner/.config/halp && cp ./src/halper/default_config.toml /home/runner/.config/halp/config.toml
 
             # ----------------------------------------------
             # Test before building and uploading the package
