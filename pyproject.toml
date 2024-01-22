@@ -17,14 +17,15 @@
         halp = "halper.cli:app"
 
     [tool.poetry.dependencies]
+        confz  = "^2.0.1"
         loguru = "^0.7.2"
         parsy  = "^2.1"
         peewee = "^3.17.0"
         python = "^3.10"
         rich   = "^13.6.0"
         sh     = "^2.0.6"
+        tomli  = "^2.0.1"
         typer  = { extras = ["all"], version = "^0.9.0" }
-    tomli = "^2.0.1"
 
     [tool.poetry.group.test.dependencies]
         pytest                 = "^7.4.3"
@@ -254,7 +255,7 @@
 [tool.vulture] # https://pypi.org/project/vulture/
     # exclude = ["file*.py", "dir/"]
     # ignore_decorators = ["@app.route", "@require_*"]
-    ignore_names = ["args", "kwargs", "request", "version"]
+    ignore_names = ["args", "kwargs", "mock_config", "request", "version"]
     # make_whitelist = true
     min_confidence = 80
     paths          = ["src", "tests"]

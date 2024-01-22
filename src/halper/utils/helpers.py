@@ -1,111 +1,19 @@
 """Helper functions for the halp package."""
 
+import shutil
 import sys
+from pathlib import Path
 
 import sh
-from rich import box
-from rich.table import Table
+import typer
+from confz import validate_all_configs
+from loguru import logger
+from pydantic import ValidationError
 
-from halper.constants import CommandType
-from halper.models.database import Category, Command, CommandCategory
+from halper.config import HalpConfig
+from halper.constants import CONFIG_PATH
 
-
-def list_commands(  # noqa: PLR0917
-    category: Category | None = None,
-    commands: list[Command] | None = None,
-    show_hidden: bool = False,
-    show_categories: bool = False,
-    full_output: bool = False,
-    only_exports: bool = False,
-    title: str | None = None,
-) -> Table:
-    """List commands in a table.
-
-    Args:
-        category (Category): A Category object.
-        commands (list[Command]): A list of Command objects.
-        show_categories (bool): Whether to show categories.
-        show_hidden (bool): Whether to show hidden commands.
-        full_output (bool): Whether to show full output.
-        only_exports (bool): Whether to show only export commands.
-        title (str): A title for the table.
-
-    Returns:
-        Table | None: A 'rich' Table object containing the formatted command data. Returns None if the table has no rows (i.e., there are no commands to display).
-    """
-    if category:
-        commands_to_display = (
-            Command.select()
-            .where(Command.hidden == show_hidden)
-            .join(CommandCategory)
-            .join(Category)
-            .where(Category.id == category.id)
-            .order_by(Command.name)
-        )
-        table_title = (
-            f"[bold]{category.name}[/bold]\n{category.description}"
-            if category.description
-            else category.name
-        )
-
-    elif commands:
-        commands_to_display = [c for c in commands if c.hidden == show_hidden]
-        table_title = title
-
-    table = Table(
-        box=box.SIMPLE,
-        expand=False,
-        show_header=True,
-        title=table_title,
-    )
-
-    columns = (
-        {"name": "Command", "style": "bold", "display": True},
-        {"name": "Categories", "style": "dim", "display": show_categories},
-        {"name": "Type", "style": "dim", "display": full_output},
-        {"name": "Description", "style": "dim", "display": True},
-        {"name": "ID", "style": "dim cyan", "display": full_output or show_hidden},
-        {"name": "File", "style": "dim", "display": full_output},
-    )
-
-    for column in columns:
-        if column["display"]:
-            table.add_column(str(column["name"]), style=str(column["style"]))
-
-    for c in commands_to_display:
-        if only_exports and c.command_type != CommandType.EXPORT.name:
-            continue
-
-        if not only_exports and not full_output and c.command_type == CommandType.EXPORT.name:
-            continue
-
-        command_categories = (
-            Category().select().join(CommandCategory).join(Command).where(Command.id == c.id)
-        )
-
-        description = (
-            c.description
-            if c.description
-            else c.code_syntax()
-            if c.command_type in {CommandType.ALIAS.name, CommandType.EXPORT.name}
-            else ""
-        )
-
-        column_data = (
-            {"value": c.name, "display": True},
-            {
-                "value": ", ".join([category.name for category in command_categories]),
-                "display": show_categories,
-            },
-            {"value": c.command_type.title(), "display": full_output},
-            {"value": description, "display": True},
-            {"value": str(c.id), "display": full_output or show_hidden},
-            {"value": c.file.name, "display": full_output},
-        )
-
-        table.add_row(*[column["value"] for column in column_data if column["display"]])
-
-    return table if table.rows else None
+from .console import console
 
 
 def get_tldr_command() -> sh.Command | None:
@@ -129,3 +37,61 @@ def check_python_version() -> bool:
         bool: True if the Python version is >= 3.9, False otherwise.
     """
     return sys.version_info >= (3, 10)
+
+
+def create_default_config() -> None:
+    """Create a default configuration file."""
+    CONFIG_PATH.parent.mkdir(parents=True, exist_ok=True)
+    default_config_file = Path(__file__).parent.parent / "default_config.toml"
+    shutil.copy(default_config_file, CONFIG_PATH)
+
+    msg = """\
+[bold]halp requires a configuration file to run[/bold]
+Empty configuration created, edit before continuing
+"""
+    console.print(msg)
+    edit_config(exit_code=1)
+
+
+def edit_config(exit_code: int = 0) -> None:
+    """Edit the configuration file."""
+    if not CONFIG_PATH.exists():
+        create_default_config()
+
+    msg = f"""\
+Config location: '{CONFIG_PATH}'
+[dim]Attempting to open file...[/dim]"""
+    console.print(msg)
+    typer.launch(str(CONFIG_PATH), locate=True)
+    raise typer.Exit(code=exit_code)
+
+
+def validate_config() -> None:
+    """Validate the configuration file.
+
+    Returns:
+        bool: True if the configuration file is valid, False otherwise.
+    """
+    # Create a default configuration file if one does not exist
+    if not CONFIG_PATH.exists():
+        create_default_config()
+
+    try:
+        validate_all_configs()
+    except ValidationError as e:
+        logger.error(f"Invalid configuration file: {CONFIG_PATH}")
+        for error in e.errors():
+            console.print(f"           [red]{error['loc'][0]}: {error['msg']}[/red]")
+
+        raise typer.Exit(code=1) from e
+
+    # Confirm we don't have a default configuration file
+    if (
+        not HalpConfig().file_globs
+        and not HalpConfig().file_exclude_regex
+        and not HalpConfig().categories
+    ):
+        console.print(
+            "Configuration file is using default values. Please edit the file before continuing.\nRun [code]halp --edit-config[/code] to open the file."
+        )
+        raise typer.Exit(code=1)
