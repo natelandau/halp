@@ -133,7 +133,7 @@ class Indexer:
         Returns:
             tuple[str, str, str]: Status indicator, count of categories added, and a descriptive message.
         """
-        config_categories = [d.asdict() for d in HalpConfig().categories.values()]
+        config_categories = [d.model_dump() for d in HalpConfig().categories.values()]
 
         # Add categories to the database
         with DB.atomic():
@@ -194,7 +194,7 @@ class Indexer:
                         description=category.description,
                         code_regex=category.code_regex,
                         comment_regex=category.comment_regex,
-                        name_regex=category.name_regex,
+                        command_name_regex=category.command_name_regex,
                         path_regex=category.path_regex,
                     )
 

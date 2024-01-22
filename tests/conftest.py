@@ -59,11 +59,11 @@ def config_data():
             cats = {}
             for name, category in categories.items():
                 new_cat = CategoryConfig(
-                    name=category["category_name"],
+                    name=category["name"],
                     code_regex=category["code_regex"],
                     comment_regex=category["comment_regex"],
                     description=category["description"],
-                    name_regex=category["name_regex"],
+                    command_name_regex=category["command_name_regex"],
                     path_regex=category["path_regex"],
                 )
                 cats[name] = new_cat

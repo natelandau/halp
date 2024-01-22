@@ -82,11 +82,11 @@ class TestIndexing:
                 False,
                 {
                     "hello": {
-                        "category_name": "hello world",
+                        "name": "hello world",
                         "code_regex": r"hello.*world",
                         "comment_regex": r"",
                         "description": "category",
-                        "name_regex": "",
+                        "command_name_regex": "",
                         "path_regex": "",
                     }
                 },
@@ -104,11 +104,11 @@ class TestIndexing:
                 False,
                 {
                     "always_print": {
-                        "category_name": "hello world",
+                        "name": "hello world",
                         "code_regex": r"",
                         "comment_regex": r"Always.*contents",
                         "description": "category",
-                        "name_regex": "",
+                        "command_name_regex": "",
                         "path_regex": "",
                     }
                 },
@@ -126,11 +126,11 @@ class TestIndexing:
                 False,
                 {
                     "always_print": {
-                        "category_name": "hello world",
+                        "name": "hello world",
                         "code_regex": r"",
                         "comment_regex": r"Always.*contents",
                         "description": "category",
-                        "name_regex": "",
+                        "command_name_regex": "",
                         "path_regex": "",
                     }
                 },
@@ -166,11 +166,11 @@ class TestIndexing:
                 True,
                 {
                     "cat": {
-                        "category_name": "cat",
+                        "name": "cat",
                         "code_regex": "",
                         "comment_regex": "",
                         "description": "category",
-                        "name_regex": ".*ALIAS.*",
+                        "command_name_regex": ".*ALIAS.*",
                         "path_regex": "",
                     }
                 },
@@ -188,11 +188,11 @@ class TestIndexing:
                 False,
                 {
                     "cat": {
-                        "category_name": "cat",
+                        "name": "cat",
                         "code_regex": "",
                         "comment_regex": "",
                         "description": "category",
-                        "name_regex": "ALIAS1",
+                        "command_name_regex": "ALIAS1",
                         "path_regex": "",
                     }
                 },
@@ -210,11 +210,11 @@ class TestIndexing:
                 False,
                 {
                     "cat": {
-                        "category_name": "cat",
+                        "name": "cat",
                         "code_regex": "",
                         "comment_regex": "",
                         "description": "category",
-                        "name_regex": "",
+                        "command_name_regex": "",
                         "path_regex": "dotfiles_1",
                     }
                 },

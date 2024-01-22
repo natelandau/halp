@@ -76,7 +76,7 @@ class Parser:
             for pattern, text in [
                 (cat.code_regex, result["code"]),
                 (cat.comment_regex, result["description"]),
-                (cat.name_regex, result["name"]),
+                (cat.command_name_regex, result["name"]),
                 (cat.path_regex, str(self.path)),
             ]:
                 if pattern and text and re.search(pattern, text, flags=self.regex_flags):

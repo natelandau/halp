@@ -39,7 +39,7 @@ class TestParserClass:
         (
             "code_regex",
             "comment_regex",
-            "name_regex",
+            "command_name_regex",
             "path_regex",
             "cat_two_code_regex",
             "found_categories",
@@ -59,7 +59,7 @@ class TestParserClass:
         fixture_file,
         code_regex,
         comment_regex,
-        name_regex,
+        command_name_regex,
         path_regex,
         cat_two_code_regex,
         found_categories,
@@ -70,7 +70,7 @@ class TestParserClass:
             "name": "cat_1",
             "code_regex": code_regex,
             "comment_regex": comment_regex,
-            "name_regex": name_regex,
+            "command_name_regex": command_name_regex,
             "path_regex": path_regex,
             "description": "description text 1",
         }
@@ -78,7 +78,7 @@ class TestParserClass:
             "name": "cat_2",
             "code_regex": cat_two_code_regex,
             "comment_regex": "",
-            "name_regex": "",
+            "command_name_regex": "",
             "path_regex": "",
             "description": "description text 2",
         }
@@ -143,7 +143,7 @@ class TestParserClass:
             "name": "cat_1",
             "code_regex": "ls",
             "comment_regex": "",
-            "name_regex": "",
+            "command_name_regex": "",
             "path_regex": "",
             "description": "description text 1",
         }
@@ -151,7 +151,7 @@ class TestParserClass:
             "name": "cat_2",
             "code_regex": "",
             "comment_regex": "",
-            "name_regex": "",
+            "command_name_regex": "",
             "path_regex": "",
             "description": "description text 2",
         }
