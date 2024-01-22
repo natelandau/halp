@@ -4,7 +4,8 @@ import typer
 from loguru import logger
 
 from halper.models import Command
-from halper.utils import console, list_commands
+from halper.utils import console
+from halper.views import list_commands
 
 
 def list_hidden_commands(full_output: bool = False, only_exports: bool = False) -> None:

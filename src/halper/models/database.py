@@ -41,7 +41,7 @@ class Category(BaseModel):
     description = TextField(null=True)
     code_regex = TextField(null=True)
     comment_regex = TextField(null=True)
-    name_regex = TextField(null=True)
+    command_name_regex = TextField(null=True)
     path_regex = TextField(null=True)
 
 
@@ -52,7 +52,7 @@ class TempCategory(BaseModel):
     description = TextField(null=True)
     code_regex = TextField(null=True)
     comment_regex = TextField(null=True)
-    name_regex = TextField(null=True)
+    command_name_regex = TextField(null=True)
     path_regex = TextField(null=True)
 
 

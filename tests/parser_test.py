@@ -3,6 +3,7 @@
 
 import pytest
 
+from halper.config import HalpConfig
 from halper.constants import UNKNOWN_CATEGORY_NAME, CommandType
 from halper.models import Category, Command, CommandCategory, File, Parser
 
@@ -18,31 +19,27 @@ class TestParserClass:
             for t in table.select():
                 t.delete_instance(recursive=True, delete_nullable=True)
 
-    def test_parser_instantiation(self, fixture_file, mocker) -> None:
+    def test_parser_instantiation(self, fixture_file, config_data) -> None:
         """Test the parser instantiation."""
         self._clear_tests()
 
-        # Create a test file
-        test_file = fixture_file()
-        mock_config_file = {"case_sensitive": True}
-        mocker.patch(
-            "halper.models.parser.CONFIG.get",
-            side_effect=lambda k, d=None, **kwargs: mock_config_file.get(k, d),
-        )
+        with HalpConfig.change_config_sources(config_data(case_sensitive=True)):
+            # Create a test file
+            test_file = fixture_file()
 
-        # Instantiate the parser
-        parser = Parser(test_file)
-        assert parser.path == test_file
-        assert parser.path.exists()
-        assert parser.regex_flags == 0
-        assert File.select().count() == 1
-        assert parser.file == File.get()
+            # Instantiate the parser
+            parser = Parser(test_file)
+            assert parser.path == test_file
+            assert parser.path.exists()
+            assert parser.regex_flags == 0
+            assert File.select().count() == 1
+            assert parser.file == File.get()
 
     @pytest.mark.parametrize(
         (
             "code_regex",
             "comment_regex",
-            "name_regex",
+            "command_name_regex",
             "path_regex",
             "cat_two_code_regex",
             "found_categories",
@@ -58,10 +55,11 @@ class TestParserClass:
     )
     def test__categorize_command(
         self,
+        mock_config,  # noqa: ARG002
         fixture_file,
         code_regex,
         comment_regex,
-        name_regex,
+        command_name_regex,
         path_regex,
         cat_two_code_regex,
         found_categories,
@@ -72,7 +70,7 @@ class TestParserClass:
             "name": "cat_1",
             "code_regex": code_regex,
             "comment_regex": comment_regex,
-            "name_regex": name_regex,
+            "command_name_regex": command_name_regex,
             "path_regex": path_regex,
             "description": "description text 1",
         }
@@ -80,7 +78,7 @@ class TestParserClass:
             "name": "cat_2",
             "code_regex": cat_two_code_regex,
             "comment_regex": "",
-            "name_regex": "",
+            "command_name_regex": "",
             "path_regex": "",
             "description": "description text 2",
         }
@@ -137,7 +135,7 @@ class TestParserClass:
             ),
         ],
     )
-    def test_parser_parse(self, mocker, fixture_file, file_content, expected):
+    def test_parser_parse(self, config_data, fixture_file, file_content, expected):
         """Test the parser parse() method."""
         self._clear_tests()
         # GIVEN categories in the database, a file, and a configuration file
@@ -145,7 +143,7 @@ class TestParserClass:
             "name": "cat_1",
             "code_regex": "ls",
             "comment_regex": "",
-            "name_regex": "",
+            "command_name_regex": "",
             "path_regex": "",
             "description": "description text 1",
         }
@@ -153,7 +151,7 @@ class TestParserClass:
             "name": "cat_2",
             "code_regex": "",
             "comment_regex": "",
-            "name_regex": "",
+            "command_name_regex": "",
             "path_regex": "",
             "description": "description text 2",
         }
@@ -162,25 +160,17 @@ class TestParserClass:
 
         test_file = fixture_file(file_content)
 
-        mock_config_file = {
-            "case_sensitive": False,
-            "command_name_ignore_regex": "_",
-        }
-        mocker.patch(
-            "halper.models.parser.CONFIG.get",
-            side_effect=lambda k, d=None, **kwargs: mock_config_file.get(k, d),
-        )
+        with HalpConfig.change_config_sources(config_data(command_name_ignore_regex="_")):
+            # WHEN the parse method is called
+            p = Parser(test_file)
+            result = p.parse()
 
-        # WHEN the parse method is called
-        p = Parser(test_file)
-        result = p.parse()
-
-        # THEN the command should be categorized and added to the database
-        if not expected:
-            assert result == expected
-        else:
-            assert result[0]["code"] == expected[0]["code"]
-            assert result[0]["description"] == expected[0]["description"]
-            assert result[0]["name"] == expected[0]["name"]
-            assert result[0]["file"] == File.get(1)
-            assert result[0]["command_type"] == expected[0]["command_type"]
+            # THEN the command should be categorized and added to the database
+            if not expected:
+                assert result == expected
+            else:
+                assert result[0]["code"] == expected[0]["code"]
+                assert result[0]["description"] == expected[0]["description"]
+                assert result[0]["name"] == expected[0]["name"]
+                assert result[0]["file"] == File.get(1)
+                assert result[0]["command_type"] == expected[0]["command_type"]

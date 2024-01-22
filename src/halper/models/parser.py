@@ -2,12 +2,12 @@
 
 import re
 from pathlib import Path
-from typing import cast
 
 from loguru import logger
 from parsy import ParseError
 
-from halper.constants import CONFIG, UNKNOWN_CATEGORY_NAME
+from halper.config import HalpConfig
+from halper.constants import UNKNOWN_CATEGORY_NAME
 from halper.models import Category, File
 from halper.utils.text_parsers import parse_file
 
@@ -33,7 +33,7 @@ class Parser:
             path = Path(path)
 
         self.path = path.expanduser().resolve()
-        self.regex_flags = 0 if CONFIG.get("case_sensitive", False) else re.IGNORECASE
+        self.regex_flags = 0 if HalpConfig().case_sensitive else re.IGNORECASE
         self.file = self._fetch_file_record()
 
     def _fetch_file_record(self) -> File:
@@ -76,7 +76,7 @@ class Parser:
             for pattern, text in [
                 (cat.code_regex, result["code"]),
                 (cat.comment_regex, result["description"]),
-                (cat.name_regex, result["name"]),
+                (cat.command_name_regex, result["name"]),
                 (cat.path_regex, str(self.path)),
             ]:
                 if pattern and text and re.search(pattern, text, flags=self.regex_flags):
@@ -101,7 +101,7 @@ class Parser:
             list: A list of dictionaries, each representing a parsed command with its details.
         """
         # Ignore commands that match the ignore regex
-        command_name_ignore_regex = cast(str, CONFIG.get("command_name_ignore_regex", None))
+        command_name_ignore_regex = HalpConfig().command_name_ignore_regex
 
         categorized_commands: list[dict] = []
 

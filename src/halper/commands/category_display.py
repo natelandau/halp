@@ -6,7 +6,8 @@ from loguru import logger
 from rich.columns import Columns
 
 from halper.models import Category
-from halper.utils import console, list_commands
+from halper.utils import console
+from halper.views import list_commands
 
 
 def category_display(

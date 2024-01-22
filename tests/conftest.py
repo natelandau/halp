@@ -5,7 +5,10 @@ import shutil
 from pathlib import Path
 
 import pytest
+from confz import DataSource, FileSource
 from peewee import SqliteDatabase
+
+from halper.config import CategoryConfig, HalpConfig
 
 from halper.utils import console  # isort:skip
 from halper.models import (
@@ -30,6 +33,61 @@ MODELS = [
     TempCategory,
     TempCommandCategory,
 ]
+
+
+@pytest.fixture()
+def config_data():
+    """Mock specific configuration data for use in tests."""
+
+    def _inner(
+        case_sensitive: bool | None = None,
+        command_name_ignore_regex: str | None = None,
+        file_globs: list[str] | None = None,
+        file_exclude_regex: str | None = None,
+        categories: dict[str, CategoryConfig] | None = None,
+    ):
+        override_data = {}
+        if case_sensitive:
+            override_data["case_sensitive"] = case_sensitive
+        if file_globs:
+            override_data["file_globs"] = file_globs
+        if command_name_ignore_regex:
+            override_data["command_name_ignore_regex"] = command_name_ignore_regex
+        if file_exclude_regex:
+            override_data["file_exclude_regex"] = file_exclude_regex
+        if categories and isinstance(categories, dict):
+            cats = {}
+            for name, category in categories.items():
+                new_cat = CategoryConfig(
+                    name=category["name"],
+                    code_regex=category["code_regex"],
+                    comment_regex=category["comment_regex"],
+                    description=category["description"],
+                    command_name_regex=category["command_name_regex"],
+                    path_regex=category["path_regex"],
+                )
+                cats[name] = new_cat
+            override_data["categories"] = cats
+
+        return [
+            FileSource("tests/fixtures/configs/default_test_config.toml"),
+            DataSource(data=override_data),
+        ]
+
+    return _inner
+
+
+@pytest.fixture()
+def mock_config():  # noqa: PT004
+    """Override configuration file with mock configuration for use in tests. To override a default use the `config_data` fixture.
+
+    Returns:
+        HalpConfig: The mock configuration.
+    """
+    with HalpConfig.change_config_sources(
+        FileSource("tests/fixtures/configs/default_test_config.toml")
+    ):
+        yield
 
 
 @pytest.fixture(scope="class")
@@ -69,8 +127,15 @@ def fixtures(tmp_path) -> Path:
 
 
 @pytest.fixture()
-def fixture_file(tmp_path):
-    """Create a fixture file for testing."""
+def fixture_file(tmp_path):  # noqa: D417
+    """Create a single file for testing.
+
+    Args:
+        text (str): The text to write to the file.
+
+    Returns:
+        Path: The path to the file.
+    """
 
     def _method(text: str = "sample text") -> Path:
         test_file = tmp_path / "test_file"
@@ -111,39 +176,3 @@ def debug():
         return True
 
     return _debug_inner
-
-
-@pytest.fixture()
-def mock_config_get(mocker, tmp_path):
-    """Returns a mock configuration for use in tests."""
-
-    def mock_config_inner(config: dict | None = None):
-        """Returns a mock configuration for use in tests."""
-        default_mock_config = {
-            "file_globs": [f"{tmp_path}/dotfiles/*.bash"],
-            "file_exclude_regex": ".*ignore.*",
-            "case_sensitive": False,
-            "categories": {
-                "hello": {
-                    "category_name": "hello world",
-                    "code_regex": r"hello.*world",
-                    "comment_regex": r"",
-                    "description": "hello world category",
-                    "name_regex": "",
-                    "path_regex": "",
-                }
-            },
-        }
-
-        if not config:
-            config = default_mock_config
-        # Mock the CONFIG.get method
-        mock_get = mocker.patch("halper.models.indexer.CONFIG.get")
-        # mock_get = mocker.patch("halper.models.parser.CONFIG.get")
-        # mock_get = mocker.patch("halper.cli.CONFIG.get")
-        # Configure the mock to return specific values based on the called arguments
-        mock_get.side_effect = lambda key, default=None, pass_none=False: config.get(key, default)
-
-        return mock_get
-
-    return mock_config_inner

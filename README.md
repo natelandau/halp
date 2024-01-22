@@ -97,11 +97,11 @@ file_globs                = []    # Globs to match files which will be indexed f
 
 [categories] # Commands are matched against these categories
     [categories.example]
-        category_name = "" # The name of the category
+        name = "" # The name of the category
         code_regex    = '' # Regex to match within the code
         comment_regex = '' # Regex to match a comment on the same line as an alias/function definition or a comment on the first line of a function
         description   = "" # The description of this category
-        name_regex    = '' # Regex to match the name of the command
+        command_name_regex    = '' # Regex to match the name of the command
         path_regex    = '' # Regex to match the path of the file
 ```
 

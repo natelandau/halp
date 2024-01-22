@@ -1,5 +1,5 @@
 """Configuration module."""
 
-from halper.config.config import Config
+from .config import CategoryConfig, HalpConfig
 
-__all__ = ["Config"]
+__all__ = ["CategoryConfig", "HalpConfig"]

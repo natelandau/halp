@@ -10,7 +10,8 @@ from peewee import PeeweeException
 from rich.progress import track
 from rich.table import Table
 
-from halper.constants import CONFIG, DB
+from halper.config import HalpConfig
+from halper.constants import DB
 from halper.models import (
     Category,
     Command,
@@ -36,9 +37,9 @@ class Indexer:
     """
 
     def __init__(self, rebuild: bool = False) -> None:
-        self.globs: list[str] = CONFIG.get("file_globs")
-        self.exclude_regex: str = CONFIG.get("file_exclude_regex", default="")
-        self.case_sensitive: bool = CONFIG.get("case_sensitive", False)
+        self.globs: tuple[str, ...] = HalpConfig().file_globs
+        self.exclude_regex: str = HalpConfig().file_exclude_regex
+        self.case_sensitive: bool = HalpConfig().case_sensitive
         self.database = Database(DB)
 
         # Set rebuild flag
@@ -132,11 +133,7 @@ class Indexer:
         Returns:
             tuple[str, str, str]: Status indicator, count of categories added, and a descriptive message.
         """
-        # Grab categories from the configuration file and rename keys to match database
-        config_categories: list[dict[str, str]] = [  # type: ignore [var-annotated]
-            {("name" if k == "category_name" else k): v for k, v in d.items()}
-            for d in CONFIG.get("categories", default={}).values()
-        ]
+        config_categories = [d.model_dump() for d in HalpConfig().categories.values()]
 
         # Add categories to the database
         with DB.atomic():
@@ -197,7 +194,7 @@ class Indexer:
                         description=category.description,
                         code_regex=category.code_regex,
                         comment_regex=category.comment_regex,
-                        name_regex=category.name_regex,
+                        command_name_regex=category.command_name_regex,
                         path_regex=category.path_regex,
                     )
 

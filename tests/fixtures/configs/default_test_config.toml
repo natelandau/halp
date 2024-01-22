@@ -1,0 +1,7 @@
+case_sensitive            = false
+command_name_ignore_regex = ''
+file_exclude_regex        = ''
+file_globs                = [""]
+
+[categories]
+    # Intentionally blank

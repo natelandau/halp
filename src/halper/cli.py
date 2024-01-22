@@ -9,7 +9,7 @@ from loguru import logger
 
 from halper.__version__ import __version__
 
-from halper.utils import console, errors, instantiate_logger, check_python_version  # isort:skip
+# isort:skip
 from halper.commands import (
     category_display,
     command_display,
@@ -18,8 +18,15 @@ from halper.commands import (
     list_hidden_commands,
     unhide_commands,
 )
-from halper.constants import APP_DIR, CONFIG, DB, UNKNOWN_CATEGORY_NAME
+from halper.constants import APP_DIR, DB, UNKNOWN_CATEGORY_NAME
 from halper.models import Database, Indexer
+from halper.utils import (
+    check_python_version,
+    console,
+    edit_config,
+    instantiate_logger,
+    validate_config,
+)
 
 app = typer.Typer(add_completion=False, rich_markup_mode="rich")
 
@@ -157,12 +164,11 @@ def main(  # noqa: PLR0917, C901
         logger.error("Python version must be >= 3.10")
         raise typer.Exit(code=1)
 
-    # Validate config
-    try:
-        CONFIG.validate()
-    except errors.InvalidConfigError as e:
-        logger.error(e)
-        raise typer.Abort from e
+    if edit_configuration:
+        edit_config()
+        raise typer.Exit(0)
+
+    validate_config()
 
     # Instantiate Database
     try:
@@ -183,13 +189,9 @@ def main(  # noqa: PLR0917, C901
         indexer.do_index()
         raise typer.Exit(0)
 
-    if edit_configuration:
-        CONFIG.edit_config()
-        return
-
     if list_hidden:
         list_hidden_commands(full_output=full_output, only_exports=only_exports)
-        return
+        raise typer.Exit(0)
 
     if ids_to_hide:
         hide_commands(ids_to_hide)

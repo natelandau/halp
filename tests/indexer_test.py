@@ -7,16 +7,16 @@ import pytest
 from typer.testing import CliRunner
 
 from halper.cli import app
-from halper.config.config import Config
+from halper.config import HalpConfig
 from halper.models import Category, Command, CommandCategory, Database, File
 from tests.helpers import strip_ansi
 
 runner = CliRunner()
 
 
-# Always bypass the database connection in cli.py since we are using a mock database
 @pytest.fixture(autouse=True)
 def _mock_db_instantiate(mocker):
+    """Bypass the production database instantiation."""
     mocker.patch.object(Database, "instantiate", MagicMock())
 
 
@@ -82,11 +82,11 @@ class TestIndexing:
                 False,
                 {
                     "hello": {
-                        "category_name": "hello world",
+                        "name": "hello world",
                         "code_regex": r"hello.*world",
                         "comment_regex": r"",
                         "description": "category",
-                        "name_regex": "",
+                        "command_name_regex": "",
                         "path_regex": "",
                     }
                 },
@@ -104,11 +104,11 @@ class TestIndexing:
                 False,
                 {
                     "always_print": {
-                        "category_name": "hello world",
+                        "name": "hello world",
                         "code_regex": r"",
                         "comment_regex": r"Always.*contents",
                         "description": "category",
-                        "name_regex": "",
+                        "command_name_regex": "",
                         "path_regex": "",
                     }
                 },
@@ -126,11 +126,11 @@ class TestIndexing:
                 False,
                 {
                     "always_print": {
-                        "category_name": "hello world",
+                        "name": "hello world",
                         "code_regex": r"",
                         "comment_regex": r"Always.*contents",
                         "description": "category",
-                        "name_regex": "",
+                        "command_name_regex": "",
                         "path_regex": "",
                     }
                 },
@@ -166,11 +166,11 @@ class TestIndexing:
                 True,
                 {
                     "cat": {
-                        "category_name": "cat",
+                        "name": "cat",
                         "code_regex": "",
                         "comment_regex": "",
                         "description": "category",
-                        "name_regex": ".*ALIAS.*",
+                        "command_name_regex": ".*ALIAS.*",
                         "path_regex": "",
                     }
                 },
@@ -188,11 +188,11 @@ class TestIndexing:
                 False,
                 {
                     "cat": {
-                        "category_name": "cat",
+                        "name": "cat",
                         "code_regex": "",
                         "comment_regex": "",
                         "description": "category",
-                        "name_regex": "ALIAS1",
+                        "command_name_regex": "ALIAS1",
                         "path_regex": "",
                     }
                 },
@@ -210,11 +210,11 @@ class TestIndexing:
                 False,
                 {
                     "cat": {
-                        "category_name": "cat",
+                        "name": "cat",
                         "code_regex": "",
                         "comment_regex": "",
                         "description": "category",
-                        "name_regex": "",
+                        "command_name_regex": "",
                         "path_regex": "dotfiles_1",
                     }
                 },
@@ -231,7 +231,7 @@ class TestIndexing:
     def test_indexing(
         self,
         fixtures,
-        mocker,
+        config_data,
         globs,
         exclude_regex,
         case_sensitive,
@@ -247,78 +247,62 @@ class TestIndexing:
         """Test indexing commands."""
         self._clear_test_data()
 
-        # GIVEN a mock configuration
-        mocker.patch.object(Config, "validate", MagicMock())  # Pass validation
-        mock_get = mocker.patch("halper.models.indexer.CONFIG.get")
-        mock_get.side_effect = lambda key, default=None, pass_none=False: {
-            "file_globs": [f"{fixtures}/{glob}" for glob in globs],
-            "file_exclude_regex": exclude_regex,
-            "case_sensitive": case_sensitive,
-            "categories": categories,
-        }.get(key, default)
-
-        # WHEN the index command is run
-        result = runner.invoke(app, ["--index"])
-        debug("result", strip_ansi(result.output))
-
-        # THEN the output should be as expected
-        assert result.exit_code == exit_code
-
-        assert File.select().count() == num_files
-        assert len(Category.select()) == num_cats + 1  # 'Uncategorized' always created
-        assert Command.select().count() == num_commands
-
-        if exit_code == 0 and num_commands > 0:
-            assert (
-                CommandCategory.select()
-                .where(CommandCategory.category == Category.get(name="Uncategorized"))
-                .count()
-                == uncategorized_commands
+        with HalpConfig.change_config_sources(
+            config_data(
+                file_globs=[f"{fixtures}/{glob}" for glob in globs],
+                file_exclude_regex=exclude_regex,
+                case_sensitive=case_sensitive,
+                categories=categories,
             )
+        ):
+            # WHEN the index command is run
+            result = runner.invoke(app, ["--index"])
 
-        for string in return_strings:
-            assert string in strip_ansi(result.output)
+            # THEN the output should be as expected
+            assert result.exit_code == exit_code
 
-    def test_reindexing(self, fixture_file, mocker, debug):
+            assert File.select().count() == num_files
+            assert len(Category.select()) == num_cats + 1  # 'Uncategorized' always created
+            assert Command.select().count() == num_commands
+
+            if exit_code == 0 and num_commands > 0:
+                assert (
+                    CommandCategory.select()
+                    .where(CommandCategory.category == Category.get(name="Uncategorized"))
+                    .count()
+                    == uncategorized_commands
+                )
+
+            for string in return_strings:
+                assert string in strip_ansi(result.output)
+
+    def test_reindexing(self, fixture_file, config_data):
         """Test indexing commands."""
         self._clear_test_data()
 
         # GIVEN a dotfile
         test_file = fixture_file("alias one='echo one'\nalias two='echo two'\n")
 
-        # GIVEN a mock configuration
-        mocker.patch.object(Config, "validate", MagicMock())  # Pass validation
-        mock_get = mocker.patch("halper.models.indexer.CONFIG.get")
-        mock_get.side_effect = lambda key, default=None, pass_none=False: {
-            "file_globs": [f"{test_file}"],  # Example values
-            "file_exclude_regex": "",
-            "case_sensitive": False,
-            "categories": {},
-        }.get(key, default)
+        with HalpConfig.change_config_sources(config_data(file_globs=[f"{test_file}"])):
+            # WHEN the index command is run
+            result = runner.invoke(app, ["--index"])
 
-        # WHEN the index command is run
-        result = runner.invoke(app, ["--index"])
-        debug("result", strip_ansi(result.output))
+            # THEN the command should run a first time
+            assert result.exit_code == 0
+            assert File.select().count() == 1
+            assert Command.select().count() == 2
 
-        # THEN the command should run a first time
-        assert result.exit_code == 0
-        assert File.select().count() == 1
-        assert len(Category.select()) == 1  # 'Uncategorized' always created
-        assert Command.select().count() == 2
+            # WHEN a command is set to "hidden" and halp --index is run again
+            Command.update(hidden=True).where(Command.name == "two").execute()
+            result = runner.invoke(app, ["--index"])
 
-        # WHEN a command is set to "hidden" and halp --index is run again
-        Command.update(hidden=True).where(Command.name == "two").execute()
-        result = runner.invoke(app, ["--index"])
-        debug("result", strip_ansi(result.output))
+            # THEN the command should still be hidden
+            assert result.exit_code == 0
+            assert Command.select().where(Command.name == "two").get().hidden is True
 
-        # THEN the command should still be hidden
-        assert result.exit_code == 0
-        assert Command.select().where(Command.name == "two").get().hidden is True
+            # WHEN a command is set to "hidden" and halp --index-full is run
+            result = runner.invoke(app, ["--index-full"])
 
-        # WHEN a command is set to "hidden" and halp --index-full is run
-        result = runner.invoke(app, ["--index-full"])
-        debug("result", strip_ansi(result.output))
-
-        # THEN the command should not be hidden
-        assert result.exit_code == 0
-        assert Command.select().where(Command.name == "two").get().hidden is False
+            # THEN the command should not be hidden
+            assert result.exit_code == 0
+            assert Command.select().where(Command.name == "two").get().hidden is False
