@@ -23,7 +23,7 @@ def instantiate_logger(
 ) -> None:  # pragma: no cover
     """Instantiate the Loguru logger for Halp.
 
-    It configures the logger with the specified verbosity level, log file path,
+    Configure the logger with the specified verbosity level, log file path,
     and whether to log to a file.
 
     Args:

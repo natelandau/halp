@@ -2,18 +2,19 @@
 
 # Halp
 
-If you're anything like me, you have numerous shell aliases and functions in your dotfiles that you've written to make your life easier. You've also probably forgotten what half of them are called and how to use them. Halper aims to solve that problem by providing a single command that will print all your custom commands with a brief description of what they do.
+Halp is a command line tool that reminds you how to use your custom shell commands. It finds aliases and functions from your dotfiles and indexes them so you can query them later. Simply type `halp <command>` to see what it does or `halp --list` to see all your custom commands.
 
 Point Halp at the appropriate dotfiles and it will index all your custom commands and add them to categories you specify. Then you can query it to find your commands and their usage.
 
 Key features:
 
--   Understands aliases, functions, and exported environment variables
+-   Understands your aliases, functions, and exported environment variables
 -   Customizable categories
 -   Customizable regexes for matching commands
 -   Uses a SQLite database for fast querying
+-   Falls back to [TLDR pages](https://tldr.sh/) and then to [explainshell.com](https://explainshell.com/) for commands that you don't have a custom command for
 
-As an added bonus, it will also query [TLDR pages](https://tldr.sh/) for any commands that you don't have a custom command for. To enable this feature you must have a TLDR client installed and in your PATH. I recommend [TealDeer](https://github.com/dbrgn/tealdeer)
+As an added bonus, it will also query [TLDR pages](https://tldr.sh/) for any commands that you don't have a custom command for. This allows Halp to be your one-stop-shop for all command line help. To enable this feature you must have a TLDR client installed and in your PATH. I recommend [TealDeer](https://github.com/dbrgn/tealdeer)
 
 ## Usage
 
@@ -73,12 +74,18 @@ halp --help
 
 ## Installation
 
-Halp requires Python 3.10 or higher.
+Note: Halp requires Python 3.10 or higher.
 
-Install with Pip
+[pipx](https://pipx.pypa.io/) is strongly recommended for installing Halp
 
 ```bash
-pip install halper
+pipx install halper
+```
+
+If pipx is not an option, you can install Halp in your Python user directory.
+
+```bash
+python -m pip install --user halper
 ```
 
 ## First run

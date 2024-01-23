@@ -4,16 +4,76 @@ import shutil
 import sys
 from pathlib import Path
 
+import requests
 import sh
 import typer
 from confz import validate_all_configs
 from loguru import logger
+from markdownify import markdownify as md
 from pydantic import ValidationError
 
 from halper.config import HalpConfig
 from halper.constants import CONFIG_PATH
 
 from .console import console
+
+
+def strip_last_two_lines(multiline_string: str) -> str:
+    r"""Remove the last line from a multiline string.
+
+    Splits the string into lines, removes the last line, and rejoins the remaining lines.
+
+    Args:
+        multiline_string (str): The multiline string to process.
+
+    Returns:
+        str: The modified string with the last line removed.
+
+    Example:
+        >>> example_string = "Line 1\nLine 2\nLine 3"
+        >>> strip_last_two_lines(example_string)
+        'Line 1'
+    """
+    # Split the string into lines
+    lines = multiline_string.splitlines()
+
+    # Remove the last line and rejoin the remaining lines
+    return "\n".join(lines[:-2])
+
+
+def get_mankier_response(input_string: str) -> tuple[str, str]:
+    """Query mankier.com for a command."""
+    # Get the command description as markdown
+    url = f"https://www.mankier.com/api/v2/mans/{input_string.split(' ')[0]}.1/sections/Description"
+
+    try:
+        response = requests.get(url, timeout=15)
+    except Exception as e:  # noqa: BLE001
+        raise typer.Exit(1) from e
+
+    if response.status_code != 200:  # noqa: PLR2004
+        logger.error(f"Error contacting mankier.com: {response.status_code} {response.reason}")
+        raise typer.Exit(1)
+
+    converted_to_markdown = md(response.json()["html"])
+    description = "\n".join(converted_to_markdown.splitlines()[3:4])
+
+    # Get the explanation as a multi-line string
+    url = "https://www.mankier.com/api/explain/"
+    params = {"q": input_string}
+
+    try:
+        explanation = requests.get(url, params=params, timeout=15)
+    except Exception as e:  # noqa: BLE001
+        raise typer.Exit(1) from e
+
+    if explanation.status_code != 200:  # noqa: PLR2004
+        logger.error(
+            f"Error contacting mankier.com: {explanation.status_code} {explanation.reason}"
+        )
+        raise typer.Exit(1)
+
+    return description, strip_last_two_lines(explanation.text)
 
 
 def get_tldr_command() -> sh.Command | None:
