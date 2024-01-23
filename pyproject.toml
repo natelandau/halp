@@ -7,7 +7,7 @@
     description = "One stop shop for command line help."
     homepage    = "https://github.com/natelandau/halp"
     keywords    = ["bash", "cli", "dotfiles", "shell", "zsh"]
-    license     = "GNU AFFERO"
+    license     = "AGPL-3.0-or-later"
     name        = "halper"
     readme      = "README.md"
     repository  = "https://github.com/natelandau/halp"
@@ -273,10 +273,10 @@
 
     [tool.poe.tasks.docs]
         cmd = """
-    pdoc
+pdoc
       --docformat google
-      --output-directory docs
-      src/halp
+--output-directory docs
+src/halp
     """
         help = "Generate this package's docs"
 
