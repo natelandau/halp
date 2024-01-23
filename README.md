@@ -12,9 +12,10 @@ Key features:
 -   Customizable categories
 -   Customizable regexes for matching commands
 -   Uses a SQLite database for fast querying
--   Falls back to [TLDR pages](https://tldr.sh/) and then to [explainshell.com](https://explainshell.com/) for commands that you don't have a custom command for
+-   Explains builtin commands with [TLDR pages](https://tldr.sh/)
+-   Explains builtin commands with options from [mankier.com](https://www.mankier.com/)
 
-As an added bonus, it will also query [TLDR pages](https://tldr.sh/) for any commands that you don't have a custom command for. This allows Halp to be your one-stop-shop for all command line help. To enable this feature you must have a TLDR client installed and in your PATH. I recommend [TealDeer](https://github.com/dbrgn/tealdeer)
+Note: To enable TLDR integration, you must have a TLDR client installed and in your PATH. I recommend [TealDeer](https://github.com/dbrgn/tealdeer)
 
 ## Usage
 
