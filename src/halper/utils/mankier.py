@@ -7,7 +7,7 @@ from markdownify import markdownify as md
 from rich.markdown import Markdown
 from rich.table import Table
 
-from halper.utils import strip_last_two_lines
+from halper.utils import errors, strip_last_two_lines
 
 
 def get_mankier_table(input_text: str) -> Table:
@@ -39,6 +39,9 @@ def get_mankier_description(input_string: str) -> str:
     if response.status_code != 200:  # noqa: PLR2004
         logger.error(f"Error contacting mankier.com: {response.status_code} {response.reason}")
         raise typer.Exit(1)
+
+    if "html" not in response.json():
+        raise errors.MankierCommandNotFoundError(input_string)
 
     converted_to_markdown = md(response.json()["html"])
     return "\n".join(converted_to_markdown.splitlines()[3:4])
