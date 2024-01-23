@@ -17,7 +17,7 @@ As an added bonus, it will also query [TLDR pages](https://tldr.sh/) for any com
 
 ## Usage
 
-Remind yourself what a command does
+Remind yourself what a command does (Your own aliases and functions or TLDR pages)
 
 ```bash
 halp <command>
@@ -59,6 +59,12 @@ Edit the configuration file
 halp --edit-config
 ```
 
+Search for commands who's code matches a regex pattern
+
+```bash
+halp --search-code <regex pattern>
+```
+
 See all options
 
 ```bash
@@ -74,6 +80,13 @@ Install with Pip
 ```bash
 pip install halper
 ```
+
+## First run
+
+Before you can use Halp, you must first
+
+1. Create a configuration file by running `halp --edit-config``.
+2. Index your commands. You can do this by running `halp --index``.
 
 ## Known issues
 

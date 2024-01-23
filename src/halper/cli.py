@@ -112,7 +112,9 @@ def main(  # noqa: PLR0917, C901
     index: Annotated[
         bool,
         typer.Option(
-            "--index", help="Index files for changes", rich_help_panel="Maintenance Commands"
+            "--index",
+            help="Index files for changes. (Maintains hidden status)",
+            rich_help_panel="Maintenance Commands",
         ),
     ] = False,
     index_full: Annotated[
@@ -169,7 +171,33 @@ def main(  # noqa: PLR0917, C901
     """Your one stop shop for command line help.
 
     \b
-    Point Halp at the appropriate dotfiles and it will index all your custom commands and add them to categories you specify. Then you can query it to find your commands and their usage.
+    Point Halp at the appropriate dotfiles and it will index all your custom aliases and functions and add them to categories you specify. Then you can query it to find your commands and their usage.
+
+    [bold]Before you can use Halp, you must first[/bold]
+
+        1. Create a configuration file by running 'halp --edit-config'.
+        2. Index your commands. You can do this by running 'halp --index'.
+
+    [bold]Usage Examples:[/bold]
+
+    [dim]Search for a command by name[/dim]
+    halp <command name>
+
+    [dim]See full output of a command[/dim]
+    halp --full  <command>
+
+    [dim]View all commands in a particular category[/dim]
+    halp --category <category>
+
+    [dim]Edit the configuration file[/dim]
+    halp --edit-config
+
+    [dim]Hide a command that you don't want to see[/dim]
+    halp --hide <command ID>
+
+    [dim]Search for commands who's code matches a regex pattern[/dim]
+    halp --search-code <regex pattern>
+
     """  # noqa: D301
     # Instantiate Logging
     instantiate_logger(verbosity, log_file, log_to_file)
