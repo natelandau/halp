@@ -3,6 +3,7 @@
 from .category_display import category_display
 from .command_display import command_display, command_list
 from .hidden_commands import hide_commands, list_hidden_commands, unhide_commands
+from .search import search_commands
 
 __all__ = [
     "category_display",
@@ -10,5 +11,6 @@ __all__ = [
     "command_list",
     "hide_commands",
     "list_hidden_commands",
+    "search_commands",
     "unhide_commands",
 ]

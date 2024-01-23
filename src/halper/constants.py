@@ -26,6 +26,13 @@ class ShellType(Enum):
     SH = "sh"
 
 
+class SearchType(Enum):
+    """Search types used for the search command."""
+
+    CODE = "code"
+    NAME = "name"
+
+
 APP_DIR = Path(typer.get_app_dir("halp"))
 CONFIG_PATH = APP_DIR / "config.toml"
 DB_PATH = APP_DIR / "halp.sqlite"

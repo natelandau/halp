@@ -16,9 +16,10 @@ from halper.commands import (
     command_list,
     hide_commands,
     list_hidden_commands,
+    search_commands,
     unhide_commands,
 )
-from halper.constants import APP_DIR, DB, UNKNOWN_CATEGORY_NAME
+from halper.constants import APP_DIR, DB, UNKNOWN_CATEGORY_NAME, SearchType
 from halper.models import Database, Indexer
 from halper.utils import (
     check_python_version,
@@ -75,6 +76,18 @@ def main(  # noqa: PLR0917, C901
     show_list: Annotated[
         bool, typer.Option("--list", help="List names only", show_default=False)
     ] = False,
+    search_code: Annotated[
+        Optional[str],
+        typer.Option(
+            "--search-code", help="Search for command code matching this regex", show_default=False
+        ),
+    ] = None,
+    search_name: Annotated[
+        Optional[str],
+        typer.Option(
+            "--search-name", help="Search command names matching this regex", show_default=False
+        ),
+    ] = None,
     uncategorized: Annotated[
         bool, typer.Option("--uncategorized", help="Show uncategorized commands only")
     ] = False,
@@ -86,15 +99,16 @@ def main(  # noqa: PLR0917, C901
             show_default=False,
         ),
     ] = None,
+    # MAINTENANCE COMMANDS ######################
     edit_configuration: Annotated[
         bool,
         typer.Option(
             "--edit-config",
             help="Edit the configuration file",
             show_default=True,
+            rich_help_panel="Maintenance Commands",
         ),
     ] = False,
-    # MAINTENANCE COMMANDS ######################
     index: Annotated[
         bool,
         typer.Option(
@@ -198,6 +212,12 @@ def main(  # noqa: PLR0917, C901
 
     if ids_to_unhide:
         unhide_commands(ids_to_unhide)
+
+    if search_code or search_name:
+        search_type, pattern = (
+            (SearchType.CODE, search_code) if search_code else (SearchType.NAME, search_name)
+        )
+        search_commands(search_type=search_type, pattern=pattern, full_output=full_output)
 
     # If we are working with categories, run those commands
     if category or uncategorized:
