@@ -1,12 +1,14 @@
 """Database models for the HALP app."""
 
 import os
+import re
 
 from loguru import logger
 from peewee import BooleanField, ForeignKeyField, Model, PeeweeException, SqliteDatabase, TextField
 from rich.syntax import Syntax
 from rich.table import Table
 
+from halper.config import HalpConfig
 from halper.constants import APP_DIR, DB, DB_PATH, CommandType
 from halper.utils import errors
 
@@ -154,6 +156,21 @@ class TempCommandCategory(BaseModel):
     category = ForeignKeyField(TempCategory, backref="commands")
 
 
+# Custom regexp function for SQLite. Registered in Database.instantiate()
+def regexp(pattern: str, value: str) -> bool:
+    """Evaluate a regular expression pattern against a given string value.
+
+    Args:
+        pattern (str): The regular expression pattern to search for.
+        value (str): The string value to be searched.
+
+    Returns:
+        bool: True if the pattern is found in the value, False otherwise.
+    """
+    case_sensitive_regex = 0 if HalpConfig().case_sensitive else re.IGNORECASE
+    return re.search(pattern, value, flags=case_sensitive_regex) is not None
+
+
 class Database:
     """Database controller for the HALP app."""
 
@@ -182,6 +199,9 @@ class Database:
             CommandCategory,
             File,
         ])
+
+        # Register the regexp function with the SQLite database
+        DB.register_function(regexp, "REGEXP")
 
     def close(self) -> None:
         """Close database."""
