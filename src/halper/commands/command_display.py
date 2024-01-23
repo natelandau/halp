@@ -8,12 +8,10 @@ import sh
 import typer
 from loguru import logger
 from rich.columns import Columns
-from rich.markdown import Markdown
-from rich.table import Table
 
 from halper.constants import CommandType
 from halper.models import Command
-from halper.utils import console, get_mankier_response, get_tldr_command
+from halper.utils import console, get_mankier_table, get_tldr_command
 
 
 def command_list(
@@ -62,19 +60,6 @@ def command_list(
     raise typer.Exit()
 
 
-def mankier_display(input_text: str, description: str, explanation: str) -> Table:
-    """Display an individual command's information."""
-    grid = Table.grid(expand=False, padding=(0, 1))
-    grid.add_column(style="bold")
-    grid.add_column()
-
-    grid.add_row("Command:", f"[bold]{input_text}[/bold]")
-    grid.add_row("Description:", Markdown(description))
-    grid.add_row("Explanation:", explanation)
-
-    return grid
-
-
 def command_display(input_string: str, full_output: bool = False) -> None:
     """Display an individual command's information.
 
@@ -90,8 +75,7 @@ def command_display(input_string: str, full_output: bool = False) -> None:
     """
     # if input_string has a space in it, it's probably a command with options so we'll try to display it using mankier.com first
     if " " in input_string:
-        description, explanation = get_mankier_response(input_string)
-        table = mankier_display(input_string, description, explanation)
+        table = get_mankier_table(input_string)
         console.print(table)
         raise typer.Exit()
 
