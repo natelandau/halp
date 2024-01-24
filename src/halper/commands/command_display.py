@@ -7,12 +7,11 @@ import peewee
 import sh
 import typer
 from loguru import logger
-from rich.columns import Columns
 
 from halper.constants import CommandType
 from halper.models import Command
 from halper.utils import console, errors, get_mankier_table, get_tldr_command
-from halper.views import display_commands
+from halper.views import command_list_table, display_commands, strings_to_columns
 
 
 def command_list(
@@ -35,23 +34,28 @@ def command_list(
                 Command.command_type == CommandType.EXPORT.name,
                 Command.hidden == False,  # noqa: E712
             )
-        elif not full_output:
+        else:
             query = query.where(
                 Command.command_type != CommandType.EXPORT.name,
                 Command.hidden == False,  # noqa: E712
             )
+
+        if full_output:
+            table = command_list_table(
+                commands=query.order_by(Command.name),
+                full_output=full_output,
+                only_exports=only_exports,
+                show_categories=True,
+            )
+            console.print(table)
+            raise typer.Exit()
 
         command_names = [command.name for command in query.order_by(Command.name)]
         if not command_names:
             console.print("No commands found")
             raise typer.Exit(1)
 
-        columns = Columns(
-            command_names,
-            equal=True,
-            expand=True,
-            title="[bold underline]All Indexed Commands[/bold underline]",
-        )
+        columns = strings_to_columns(name="command", strings=command_names)
         console.print(columns)
 
     except peewee.PeeweeException as e:

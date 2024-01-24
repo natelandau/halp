@@ -6,7 +6,7 @@ from peewee import fn
 from halper.constants import CommandType, SearchType
 from halper.models import Command
 from halper.utils import console
-from halper.views import list_commands
+from halper.views import command_list_table
 
 
 def search_commands(search_type: SearchType, pattern: str, full_output: bool = False) -> None:
@@ -29,6 +29,8 @@ def search_commands(search_type: SearchType, pattern: str, full_output: bool = F
         console.print(f"No commands found matching regex: [code]{pattern}[/code]")
         raise typer.Exit(1)
 
-    result = list_commands(commands=commands, full_output=full_output)
+    result = command_list_table(
+        commands=commands, full_output=full_output, show_categories=full_output
+    )
     console.print(result)
     raise typer.Exit()
