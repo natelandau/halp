@@ -30,8 +30,6 @@ from halper.utils import (
 )
 
 app = typer.Typer(add_completion=False, rich_markup_mode="rich")
-
-
 typer.rich_utils.STYLE_HELPTEXT = ""
 
 

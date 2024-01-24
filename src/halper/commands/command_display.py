@@ -11,7 +11,8 @@ from rich.columns import Columns
 
 from halper.constants import CommandType
 from halper.models import Command
-from halper.utils import console, get_tldr_command
+from halper.utils import console, errors, get_mankier_table, get_tldr_command
+from halper.views import display_commands
 
 
 def command_list(
@@ -61,23 +62,30 @@ def command_list(
 
 
 def command_display(input_string: str, full_output: bool = False) -> None:
-    """Display an individual command's information.
-
-    Tries to display information from indexed commands first. If not found,
-    it attempts to display using 'tldr' if installed.
+    """Display an individual command's information from indexed commands or using 'tldr' if available.
 
     Args:
-        input_string: Name of the command to display.
-        full_output: Flag to indicate whether to display full output.
+        input_string: The command name to display information about.
+        full_output: Whether to display full command information.
 
     Raises:
-        typer.Exit: Exits the application with a status code. The status code is 1 if either no commands are found, and 0 upon successful completion.
+        typer.Exit: Exits the application with status code 0 on success, 1 on failure.
     """
+    # Check if input_string contains a space
+    if " " in input_string:
+        try:
+            console.print(get_mankier_table(input_string))
+            raise typer.Exit()
+        except errors.MankierCommandNotFoundError:
+            input_string = input_string.split(" ")[0]
+
     tldr = get_tldr_command()
 
+    # Attempt to find the command in the database
     try:
         commands = Command.select().where(Command.name == input_string, Command.hidden == False)  # noqa: E712
 
+        # Check if commands were found in the database
         if commands:
             found_in_tldr = False
             if tldr:
@@ -85,27 +93,10 @@ def command_display(input_string: str, full_output: bool = False) -> None:
                     tldr(input_string)
                     found_in_tldr = True
 
-            show_id = False
-            if len(commands) > 1:
-                console.print(
-                    f"[bold]Found {len(commands)} commands matching:[/bold] [code]{input_string}[/code]"
-                )
-                show_id = True
-
-            for command in commands:
-                if len(commands) > 1:
-                    console.rule()
-
-                console.print(
-                    command.table(
-                        full_output=full_output, found_in_tldr=found_in_tldr, show_id=show_id
-                    )
-                )
-            if len(commands) > 1:
-                console.rule()
+            display_commands(commands, input_string, full_output, found_in_tldr)
             raise typer.Exit()
 
-        # If we have tldr installed, try to display it
+        # Attempt to display using tldr if installed
         if tldr:
             with contextlib.suppress(sh.ErrorReturnCode):
                 tldr(input_string, _out=sys.stdout, _err=sys.stderr)

@@ -5,6 +5,37 @@ from rich.table import Table
 
 from halper.constants import CommandType
 from halper.models.database import Category, Command, CommandCategory
+from halper.utils import console
+
+
+def display_commands(
+    commands: list[Command], input_string: str, full_output: bool, found_in_tldr: bool
+) -> None:
+    """Display the information for a set of commands.
+
+    Args:
+        commands: The commands to display.
+        input_string: The input string used to search for the commands.
+        full_output: Whether to display full command information.
+        found_in_tldr: Whether the command was found in tldr.
+    """
+    show_id = len(commands) > 1
+
+    if show_id:
+        console.print(
+            f"[bold]Found {len(commands)} commands matching:[/bold] [code]{input_string}[/code]"
+        )
+
+    for command in commands:
+        if show_id:
+            console.rule()
+
+        console.print(
+            command.table(full_output=full_output, found_in_tldr=found_in_tldr, show_id=show_id)
+        )
+
+    if show_id:
+        console.rule()
 
 
 def list_commands(  # noqa: PLR0917

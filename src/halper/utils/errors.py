@@ -1,6 +1,26 @@
 """Custom errors for Halp."""
 
 
+class MankierCommandNotFoundError(Exception):
+    """Raised when a command is not found on mankier.com."""
+
+    def __init__(
+        self,
+        msg: str | None = None,
+        e: Exception | None = None,
+        *args: str | int,
+        **kwargs: int | str | bool,
+    ):
+        formatted_msg = (
+            f"Command not found on mankier.com: {msg}"
+            if msg
+            else "Command not found on mankier.com"
+        )
+        if e:
+            formatted_msg += f"\nRaised from: {e.__class__.__name__}: {e}"
+        super().__init__(formatted_msg, *args, **kwargs)
+
+
 class InvalidConfigError(Exception):
     """Raised when the configuration file is malformed."""
 

@@ -16,6 +16,29 @@ from halper.constants import CONFIG_PATH
 from .console import console
 
 
+def strip_last_two_lines(multiline_string: str) -> str:
+    r"""Remove the last line from a multiline string.
+
+    Splits the string into lines, removes the last line, and rejoins the remaining lines.
+
+    Args:
+        multiline_string (str): The multiline string to process.
+
+    Returns:
+        str: The modified string with the last line removed.
+
+    Example:
+        >>> example_string = "Line 1\nLine 2\nLine 3"
+        >>> strip_last_two_lines(example_string)
+        'Line 1'
+    """
+    # Split the string into lines
+    lines = multiline_string.splitlines()
+
+    # Remove the last line and rejoin the remaining lines
+    return "\n".join(lines[:-2])
+
+
 def get_tldr_command() -> sh.Command | None:
     """Get the 'tldr' command if available.
 
