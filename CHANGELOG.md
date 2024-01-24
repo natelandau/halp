@@ -1,3 +1,16 @@
+## v0.2.0 (2024-01-24)
+
+### Feat
+
+- add `uncategorized_name` to config
+- explain commands with options (#13)
+- search by command name or code (#12)
+- improve configuration management (#11)
+
+### Fix
+
+- improve `--list` table view (#14)
+
 ## v0.1.0 (2024-01-21)
 
 ### Feat
