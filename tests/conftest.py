@@ -41,10 +41,11 @@ def config_data():
 
     def _inner(
         case_sensitive: bool | None = None,
-        command_name_ignore_regex: str | None = None,
-        file_globs: list[str] | None = None,
-        file_exclude_regex: str | None = None,
         categories: dict[str, CategoryConfig] | None = None,
+        command_name_ignore_regex: str | None = None,
+        file_exclude_regex: str | None = None,
+        file_globs: list[str] | None = None,
+        uncategorized_name: str | None = None,
     ):
         override_data = {}
         if case_sensitive:
@@ -55,6 +56,8 @@ def config_data():
             override_data["command_name_ignore_regex"] = command_name_ignore_regex
         if file_exclude_regex:
             override_data["file_exclude_regex"] = file_exclude_regex
+        if uncategorized_name:
+            override_data["uncategorized_name"] = uncategorized_name
         if categories and isinstance(categories, dict):
             cats = {}
             for name, category in categories.items():

@@ -2,6 +2,7 @@ case_sensitive            = false
 command_name_ignore_regex = ''
 file_exclude_regex        = ''
 file_globs                = [""]
+uncategorized_name        = "uncategorized"
 
 [categories]
     # Intentionally blank

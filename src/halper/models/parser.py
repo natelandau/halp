@@ -7,7 +7,6 @@ from loguru import logger
 from parsy import ParseError
 
 from halper.config import HalpConfig
-from halper.constants import UNKNOWN_CATEGORY_NAME
 from halper.models import Category, File
 from halper.utils.text_parsers import parse_file
 
@@ -87,7 +86,7 @@ class Parser:
             return matched_categories
 
         default_cat, _ = Category.get_or_create(
-            name=UNKNOWN_CATEGORY_NAME, defaults={"description": "Uncategorized commands"}
+            name=HalpConfig().uncategorized_name, defaults={"description": "Uncategorized commands"}
         )
         return [default_cat]
 

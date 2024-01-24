@@ -268,7 +268,7 @@ class TestIndexing:
             if exit_code == 0 and num_commands > 0:
                 assert (
                     CommandCategory.select()
-                    .where(CommandCategory.category == Category.get(name="Uncategorized"))
+                    .where(CommandCategory.category == Category.get(name="uncategorized"))
                     .count()
                     == uncategorized_commands
                 )

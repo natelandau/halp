@@ -4,7 +4,7 @@
 import pytest
 
 from halper.config import HalpConfig
-from halper.constants import UNKNOWN_CATEGORY_NAME, CommandType
+from halper.constants import CommandType
 from halper.models import Category, Command, CommandCategory, File, Parser
 
 
@@ -97,7 +97,7 @@ class TestParserClass:
 
         # THEN the correct categories should be returned
         if len(found_categories) == 0:
-            assert result == [Category.get(name=UNKNOWN_CATEGORY_NAME)]
+            assert result == [Category.get(name=HalpConfig().uncategorized_name)]
         if len(found_categories) == 1:
             assert result == [Category.get(name=found_categories[0])]
         if len(found_categories) == 2:

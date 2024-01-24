@@ -1,7 +1,8 @@
-case_sensitive            = false # Whether or not to match case sensitively with regexes
-command_name_ignore_regex = ''    # Exclude commands who's names match this regex
-file_exclude_regex        = ''    # Exclude files who's paths match this regex
-file_globs                = []    # Absolute path globs to files to parse for commands
+case_sensitive            = false           # Whether or not to match case sensitively with regexes
+command_name_ignore_regex = ''              # Exclude commands who's names match this regex
+file_exclude_regex        = ''              # Exclude files who's paths match this regex
+file_globs                = []              # Absolute path globs to files to parse for commands
+uncategorized_name        = "uncategorized" # The name of the uncategorized category
 
 [categories] # Commands are matched against these categories
     # [categories.example]

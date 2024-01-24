@@ -23,9 +23,10 @@ class HalpConfig(BaseConfig):  # type: ignore [misc]
     """Halper Configuration."""
 
     case_sensitive: bool = False
+    categories: dict[str, CategoryConfig] = None
     command_name_ignore_regex: str = ""
     file_exclude_regex: str = ""
     file_globs: tuple[str, ...] = ()
-    categories: dict[str, CategoryConfig] = None
+    uncategorized_name: str = "uncategorized"
 
     CONFIG_SOURCES: ClassVar[ConfigSources | None] = FileSource(file=CONFIG_PATH)

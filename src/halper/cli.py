@@ -19,7 +19,8 @@ from halper.commands import (
     search_commands,
     unhide_commands,
 )
-from halper.constants import APP_DIR, DB, UNKNOWN_CATEGORY_NAME, SearchType
+from halper.config import HalpConfig
+from halper.constants import APP_DIR, DB, SearchType
 from halper.models import Database, Indexer
 from halper.utils import (
     check_python_version,
@@ -248,7 +249,7 @@ def main(  # noqa: PLR0917, C901
     # If we are working with categories, run those commands
     if category or uncategorized:
         category_display(
-            input_string=UNKNOWN_CATEGORY_NAME if uncategorized else input_string,
+            input_string=HalpConfig().uncategorized_name if uncategorized else input_string,
             list_categories=show_list,
             full_output=full_output,
             only_exports=only_exports,
