@@ -1,5 +1,5 @@
 """Shared views for Halp."""
 
-from .views import display_commands, list_commands
+from .views import command_list_table, display_commands, strings_to_columns
 
-__all__ = ["display_commands", "list_commands"]
+__all__ = ["command_list_table", "display_commands", "strings_to_columns"]

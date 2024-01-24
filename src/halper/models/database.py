@@ -74,6 +74,28 @@ class Command(BaseModel):
             f"{self.name=}\n{self.description=}\n{self.command_type=}\n{self.code=}\n{self.file=}\n"
         )
 
+    @property
+    def category_names(self) -> list[str]:
+        """Return a list of category names associated with this command.
+
+        Retrieves the names of categories linked to the current command instance
+        from the database, ordered alphabetically by category name.
+
+        Returns:
+            list[str]: A list of category names.
+        """
+        # Retrieve category names associated with this command
+        category_query = (
+            Category.select(Category.name)
+            .join(CommandCategory)
+            .join(Command)
+            .where(Command.id == self.id)
+            .order_by(Category.name)
+        )
+
+        # Construct the list of category names
+        return [category.name for category in category_query]
+
     def table(
         self, full_output: bool = False, found_in_tldr: bool = False, show_id: bool = False
     ) -> Table:
@@ -87,15 +109,6 @@ class Command(BaseModel):
         Returns:
             rich.Table: Rich table for command
         """
-        categories = [
-            c.name
-            for c in Category.select()
-            .join(CommandCategory)
-            .join(Command)
-            .where(Command.id == self.id)
-            .order_by(Category.name)
-        ]
-
         grid = Table.grid(expand=False, padding=(0, 1))
         grid.add_column(style="bold")
         grid.add_column()
@@ -103,7 +116,7 @@ class Command(BaseModel):
         if show_id:
             grid.add_row("ID:", f"[cyan]{self.id!s}[/cyan]")
         grid.add_row("Description:", self.description)
-        grid.add_row("Categories:", ", ".join(categories))
+        grid.add_row("Categories:", ", ".join(self.category_names))
         grid.add_row("Type:", self.command_type.title())
         grid.add_row("File:", f"[dim]{self.file.path}[/dim]")
         if found_in_tldr:

@@ -1,17 +1,31 @@
 """Views for the halper app."""
 
+import inflect
 from rich import box
+from rich.columns import Columns
 from rich.table import Table
 
 from halper.constants import CommandType
 from halper.models.database import Category, Command, CommandCategory
 from halper.utils import console
 
+p = inflect.engine()
+
+
+def strings_to_columns(name: str, strings: list[str], equal: bool = True) -> Columns:
+    """Convert a list of strings to a rich Columns object."""
+    return Columns(
+        strings,
+        equal=equal,
+        expand=True,
+        title=f"[bold underline]{len(strings)} {p.plural_noun(name, len(strings))}[/bold underline]",
+    )
+
 
 def display_commands(
     commands: list[Command], input_string: str, full_output: bool, found_in_tldr: bool
 ) -> None:
-    """Display the information for a set of commands.
+    """Display detailed information for a set of commands.
 
     Args:
         commands: The commands to display.
@@ -38,7 +52,7 @@ def display_commands(
         console.rule()
 
 
-def list_commands(  # noqa: PLR0917
+def command_list_table(  # noqa: PLR0917
     category: Category | None = None,
     commands: list[Command] | None = None,
     show_hidden: bool = False,
@@ -47,21 +61,24 @@ def list_commands(  # noqa: PLR0917
     only_exports: bool = False,
     title: str | None = None,
 ) -> Table:
-    """List commands in a table.
+    """List commands in a table, filtered and formatted based on the provided parameters.
 
     Args:
-        category (Category): A Category object.
-        commands (list[Command]): A list of Command objects.
-        show_categories (bool): Whether to show categories.
+        category (Optional[Category]): A Category object to filter commands.
+        commands (Optional[list[Command]]): A list of Command objects to display.
         show_hidden (bool): Whether to show hidden commands.
+        show_categories (bool): Whether to show categories.
         full_output (bool): Whether to show full output.
         only_exports (bool): Whether to show only export commands.
-        title (str): A title for the table.
+        title (Optional[str]): A title for the table.
 
     Returns:
-        Table | None: A 'rich' Table object containing the formatted command data. Returns None if the table has no rows (i.e., there are no commands to display).
+        Optional[Table]: A 'rich' Table object containing the formatted command data, or None if no commands to display.
     """
+    commands_to_display = []
+
     if category:
+        # Filter commands by category
         commands_to_display = (
             Command.select()
             .where(Command.hidden == show_hidden)
@@ -70,46 +87,34 @@ def list_commands(  # noqa: PLR0917
             .where(Category.id == category.id)
             .order_by(Command.name)
         )
-        table_title = (
-            f"[bold]{category.name}[/bold]\n{category.description}"
-            if category.description
-            else category.name
-        )
 
     elif commands:
+        # Use provided command list
         commands_to_display = [c for c in commands if c.hidden == show_hidden]
-        table_title = title
 
-    table = Table(
-        box=box.SIMPLE,
-        expand=False,
-        show_header=True,
-        title=table_title,
-    )
+    if not commands_to_display:
+        return None
 
-    columns = (
-        {"name": "Command", "style": "bold", "display": True},
-        {"name": "Categories", "style": "dim", "display": show_categories},
-        {"name": "Type", "style": "dim", "display": full_output},
-        {"name": "Description", "style": "dim", "display": True},
-        {"name": "ID", "style": "dim cyan", "display": full_output or show_hidden},
-        {"name": "File", "style": "dim", "display": full_output},
-    )
+    table = Table(box=box.SIMPLE, expand=False, show_header=True, title=title)
+    columns = [
+        ("Command", "bold", True),
+        ("Categories", "dim", show_categories),
+        ("Type", "dim", full_output),
+        ("Description", "dim", True),
+        ("ID", "dim cyan", full_output or show_hidden),
+        ("File", "dim", full_output),
+    ]
 
-    for column in columns:
-        if column["display"]:
-            table.add_column(str(column["name"]), style=str(column["style"]))
+    # Add columns based on display condition
+    for name, style, display in columns:
+        if display:
+            table.add_column(name, style=style)
 
     for c in commands_to_display:
         if only_exports and c.command_type != CommandType.EXPORT.name:
             continue
-
         if not only_exports and not full_output and c.command_type == CommandType.EXPORT.name:
             continue
-
-        command_categories = (
-            Category().select().join(CommandCategory).join(Command).where(Command.id == c.id)
-        )
 
         description = (
             c.description
@@ -118,19 +123,18 @@ def list_commands(  # noqa: PLR0917
             if c.command_type in {CommandType.ALIAS.name, CommandType.EXPORT.name}
             else ""
         )
+        row_values = [
+            c.name,
+            ", ".join(c.category_names),
+            c.command_type.title() if full_output else "",
+            description,
+            str(c.id) if full_output or show_hidden else "",
+            c.file.name if full_output else "",
+        ]
 
-        column_data = (
-            {"value": c.name, "display": True},
-            {
-                "value": ", ".join([category.name for category in command_categories]),
-                "display": show_categories,
-            },
-            {"value": c.command_type.title(), "display": full_output},
-            {"value": description, "display": True},
-            {"value": str(c.id), "display": full_output or show_hidden},
-            {"value": c.file.name, "display": full_output},
-        )
+        # Add row to table
+        table.add_row(*[
+            value for value, (_, _, display) in zip(row_values, columns, strict=False) if display
+        ])
 
-        table.add_row(*[column["value"] for column in column_data if column["display"]])
-
-    return table if table.rows else None
+    return table

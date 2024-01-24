@@ -3,11 +3,10 @@
 import peewee
 import typer
 from loguru import logger
-from rich.columns import Columns
 
 from halper.models import Category
 from halper.utils import console
-from halper.views import list_commands
+from halper.views import command_list_table, strings_to_columns
 
 
 def category_display(
@@ -45,19 +44,21 @@ def category_display(
         raise typer.Exit(code=1)
 
     if list_categories:
-        command_names = [category.name for category in categories]
-        columns = Columns(
-            command_names,
-            equal=True,
-            expand=True,
-            title="[bold underline]All Categories[/bold underline]",
-        )
+        category_names = [category.name for category in categories]
+        columns = strings_to_columns(name="category", strings=category_names)
         console.print(columns)
 
         raise typer.Exit()
 
     for category in categories:
-        table = list_commands(category=category, full_output=full_output, only_exports=only_exports)
+        table = command_list_table(
+            category=category,
+            full_output=full_output,
+            only_exports=only_exports,
+            title=f"[bold underline]{category.name}[/bold underline]\n{category.description}"
+            if category.description
+            else category.name,
+        )
         if table:
             console.print(table)
 
