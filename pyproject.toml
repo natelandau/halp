@@ -117,7 +117,6 @@
     show_column_numbers = true
     show_error_codes = true
     show_error_context = true
-    strict_optional = false
     warn_redundant_casts = true
     warn_unreachable = true
     warn_unused_ignores = true

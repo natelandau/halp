@@ -60,7 +60,7 @@ def command_list_table(  # noqa: PLR0917
     full_output: bool = False,
     only_exports: bool = False,
     title: str | None = None,
-) -> Table:
+) -> Table | None:
     """List commands in a table, filtered and formatted based on the provided parameters.
 
     Args:

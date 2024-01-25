@@ -133,7 +133,10 @@ class Indexer:
         Returns:
             tuple[str, str, str]: Status indicator, count of categories added, and a descriptive message.
         """
-        config_categories = [d.model_dump() for d in HalpConfig().categories.values()]
+        if HalpConfig().categories is None:
+            return ("❓", "", "No categories from config")
+
+        config_categories = [d.model_dump() for d in HalpConfig().categories.values()]  # type: ignore [union-attr]
 
         # Add categories to the database
         with DB.atomic():

@@ -19,7 +19,7 @@ STANDALONE_COMMENT = (
 
 
 @generate
-def parse_alias() -> Generator[None, None, dict[str, str]]:
+def parse_alias() -> Generator[None, None, dict[str, str | None]]:
     """Parse a string to extract an alias definition.
 
     The function looks for a line starting with 'alias', followed by the alias name, an equal sign,
@@ -56,7 +56,7 @@ def parse_alias() -> Generator[None, None, dict[str, str]]:
 
 
 @generate
-def parse_export() -> Generator[None, None, dict[str, str]]:
+def parse_export() -> Generator[None, None, dict[str, str | None]]:
     """Parse a string to extract an export definition.
 
     Identifies an export statement, which starts with 'export', followed by a variable name, an equal
@@ -91,7 +91,7 @@ def parse_export() -> Generator[None, None, dict[str, str]]:
 
 
 @generate
-def parse_function() -> Generator[None, None, dict[str, str]]:
+def parse_function() -> Generator[None, None, dict[str, str | None]]:
     """Parse a string to extract a function definition.
 
     Looks for a function definition starting with an optional 'function' keyword, followed by the
@@ -180,13 +180,16 @@ def parse_file() -> Generator[None, None, dict[str, str | CommandType]]:
     yield NEWLINE.optional()
 
     # Find matching commands
-    parser_results: tuple[CommandType, dict[str, str | CommandType]] = (
+    parser_results: tuple[CommandType, dict[str, str | CommandType]] | None = (
         yield parse_alias.tag(CommandType.ALIAS)
         | parse_export.tag(CommandType.EXPORT)
         | parse_function.tag(CommandType.FUNCTION)
     )
 
     # Add the tag to the result dictionary
+    if parser_results is None:
+        msg = "Parser results should not be None"
+        raise ValueError(msg)
     result: dict[str, str | CommandType] = parser_results[1]
     result["command_type"] = parser_results[0]
 

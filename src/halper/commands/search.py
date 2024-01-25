@@ -9,7 +9,9 @@ from halper.utils import console
 from halper.views import command_list_table
 
 
-def search_commands(search_type: SearchType, pattern: str, full_output: bool = False) -> None:
+def search_commands(
+    search_type: SearchType, pattern: str | None, full_output: bool = False
+) -> None:
     """Search for commands based on a given pattern and type.
 
     Args:
@@ -20,6 +22,10 @@ def search_commands(search_type: SearchType, pattern: str, full_output: bool = F
     Raises:
         typer.Exit: Exits the application if no matching commands are found.
     """
+    if not pattern:
+        console.print("No search pattern provided.")
+        raise typer.Exit(1)
+
     search_field = Command.name if search_type == SearchType.NAME else Command.code
     commands = Command.select().where(
         fn.REGEXP(pattern, search_field), Command.command_type != CommandType.EXPORT.name

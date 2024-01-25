@@ -23,7 +23,7 @@ class HalpConfig(BaseConfig):  # type: ignore [misc]
     """Halper Configuration."""
 
     case_sensitive: bool = False
-    categories: dict[str, CategoryConfig] = None
+    categories: dict[str, CategoryConfig] | None = None
     command_name_ignore_regex: str = ""
     file_exclude_regex: str = ""
     file_globs: tuple[str, ...] = ()
