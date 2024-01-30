@@ -5,7 +5,8 @@ from collections.abc import Generator
 
 from parsy import generate, regex, string
 
-from halper.constants import CommandType
+from halper.config import HalpConfig
+from halper.constants import CommandType, CommentPlacement
 
 # Define shared grammar elements for parsing.
 WS = regex(r"[ \t]+").desc("whitespace")
@@ -27,6 +28,8 @@ def parse_alias() -> Generator[None, None, dict[str, str | None]]:
     optionally parses a comment at the end of the line. The function returns a dictionary with the
     alias name, value, and comment (if any).
 
+    When CommentPlacement.BEST, we will favor inline comments over above comments.
+
     Returns:
         dict[str, str]: A dictionary containing 'name', 'code', and 'description' keys with corresponding
                         values extracted from the alias definition.
@@ -36,6 +39,14 @@ def parse_alias() -> Generator[None, None, dict[str, str | None]]:
     alias_name = regex(r"[^=\s\\\$`]+") << string("=")
 
     # Parse
+    above_comment = None
+    if HalpConfig().comment_placement in {CommentPlacement.BEST, CommentPlacement.ABOVE}:
+        above_comment = yield STANDALONE_COMMENT.optional()
+    else:
+        yield STANDALONE_COMMENT.optional()
+
+    yield NEWLINE.optional()
+
     yield alias_identifier
     name = yield alias_name
 
@@ -49,10 +60,15 @@ def parse_alias() -> Generator[None, None, dict[str, str | None]]:
     elif quotation is None:
         value = yield regex(r"[^\s\n]+")
 
-    comment = yield COMMENT_ON_LINE.optional()
+    inline_comment = None
+    if HalpConfig().comment_placement in {CommentPlacement.INLINE, CommentPlacement.BEST}:
+        inline_comment = yield COMMENT_ON_LINE.optional()
+    else:
+        yield COMMENT_ON_LINE.optional()
+
     yield NEWLINE.optional()
 
-    return {"name": name, "code": value, "description": comment}
+    return {"name": name, "code": value, "description": inline_comment or above_comment}
 
 
 @generate

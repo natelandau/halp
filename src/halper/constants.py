@@ -7,7 +7,15 @@ import typer
 from peewee import SqliteDatabase
 
 
-class CommandType(Enum):
+class CommentPlacement(str, Enum):
+    """Comment placement for halp."""
+
+    ABOVE = "above"
+    INLINE = "inline"
+    BEST = "best"
+
+
+class CommandType(str, Enum):
     """Command types for halp."""
 
     ALIAS = "alias"
@@ -16,7 +24,7 @@ class CommandType(Enum):
     EXPORT = "export"
 
 
-class ShellType(Enum):
+class ShellType(str, Enum):
     """Shell types for halp."""
 
     BASH = "bash"
@@ -26,7 +34,7 @@ class ShellType(Enum):
     SH = "sh"
 
 
-class SearchType(Enum):
+class SearchType(str, Enum):
     """Search types used for the search command."""
 
     CODE = "code"
@@ -37,4 +45,3 @@ APP_DIR = Path(typer.get_app_dir("halp"))
 CONFIG_PATH = APP_DIR / "config.toml"
 DB_PATH = APP_DIR / "halp.sqlite"
 DB = SqliteDatabase(DB_PATH)
-UNKNOWN_CATEGORY_NAME = "Uncategorized"
