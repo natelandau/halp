@@ -7,9 +7,8 @@
 EXPORT export1="$PATH:/usr/local/bin"
 alias alias1='some code that does something' # comment 1
 
-# test a function
+# Always print contents of directory when entering
 func1() {
-    # Always print contents of directory when entering
     builtin cd "$@" || return 1
     ls -alF
 }

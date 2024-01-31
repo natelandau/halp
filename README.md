@@ -10,8 +10,9 @@ Key features:
 
 -   Understands your aliases, functions, and exported environment variables
 -   Customizable categories
+-   Uses your inline comments to describe your commands
 -   Customizable regexes for matching commands
--   Uses a SQLite database for fast querying
+-   SQLite database used for fast querying
 -   Explains builtin commands with [TLDR pages](https://tldr.sh/)
 -   Explains builtin commands with options from [mankier.com](https://www.mankier.com/)
 
@@ -111,10 +112,12 @@ On first run, a TOML configuration file will be created for you.
 IMPORTANT: You must add at least one path to the `file_globs` list and then run `halp --index`. Otherwise, no commands will be indexed.
 
 ```toml
-case_sensitive            = false # Whether or not to match case sensitively with regexes
-command_name_ignore_regex = ''    # Exclude commands who's names match this regex
-file_exclude_regex        = ''    # Exclude files who's paths match this regex
-file_globs                = []    # Globs to match files which will be indexed for commands
+case_sensitive            = false           # Whether or not to match case sensitively with regexes
+command_name_ignore_regex = ''              # Exclude commands who's names match this regex
+comment_placement         = "BEST"          # Where you place comments to describe your code. One of "BEST", "ABOVE", "INLINE"
+file_exclude_regex        = ''              # Exclude files who's paths match this regex
+file_globs                = []              # Absolute path globs to files to parse for commands
+uncategorized_name        = "uncategorized" # The name of the uncategorized category
 
 [categories] # Commands are matched against these categories
     [categories.example]
@@ -124,6 +127,24 @@ file_globs                = []    # Globs to match files which will be indexed f
         description   = "" # The description of this category
         command_name_regex    = '' # Regex to match the name of the command
         path_regex    = '' # Regex to match the path of the file
+```
+
+### How halp finds descriptions for commands
+
+The `comment_placement` setting determines where Halp looks for comments to describe your commands. It can be one of the following: `BEST` (default), `ABOVE`, `INLINE`. When `BEST` is used, Halp will look for comments in both places and use the inline comment when both are found.
+
+Here's how Halp looks for comments in each case:
+
+```bash
+
+# Description                            <------ Above
+alias command='some code' # Description  <------ Inline
+
+# Description                            <------ Above
+func command() {
+    # Description                        <------ Inline
+    some code
+}
 ```
 
 # Contributing
