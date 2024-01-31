@@ -5,7 +5,8 @@ from collections.abc import Generator
 
 from parsy import generate, regex, string
 
-from halper.constants import CommandType
+from halper.config import HalpConfig
+from halper.constants import CommandType, CommentPlacement
 
 # Define shared grammar elements for parsing.
 WS = regex(r"[ \t]+").desc("whitespace")
@@ -27,6 +28,8 @@ def parse_alias() -> Generator[None, None, dict[str, str | None]]:
     optionally parses a comment at the end of the line. The function returns a dictionary with the
     alias name, value, and comment (if any).
 
+    When CommentPlacement.BEST, we will favor inline comments over above comments.
+
     Returns:
         dict[str, str]: A dictionary containing 'name', 'code', and 'description' keys with corresponding
                         values extracted from the alias definition.
@@ -36,6 +39,14 @@ def parse_alias() -> Generator[None, None, dict[str, str | None]]:
     alias_name = regex(r"[^=\s\\\$`]+") << string("=")
 
     # Parse
+    above_comment = None
+    if HalpConfig().comment_placement in {CommentPlacement.BEST, CommentPlacement.ABOVE}:
+        above_comment = yield STANDALONE_COMMENT.optional()
+    else:
+        yield STANDALONE_COMMENT.optional()
+
+    yield NEWLINE.optional()
+
     yield alias_identifier
     name = yield alias_name
 
@@ -49,10 +60,15 @@ def parse_alias() -> Generator[None, None, dict[str, str | None]]:
     elif quotation is None:
         value = yield regex(r"[^\s\n]+")
 
-    comment = yield COMMENT_ON_LINE.optional()
+    inline_comment = None
+    if HalpConfig().comment_placement in {CommentPlacement.INLINE, CommentPlacement.BEST}:
+        inline_comment = yield COMMENT_ON_LINE.optional()
+    else:
+        yield COMMENT_ON_LINE.optional()
+
     yield NEWLINE.optional()
 
-    return {"name": name, "code": value, "description": comment}
+    return {"name": name, "code": value, "description": inline_comment or above_comment}
 
 
 @generate
@@ -63,6 +79,8 @@ def parse_export() -> Generator[None, None, dict[str, str | None]]:
     sign, and the variable value. Handles optional single or double quotes around the variable value
     and an optional comment. Returns a dictionary with the export name, value, and comment.
 
+    When CommentPlacement.BEST, we will favor inline comments over above comments.
+
     Returns:
         dict[str, str]: A dictionary containing 'name', 'code', and 'description' keys with values
                         extracted from the export definition.
@@ -72,6 +90,16 @@ def parse_export() -> Generator[None, None, dict[str, str | None]]:
     export_name = regex(r"[^=\s\"'\$\\`]+") << string("=")
 
     # Parse
+    yield NEWLINE.optional()
+
+    above_comment = None
+    if HalpConfig().comment_placement in {CommentPlacement.BEST, CommentPlacement.ABOVE}:
+        above_comment = yield STANDALONE_COMMENT.optional()
+    else:
+        yield STANDALONE_COMMENT.optional()
+
+    yield NEWLINE.optional()
+
     yield export_identifier
     name = yield export_name
 
@@ -84,10 +112,15 @@ def parse_export() -> Generator[None, None, dict[str, str | None]]:
     else:
         value = yield regex(r"[^\s\n]+")
 
-    comment = yield COMMENT_ON_LINE.optional()
+    inline_comment = None
+    if HalpConfig().comment_placement in {CommentPlacement.INLINE, CommentPlacement.BEST}:
+        inline_comment = yield COMMENT_ON_LINE.optional()
+    else:
+        yield COMMENT_ON_LINE.optional()
+
     yield NEWLINE.optional()
 
-    return {"name": name, "code": value, "description": comment}
+    return {"name": name, "code": value, "description": inline_comment or above_comment}
 
 
 @generate
@@ -110,15 +143,33 @@ def parse_function() -> Generator[None, None, dict[str, str | None]]:
     func_end = regex(r"[\s]\}")
 
     # Parse
+    above_comment = None
+    if HalpConfig().comment_placement in {CommentPlacement.BEST, CommentPlacement.ABOVE}:
+        above_comment = yield STANDALONE_COMMENT.optional()
+    else:
+        yield STANDALONE_COMMENT.optional()
+
+    yield NEWLINE.optional()
+
     yield func_identifier.optional()
     name = yield func_name
     args = yield func_args
     yield regex(r"[\s]+").optional()
     yield func_start
     body = yield func_body
+
+    inline_comment = None
+    if HalpConfig().comment_placement in {CommentPlacement.INLINE, CommentPlacement.BEST}:
+        inline_comment = parse_function_body_comment.parse(body)
+
     yield func_end
 
-    return {"name": name, "args": args, "code": body, "description": None}
+    return {
+        "name": name,
+        "args": args,
+        "code": body,
+        "description": inline_comment or above_comment,
+    }
 
 
 @generate
@@ -167,10 +218,13 @@ def parse_file() -> Generator[None, None, dict[str, str | CommandType]]:
     # Grammar
 
     # Match any line that does not start with 'alias', 'export', or 'function' and does not contain a function definition
-    not_alias = regex(r"(?!alias)", flags=re.IGNORECASE).desc("not_alias")
-    not_export = regex(r"(?!export [\w-]+=)", flags=re.IGNORECASE).desc("not_export")
-    not_function = regex(r"(?!(func(tion)? )?[\w-]+\(\))", flags=re.IGNORECASE).desc("not_function")
-
+    not_alias = regex(r"(?!([ \t]*#.*?[\n\r])?[ \t]*alias)", flags=re.IGNORECASE).desc("not_alias")
+    not_export = regex(r"(?!([ \t]*#.*?[\n\r])?[ \t]*export [\w-]+=)", flags=re.IGNORECASE).desc(
+        "not_export"
+    )
+    not_function = regex(
+        r"(?!([ \t]*#.*?[\n\r])?[ \t]*(func(tion)? )?[\w-]+\(\))", flags=re.IGNORECASE
+    ).desc("not_function")
     non_matching_line = (
         WS.optional() >> (not_alias + not_export + not_function) << regex(r".*") << NEWLINE
     ).desc("non_matching_line")
@@ -190,12 +244,9 @@ def parse_file() -> Generator[None, None, dict[str, str | CommandType]]:
     if parser_results is None:
         msg = "Parser results should not be None"
         raise ValueError(msg)
+
     result: dict[str, str | CommandType] = parser_results[1]
     result["command_type"] = parser_results[0]
-
-    # Parse functions for comment descriptions within their body
-    if result["command_type"] == CommandType.FUNCTION:
-        result["description"] = parse_function_body_comment.parse(result["code"])
 
     yield non_matching_line.many().optional()
     yield NEWLINE.optional()

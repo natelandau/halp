@@ -9,6 +9,7 @@ from confz import DataSource, FileSource
 from peewee import SqliteDatabase
 
 from halper.config import CategoryConfig, HalpConfig
+from halper.constants import CommentPlacement
 
 from halper.utils import console  # isort:skip
 from halper.models import (
@@ -46,6 +47,7 @@ def config_data():
         file_exclude_regex: str | None = None,
         file_globs: list[str] | None = None,
         uncategorized_name: str | None = None,
+        comment_placement: str | None = None,
     ):
         override_data = {}
         if case_sensitive:
@@ -54,6 +56,8 @@ def config_data():
             override_data["file_globs"] = file_globs
         if command_name_ignore_regex:
             override_data["command_name_ignore_regex"] = command_name_ignore_regex
+        if comment_placement:
+            override_data["comment_placement"] = comment_placement
         if file_exclude_regex:
             override_data["file_exclude_regex"] = file_exclude_regex
         if uncategorized_name:

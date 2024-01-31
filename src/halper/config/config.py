@@ -1,11 +1,23 @@
 """Instantiate Configuration class and set default values."""
 
-from typing import ClassVar
+from typing import Annotated, ClassVar
 
 from confz import BaseConfig, ConfigSources, FileSource
-from pydantic import BaseModel
+from pydantic import AfterValidator, BaseModel, BeforeValidator
 
-from halper.constants import CONFIG_PATH
+from halper.constants import CONFIG_PATH, CommentPlacement
+
+
+def valid_comment_placement(value: str) -> CommentPlacement:
+    """Convert a string to a CommentPlacement enum."""
+    return CommentPlacement(value)
+
+
+CommentLocation = Annotated[
+    CommentPlacement,
+    AfterValidator(valid_comment_placement),
+    BeforeValidator(lambda x: x.lower()),
+]
 
 
 class CategoryConfig(BaseModel):
@@ -25,6 +37,8 @@ class HalpConfig(BaseConfig):  # type: ignore [misc]
     case_sensitive: bool = False
     categories: dict[str, CategoryConfig] | None = None
     command_name_ignore_regex: str = ""
+    comment_placement: CommentLocation = CommentPlacement.BEST
+
     file_exclude_regex: str = ""
     file_globs: tuple[str, ...] = ()
     uncategorized_name: str = "uncategorized"
