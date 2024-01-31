@@ -56,6 +56,12 @@ def main(  # noqa: PLR0917, C901
             "--category", "--cat", help="Show commands organized by categories", show_default=False
         ),
     ] = False,
+    edit_description_id: Annotated[
+        Optional[int],
+        typer.Option(
+            "--description", help="Customize command description by ID", show_default=False
+        ),
+    ] = None,
     only_exports: Annotated[
         bool, typer.Option("--exports", help="Filter to only display EXPORTS")
     ] = False,
@@ -99,10 +105,6 @@ def main(  # noqa: PLR0917, C901
             show_default=False,
         ),
     ] = None,
-    edit_description_id: Annotated[
-        Optional[int],
-        typer.Option("--description", help="Edit command description by ID", show_default=False),
-    ] = None,
     # MAINTENANCE COMMANDS ######################
     edit_configuration: Annotated[
         bool,
@@ -117,7 +119,7 @@ def main(  # noqa: PLR0917, C901
         bool,
         typer.Option(
             "--index",
-            help="Index files for changes. (Maintains hidden status)",
+            help="Index files for changes. [dim](Maintain customizations)[/dim]",
             rich_help_panel="Maintenance Commands",
         ),
     ] = False,
@@ -125,7 +127,7 @@ def main(  # noqa: PLR0917, C901
         bool,
         typer.Option(
             "--index-full",
-            help="Completely rebuild index of commands",
+            help="Completely rebuild index of commands. [dim](Remove customizations)[/dim]",
             rich_help_panel="Maintenance Commands",
         ),
     ] = False,
@@ -196,8 +198,11 @@ def main(  # noqa: PLR0917, C901
     [dim]Edit the configuration file[/dim]
     halp --edit-config
 
-    [dim]Hide a command that you don't want to see[/dim]
-    halp --hide <command ID>
+    [dim]Hide commands that you don't want to see[/dim]
+    halp --hide <command ID>,<command ID>,...
+
+    [dim]Customize the description of a command[/dim]
+    halp --description <command ID>
 
     [dim]Search for commands who's code matches a regex pattern[/dim]
     halp --search-code <regex pattern>

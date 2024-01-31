@@ -50,10 +50,16 @@ Index your dotfiles
 halp --index
 ```
 
-Hide a command that you don't want to see
+Hide commands that you don't want to see
 
 ```bash
-halp --hide <command ID>
+halp --hide <command ID>,<command ID>,...
+```
+
+Customize the description of a command
+
+```bash
+halp --description <command ID>
 ```
 
 Edit the configuration file
