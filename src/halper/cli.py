@@ -14,6 +14,7 @@ from halper.commands import (
     category_display,
     command_display,
     command_list,
+    edit_command_description,
     hide_commands,
     list_hidden_commands,
     search_commands,
@@ -97,6 +98,10 @@ def main(  # noqa: PLR0917, C901
             help="Unhide command(s) by ID. [dim]Use comma separator: --unhide 234,456",
             show_default=False,
         ),
+    ] = None,
+    edit_description_id: Annotated[
+        Optional[int],
+        typer.Option("--description", help="Edit command description by ID", show_default=False),
     ] = None,
     # MAINTENANCE COMMANDS ######################
     edit_configuration: Annotated[
@@ -225,6 +230,7 @@ def main(  # noqa: PLR0917, C901
         )
         raise typer.Exit(code=1)
 
+    # Process options
     if index or index_full:
         indexer = Indexer(rebuild=index_full)
         indexer.do_index()
@@ -239,6 +245,9 @@ def main(  # noqa: PLR0917, C901
 
     if ids_to_unhide:
         unhide_commands(ids_to_unhide)
+
+    if edit_description_id:
+        edit_command_description(edit_description_id)
 
     if search_code or search_name:
         search_type, pattern = (
