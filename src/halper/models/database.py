@@ -67,6 +67,7 @@ class Command(BaseModel):
     file = ForeignKeyField(File, backref="commands", null=True)
     name = TextField(index=True)
     hidden = BooleanField(default=False)
+    has_custom_description = BooleanField(default=False)
 
     def __str__(self) -> str:
         """Return string representation of command."""
@@ -153,6 +154,7 @@ class TempCommand(BaseModel):
     file = ForeignKeyField(TempFile, backref="commands", null=True)
     name = TextField(index=True)
     hidden = BooleanField(default=False)
+    has_custom_description = BooleanField(default=False)
 
 
 class CommandCategory(BaseModel):

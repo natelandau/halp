@@ -93,9 +93,8 @@ class Indexer:
 
     @staticmethod
     def _persist_command_settings() -> None:
-        """Update the database with the hidden status of commands from the temporary command settings."""
+        """Update the database with user configurable data from the temporary command settings."""
         # Persist hidden status for existing commands
-
         matching_commands = TempCommand.select(
             TempCommand.name, TempCommand.code, TempCommand.hidden
         ).where(TempCommand.hidden == True)  # noqa: E712
@@ -106,6 +105,18 @@ class Indexer:
             )
             update_query.execute()
             logger.debug(f"Updated hidden status for: {temp_command.name}")
+
+        # Persist descriptions for existing commands
+        matching_commands = TempCommand.select(
+            TempCommand.name, TempCommand.code, TempCommand.description
+        ).where(TempCommand.has_custom_description == True)  # noqa: E712
+
+        for temp_command in matching_commands:
+            update_query = Command.update(description=temp_command.description).where(
+                (Command.name == temp_command.name) & (Command.code == temp_command.code)
+            )
+            update_query.execute()
+            logger.debug(f"Updated description for: {temp_command.name}")
 
     @staticmethod
     def _command_output() -> list[tuple[str, str, str]]:
@@ -210,6 +221,7 @@ class Indexer:
                         file=TempFile.get_or_none(TempFile.path == command.file.path) or None,
                         name=command.name,
                         hidden=command.hidden,
+                        has_custom_description=command.has_custom_description,
                     )
 
                 # Copy data to TempCommandCategory

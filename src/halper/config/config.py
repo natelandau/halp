@@ -13,13 +13,6 @@ def valid_comment_placement(value: str) -> CommentPlacement:
     return CommentPlacement(value)
 
 
-CommentLocation = Annotated[
-    CommentPlacement,
-    AfterValidator(valid_comment_placement),
-    BeforeValidator(lambda x: x.lower()),
-]
-
-
 class CategoryConfig(BaseModel):
     """Category type."""
 
@@ -31,14 +24,20 @@ class CategoryConfig(BaseModel):
     path_regex: str = ""
 
 
+CP = Annotated[
+    CommentPlacement,
+    AfterValidator(valid_comment_placement),
+    BeforeValidator(lambda x: x.lower()),
+]
+
+
 class HalpConfig(BaseConfig):  # type: ignore [misc]
     """Halper Configuration."""
 
     case_sensitive: bool = False
     categories: dict[str, CategoryConfig] | None = None
     command_name_ignore_regex: str = ""
-    comment_placement: CommentLocation = CommentPlacement.BEST
-
+    comment_placement: CP = CommentPlacement.BEST
     file_exclude_regex: str = ""
     file_globs: tuple[str, ...] = ()
     uncategorized_name: str = "uncategorized"

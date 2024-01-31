@@ -14,6 +14,7 @@ from halper.commands import (
     category_display,
     command_display,
     command_list,
+    edit_command_description,
     hide_commands,
     list_hidden_commands,
     search_commands,
@@ -55,6 +56,12 @@ def main(  # noqa: PLR0917, C901
             "--category", "--cat", help="Show commands organized by categories", show_default=False
         ),
     ] = False,
+    edit_description_id: Annotated[
+        Optional[int],
+        typer.Option(
+            "--description", help="Customize command description by ID", show_default=False
+        ),
+    ] = None,
     only_exports: Annotated[
         bool, typer.Option("--exports", help="Filter to only display EXPORTS")
     ] = False,
@@ -112,7 +119,7 @@ def main(  # noqa: PLR0917, C901
         bool,
         typer.Option(
             "--index",
-            help="Index files for changes. (Maintains hidden status)",
+            help="Index files for changes. [dim](Maintain customizations)[/dim]",
             rich_help_panel="Maintenance Commands",
         ),
     ] = False,
@@ -120,7 +127,7 @@ def main(  # noqa: PLR0917, C901
         bool,
         typer.Option(
             "--index-full",
-            help="Completely rebuild index of commands",
+            help="Completely rebuild index of commands. [dim](Remove customizations)[/dim]",
             rich_help_panel="Maintenance Commands",
         ),
     ] = False,
@@ -191,8 +198,11 @@ def main(  # noqa: PLR0917, C901
     [dim]Edit the configuration file[/dim]
     halp --edit-config
 
-    [dim]Hide a command that you don't want to see[/dim]
-    halp --hide <command ID>
+    [dim]Hide commands that you don't want to see[/dim]
+    halp --hide <command ID>,<command ID>,...
+
+    [dim]Customize the description of a command[/dim]
+    halp --description <command ID>
 
     [dim]Search for commands who's code matches a regex pattern[/dim]
     halp --search-code <regex pattern>
@@ -225,6 +235,7 @@ def main(  # noqa: PLR0917, C901
         )
         raise typer.Exit(code=1)
 
+    # Process options
     if index or index_full:
         indexer = Indexer(rebuild=index_full)
         indexer.do_index()
@@ -239,6 +250,9 @@ def main(  # noqa: PLR0917, C901
 
     if ids_to_unhide:
         unhide_commands(ids_to_unhide)
+
+    if edit_description_id:
+        edit_command_description(edit_description_id)
 
     if search_code or search_name:
         search_type, pattern = (
