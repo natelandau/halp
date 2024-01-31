@@ -79,6 +79,8 @@ def parse_export() -> Generator[None, None, dict[str, str | None]]:
     sign, and the variable value. Handles optional single or double quotes around the variable value
     and an optional comment. Returns a dictionary with the export name, value, and comment.
 
+    When CommentPlacement.BEST, we will favor inline comments over above comments.
+
     Returns:
         dict[str, str]: A dictionary containing 'name', 'code', and 'description' keys with values
                         extracted from the export definition.
@@ -88,6 +90,14 @@ def parse_export() -> Generator[None, None, dict[str, str | None]]:
     export_name = regex(r"[^=\s\"'\$\\`]+") << string("=")
 
     # Parse
+    above_comment = None
+    if HalpConfig().comment_placement in {CommentPlacement.BEST, CommentPlacement.ABOVE}:
+        above_comment = yield STANDALONE_COMMENT.optional()
+    else:
+        yield STANDALONE_COMMENT.optional()
+
+    yield NEWLINE.optional()
+
     yield export_identifier
     name = yield export_name
 
@@ -100,10 +110,15 @@ def parse_export() -> Generator[None, None, dict[str, str | None]]:
     else:
         value = yield regex(r"[^\s\n]+")
 
-    comment = yield COMMENT_ON_LINE.optional()
+    inline_comment = None
+    if HalpConfig().comment_placement in {CommentPlacement.INLINE, CommentPlacement.BEST}:
+        inline_comment = yield COMMENT_ON_LINE.optional()
+    else:
+        yield COMMENT_ON_LINE.optional()
+
     yield NEWLINE.optional()
 
-    return {"name": name, "code": value, "description": comment}
+    return {"name": name, "code": value, "description": inline_comment or above_comment}
 
 
 @generate

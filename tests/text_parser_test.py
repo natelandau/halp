@@ -4,7 +4,7 @@
 import pytest
 
 from halper.config import HalpConfig
-from halper.constants import CommandType, CommentPlacement
+from halper.constants import CommandType
 from halper.utils.text_parsers import parse_alias, parse_export, parse_file, parse_function
 
 SAMPLE_FILE = """
@@ -136,17 +136,21 @@ def test_parse_alias(comment_placement, input, return_value, config_data) -> Non
 
 
 @pytest.mark.parametrize(
-    ("input", "return_value"),
+    ("comment_placement", "input", "return_value"),
     [
+        # CommentPlacement.BEST
         (
+            "best",
             "  export PATH=$PATH:/usr/local/bin\n",
             {"name": "PATH", "code": "$PATH:/usr/local/bin", "description": None},
         ),
         (
+            "best",
             'export PATH="$PATH:/usr/local/bin"\n',
             {"name": "PATH", "code": "$PATH:/usr/local/bin", "description": None},
         ),
         (
+            "best",
             "export PATH='$PATH:/usr/local/bin' # comment is here\n",
             {
                 "name": "PATH",
@@ -154,12 +158,107 @@ def test_parse_alias(comment_placement, input, return_value, config_data) -> Non
                 "description": "comment is here",
             },
         ),
+        (
+            "best",
+            "# comment 1\nexport PATH='$PATH:/usr/local/bin'\n",
+            {
+                "name": "PATH",
+                "code": "$PATH:/usr/local/bin",
+                "description": "comment 1",
+            },
+        ),
+        (
+            "best",
+            "# comment 1\nexport PATH='$PATH:/usr/local/bin' # comment 2\n",
+            {
+                "name": "PATH",
+                "code": "$PATH:/usr/local/bin",
+                "description": "comment 2",
+            },
+        ),
+        # CommentPlacement.ABOVE
+        (
+            "above",
+            "  export PATH=$PATH:/usr/local/bin\n",
+            {"name": "PATH", "code": "$PATH:/usr/local/bin", "description": None},
+        ),
+        (
+            "above",
+            'export PATH="$PATH:/usr/local/bin"\n',
+            {"name": "PATH", "code": "$PATH:/usr/local/bin", "description": None},
+        ),
+        (
+            "above",
+            "export PATH='$PATH:/usr/local/bin' # comment is here\n",
+            {
+                "name": "PATH",
+                "code": "$PATH:/usr/local/bin",
+                "description": None,
+            },
+        ),
+        (
+            "above",
+            "# comment 1\nexport PATH='$PATH:/usr/local/bin'\n",
+            {
+                "name": "PATH",
+                "code": "$PATH:/usr/local/bin",
+                "description": "comment 1",
+            },
+        ),
+        (
+            "above",
+            "# comment 1\nexport PATH='$PATH:/usr/local/bin' # comment 2\n",
+            {
+                "name": "PATH",
+                "code": "$PATH:/usr/local/bin",
+                "description": "comment 1",
+            },
+        ),
+        # CommentPlacement.INLINE
+        (
+            "inline",
+            "  export PATH=$PATH:/usr/local/bin\n",
+            {"name": "PATH", "code": "$PATH:/usr/local/bin", "description": None},
+        ),
+        (
+            "inline",
+            'export PATH="$PATH:/usr/local/bin"\n',
+            {"name": "PATH", "code": "$PATH:/usr/local/bin", "description": None},
+        ),
+        (
+            "inline",
+            "export PATH='$PATH:/usr/local/bin' # comment 1\n",
+            {
+                "name": "PATH",
+                "code": "$PATH:/usr/local/bin",
+                "description": "comment 1",
+            },
+        ),
+        (
+            "inline",
+            "# comment 1\nexport PATH='$PATH:/usr/local/bin'\n",
+            {
+                "name": "PATH",
+                "code": "$PATH:/usr/local/bin",
+                "description": None,
+            },
+        ),
+        (
+            "inline",
+            "# comment 1\nexport PATH='$PATH:/usr/local/bin' # comment 2\n",
+            {
+                "name": "PATH",
+                "code": "$PATH:/usr/local/bin",
+                "description": "comment 2",
+            },
+        ),
     ],
 )
-def test_parse_export(input, return_value) -> None:
+def test_parse_export(comment_placement, input, return_value, config_data) -> None:
     """Test the parse_export function."""
-    result = parse_export.parse(input)
-    assert result == return_value
+    with HalpConfig.change_config_sources(config_data(comment_placement=comment_placement)):
+        result = parse_export.parse(input)
+        assert result == return_value
 
 
 @pytest.mark.parametrize(
