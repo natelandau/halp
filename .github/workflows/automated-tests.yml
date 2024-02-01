@@ -45,7 +45,6 @@ jobs:
                       api.github.com:443
                       api.snapcraft.io:443
                       auth.docker.io:443
-                      codecov.io:443
                       files.pythonhosted.org:443
                       github.com:443
                       install.python-poetry.org:443
@@ -54,7 +53,6 @@ jobs:
                       python-poetry.org:443
                       registry-1.docker.io:443
                       storage.googleapis.com:443
-                      *.codecov.io:443
 
             # ----------------------------------------------
             #    Install python and checkout repository
@@ -94,20 +92,4 @@ jobs:
             # ----------------------------------------------
             - name: Run tests with pytest
               run: |
-                  poetry run coverage run
-                  poetry run coverage report
-                  poetry run coverage xml
-
-            # ----------------------------------------------
-            #             upload coverage stats
-            # ----------------------------------------------
-            # - name: Upload coverage
-            #   #   if: github.ref == 'refs/heads/main' && matrix.python-version == '3.11'
-            #   if: matrix.python-version == '3.11'
-            #   uses: codecov/codecov-action@v4
-            #   with:
-            #       files: reports/coverage.xml
-            #       fail_ci_if_error: false
-            #       dry_run: true
-            #   env:
-            #       CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+                  poetry run poe test

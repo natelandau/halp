@@ -7,14 +7,17 @@ on:
         workflows: ["Automated Tests"]
         types:
             - completed
+        branches:
+            - main
 
 concurrency:
     group: ${{ github.workflow }}-${{ github.ref }}
     cancel-in-progress: true
 
 jobs:
-    test-python-code:
+    upload-coverage:
         runs-on: ubuntu-latest
+        if: ${{ github.event.workflow_run.conclusion == 'success' }}
         strategy:
             fail-fast: true
             matrix:
@@ -76,11 +79,14 @@ jobs:
             #             upload coverage stats
             # ----------------------------------------------
             - name: Upload coverage
-              #   if: github.ref == 'refs/heads/main'
               uses: codecov/codecov-action@v4
               with:
                   files: reports/coverage.xml
-                  fail_ci_if_error: false
-                  dry_run: true
               env:
                   CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+
+    on-failure:
+        runs-on: ubuntu-latest
+        if: ${{ github.event.workflow_run.conclusion == 'failure' }}
+        steps:
+            - run: echo 'The triggering workflow failed'
