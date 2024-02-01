@@ -1,6 +1,4 @@
 ---
-codecov:
-    token: secret:v2::E8rKV+JfSEwQ80vahssqUns92P80jJsfVNLwLeFZm2am8aBkg+8t6oXr6r4TY7CN3eMg3ZInQtUbktmlDw/yzyAe+zbh/N+euPHNenRQn90=
 coverage:
     status:
         project:

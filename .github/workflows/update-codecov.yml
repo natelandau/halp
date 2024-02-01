@@ -1,8 +1,13 @@
 ---
-name: "Automated Tests"
+name: "Upload to Codecov"
 
 on:
     workflow_dispatch:
+    workflow_run:
+        workflows: ["Automated Tests"]
+        types:
+            - completed
+
     push:
         paths:
             - ".github/workflows/automated-tests.yml"
@@ -34,7 +39,7 @@ jobs:
         strategy:
             fail-fast: true
             matrix:
-                python-version: ["3.10", "3.11", "3.12"]
+                python-version: ["3.11"]
         steps:
             - name: Harden Security Runner
               uses: step-security/harden-runner@v2
@@ -81,15 +86,6 @@ jobs:
               uses: ./.github/actions/setup-poetry
 
             # ----------------------------------------------
-            #    run linters
-            # ----------------------------------------------
-
-            - name: lint with ruff
-              run: poetry run ruff --extend-ignore=I001,D401 src/
-            - name: check pyproject.toml
-              run: poetry run poetry check
-
-            # ----------------------------------------------
             #    run test suite
             # ----------------------------------------------
             - name: Run tests with pytest
@@ -97,17 +93,15 @@ jobs:
                   poetry run coverage run
                   poetry run coverage report
                   poetry run coverage xml
-
             # ----------------------------------------------
             #             upload coverage stats
             # ----------------------------------------------
-            # - name: Upload coverage
-            #   #   if: github.ref == 'refs/heads/main' && matrix.python-version == '3.11'
-            #   if: matrix.python-version == '3.11'
-            #   uses: codecov/codecov-action@v4
-            #   with:
-            #       files: reports/coverage.xml
-            #       fail_ci_if_error: false
-            #       dry_run: true
-            #   env:
-            #       CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+            - name: Upload coverage
+              #   if: github.ref == 'refs/heads/main'
+              uses: codecov/codecov-action@v4
+              with:
+                  files: reports/coverage.xml
+                  fail_ci_if_error: false
+                  dry_run: true
+              env:
+                  CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
