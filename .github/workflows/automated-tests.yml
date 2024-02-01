@@ -54,7 +54,7 @@ jobs:
                       python-poetry.org:443
                       registry-1.docker.io:443
                       storage.googleapis.com:443
-                      uploader.codecov.io:443
+                      *.codecov.io:443
 
             # ----------------------------------------------
             #    Install python and checkout repository
@@ -105,7 +105,8 @@ jobs:
               if: matrix.python-version == '3.11'
               uses: codecov/codecov-action@v4
               with:
-                  token: ${{ secrets.CODECOV_TOKEN }}
                   files: reports/coverage.xml
                   fail_ci_if_error: false
                   dry_run: true
+              env:
+                  CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
