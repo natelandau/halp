@@ -60,7 +60,7 @@ jobs:
             #    Install python and checkout repository
             # ----------------------------------------------
             - name: Set up Python ${{ matrix.python-version }}
-              uses: actions/setup-python@v4
+              uses: actions/setup-python@v5
               with:
                   python-version: ${{ matrix.python-version }}
 
@@ -104,6 +104,6 @@ jobs:
               if: github.ref == 'refs/heads/main' && matrix.python-version == '3.11'
               uses: codecov/codecov-action@v4
               with:
-                  # token: ${{ secrets.CODECOV_TOKEN }} # Only required for private repositories
+                  token: ${{ secrets.CODECOV_TOKEN }}
                   files: reports/coverage.xml
-                  fail_ci_if_error: true
+                  fail_ci_if_error: false
