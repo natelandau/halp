@@ -101,9 +101,11 @@ jobs:
             #             upload coverage stats
             # ----------------------------------------------
             - name: Upload coverage
-              if: github.ref == 'refs/heads/main' && matrix.python-version == '3.11'
+              #   if: github.ref == 'refs/heads/main' && matrix.python-version == '3.11'
+              if: matrix.python-version == '3.11'
               uses: codecov/codecov-action@v4
               with:
                   token: ${{ secrets.CODECOV_TOKEN }}
                   files: reports/coverage.xml
-                  fail_ci_if_error: false
+                  fail_ci_if_error: true
+                  dry_run: true
