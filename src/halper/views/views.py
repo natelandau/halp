@@ -133,8 +133,8 @@ def command_list_table(  # noqa: PLR0917
         ]
 
         # Add row to table
-        table.add_row(*[
-            value for value, (_, _, display) in zip(row_values, columns, strict=False) if display
-        ])
+        table.add_row(
+            *[value for value, (_, _, display) in zip(row_values, columns, strict=False) if display]
+        )
 
     return table

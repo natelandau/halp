@@ -47,7 +47,7 @@
         pdoc           = "^14.0.0"
         poethepoet     = "^0.24.2"
         pre-commit     = "^3.5.0"
-        ruff           = "^0.1.13"
+        ruff           = "^0.2.0"
         sh             = "^2.0.4"
         shellcheck-py  = "^0.9.0.5"
         types-requests = "^2.31.0.20240106"
@@ -157,110 +157,112 @@
         "node_modules",
         "venv",
     ]
-    # Avoiding flagging (and removing) `V101` from any `# noqa`
-    # directives, despite Ruff's lack of support for `vulture`.
-    external = ["V"]
-    fix = true
-    ignore = [
-        "B006",    # mutable-argument-default
-        "B008",    # function-call-in-default-argument
-        "D107",    # undocumented-public-init
-        "D213",    # multi-line-summary-second-line
-        "D215",    # section-underline-not-over-indented
-        "D406",    # new-line-after-section-name
-        "D407",    # dashed-underline-after-section
-        "D408",    # section-underline-after-name
-        "D409",    # section-underline-matches-section-length
-        "D413",    # blank-line-after-last-section
-        "E501",    # line-too-long
-        "ISC001",  # single-line-implicit-string-concatenation
-        "N805",    # invalid-first-argument-name-for-method
-        "PLR0913", # too-many-arguments
-        "S311",    # suspicious-non-cryptographic-random-usage
-        "UP007",   # non-pep604-annotation
-    ]
-    ignore-init-module-imports = true
-    line-length = 100
-    output-format = "grouped"
-    per-file-ignores = { "cli.py" = [
-        "PLR0912",
-        "PLR0913",
-    ], "tests/*.py" = [
-        "A002",
-        "A003",
-        "ARG005",
-        "D102",
-        "F403",
-        "PGH003",
-        "PLR0913",
-        "PLR0917",
-        "PLR2004",
-        "PLR6301",
-        "S101",
-    ] }
-    preview = true
-    select = [
-        "A",     # flake8-builtins
-        "ARG",   # flake8-unused-arguments
-        "ASYNC", # flake8-async
-        "B",     # flake8-bugbear
-        "BLE",   # flake8-blind-exception
-        "C4",    # flake8-comprehensions
-        "C90",   # McCabe
-        "D",     # pydocstyle
-        "E",     # pycodestyle Errors
-        "EM",    # flake8-errmsg
-        "ERA",   # flake8-eradicate
-        "EXE",   # flake8-executable
-        "F",     # pyflakes
-        "FA",    # flake8-future
-        "FLY",   # flynt
-        "FURB",  # refurb
-        "I",     # iSort
-        "ISC",   # flake8-implicit-str-concat
-        "N",     # Pep8-naming
-        "NPY",   # flake8-numpy
-        "PERF",  # Perflint
-        "PGH",   # pygrep-hooks
-        "PL",    # pylint
-        "PLC",   # pylint Convention
-        "PLE",   # pylint Error
-        "PLR",   # pylint Refactor
-        "PLW",   # pylint Warning
-        "PT",    # flake8-pytest-style
-        "PTH",   # flake8-use-pathlib
-        "Q",     # flake8-quotes
-        "RET",   # flake8-return
-        "RUF",   # Ruff-specific rules
-        "S",     # flake8-bandit
-        "SIM",   # flake8-simplify
-        "T20",   # flake8-print
-        "TID",   # flake8-tidy-imports
-        "TRY",   # tryceratops
-        "UP",    # pyupgrade
-        "W",     # pycodestyle Warnings
-        "YTT",   # flake8-2020
-        # "DTZ",   # flake8-datetimez
-    ]
-    src = ["src", "tests"]
+
+    fix            = true
+    line-length    = 100
+    output-format  = "grouped"
+    src            = ["src", "tests"]
     target-version = "py310"
-    unfixable = ["E712", "ERA001", "F401", "F841", "UP007"]
 
-    [tool.ruff.mccabe]
-        # Unlike Flake8, default to a complexity level of 10.
-        max-complexity = 10
+    [tool.ruff.lint]
+        # Avoiding flagging (and removing) `V101` from any `# noqa`
+        # directives, despite Ruff's lack of support for `vulture`.
+        external = ["V"]
+        ignore = [
+            "B006",    # mutable-argument-default
+            "B008",    # function-call-in-default-argument
+            "D107",    # undocumented-public-init
+            "D213",    # multi-line-summary-second-line
+            "D215",    # section-underline-not-over-indented
+            "D406",    # new-line-after-section-name
+            "D407",    # dashed-underline-after-section
+            "D408",    # section-underline-after-name
+            "D409",    # section-underline-matches-section-length
+            "D413",    # blank-line-after-last-section
+            "E501",    # line-too-long
+            "ISC001",  # single-line-implicit-string-concatenation
+            "N805",    # invalid-first-argument-name-for-method
+            "PLR0913", # too-many-arguments
+            "S311",    # suspicious-non-cryptographic-random-usage
+            "UP007",   # non-pep604-annotation
+        ]
+        ignore-init-module-imports = true
+        per-file-ignores = { "cli.py" = [
+            "PLR0912",
+            "PLR0913",
+        ], "tests/*.py" = [
+            "A002",
+            "A003",
+            "ARG005",
+            "D102",
+            "F403",
+            "PGH003",
+            "PLR0913",
+            "PLR0917",
+            "PLR2004",
+            "PLR6301",
+            "S101",
+        ] }
+        preview = true
+        select = [
+            "A",     # flake8-builtins
+            "ARG",   # flake8-unused-arguments
+            "ASYNC", # flake8-async
+            "B",     # flake8-bugbear
+            "BLE",   # flake8-blind-exception
+            "C4",    # flake8-comprehensions
+            "C90",   # McCabe
+            "D",     # pydocstyle
+            "E",     # pycodestyle Errors
+            "EM",    # flake8-errmsg
+            "ERA",   # flake8-eradicate
+            "EXE",   # flake8-executable
+            "F",     # pyflakes
+            "FA",    # flake8-future
+            "FLY",   # flynt
+            "FURB",  # refurb
+            "I",     # iSort
+            "ISC",   # flake8-implicit-str-concat
+            "N",     # Pep8-naming
+            "NPY",   # flake8-numpy
+            "PERF",  # Perflint
+            "PGH",   # pygrep-hooks
+            "PL",    # pylint
+            "PLC",   # pylint Convention
+            "PLE",   # pylint Error
+            "PLR",   # pylint Refactor
+            "PLW",   # pylint Warning
+            "PT",    # flake8-pytest-style
+            "PTH",   # flake8-use-pathlib
+            "Q",     # flake8-quotes
+            "RET",   # flake8-return
+            "RUF",   # Ruff-specific rules
+            "S",     # flake8-bandit
+            "SIM",   # flake8-simplify
+            "T20",   # flake8-print
+            "TID",   # flake8-tidy-imports
+            "TRY",   # tryceratops
+            "UP",    # pyupgrade
+            "W",     # pycodestyle Warnings
+            "YTT",   # flake8-2020
+            # "DTZ",   # flake8-datetimez
+        ]
+        unfixable = ["E712", "ERA001", "F401", "F841", "UP007"]
+        [tool.ruff.lint.mccabe]
+            # Unlike Flake8, default to a complexity level of 10.
+            max-complexity = 10
 
-    [tool.ruff.pydocstyle]
-        convention = "google"
+        [tool.ruff.lint.pydocstyle]
+            convention = "google"
 
-    [tool.ruff.pylint]
-        max-args = 6
+        [tool.ruff.lint.pylint]
+            max-args = 6
 
-    [tool.ruff.format]
-        indent-style              = "space"
-        line-ending               = "auto"
-        quote-style               = "double"
-        skip-magic-trailing-comma = false
+[tool.ruff.format]
+    indent-style              = "space"
+    line-ending               = "auto"
+    quote-style               = "double"
+    skip-magic-trailing-comma = false
 
 [tool.vulture] # https://pypi.org/project/vulture/
     # exclude = ["file*.py", "dir/"]
@@ -287,7 +289,7 @@ src/halp
         help = "Lint this package"
 
         [[tool.poe.tasks.lint.sequence]]
-            shell = "ruff --preview --no-fix src/"
+            shell = "ruff --no-fix src/"
 
         [[tool.poe.tasks.lint.sequence]]
             shell = "ruff format --check src/ tests/"

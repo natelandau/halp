@@ -208,12 +208,14 @@ class Database:
             raise errors.AppDirectoryError(msg)
 
         self.db.connect()
-        self.db.create_tables([
-            Category,
-            Command,
-            CommandCategory,
-            File,
-        ])
+        self.db.create_tables(
+            [
+                Category,
+                Command,
+                CommandCategory,
+                File,
+            ]
+        )
 
         # Register the regexp function with the SQLite database
         DB.register_function(regexp, "REGEXP")

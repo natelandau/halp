@@ -180,9 +180,9 @@ class Indexer:
                     description=command["description"],
                 ).execute()
 
-                CommandCategory.insert_many([
-                    {"command": row, "category": category} for category in command["categories"]
-                ]).execute()
+                CommandCategory.insert_many(
+                    [{"command": row, "category": category} for category in command["categories"]]
+                ).execute()
 
         return len(command_list)
 
