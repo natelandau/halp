@@ -15,9 +15,10 @@ runner = CliRunner()
 
 
 @pytest.fixture(autouse=True)
-def _mock_db_instantiate(mocker):
-    """Bypass the production database instantiation."""
+def _bypass_functions(mocker):
+    """Bypass functionality which requires a production environment."""
     mocker.patch.object(Database, "instantiate", MagicMock())
+    mocker.patch("halper.cli.validate_config", return_value=None)
 
 
 @pytest.mark.usefixtures("mock_db")

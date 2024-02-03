@@ -7,6 +7,11 @@ from halper.config import HalpConfig
 from halper.constants import CommandType
 from halper.models import Category, Command, CommandCategory, File, Parser
 
+# @pytest.fixture(autouse=True)
+# def _bypass_functions(mocker):
+#     """Bypass functionality which requires a production environment."""
+#     mocker.patch("halper.cli.validate_config", return_value=None)
+
 
 @pytest.mark.usefixtures("mock_db")
 class TestParserClass:
@@ -55,7 +60,7 @@ class TestParserClass:
     )
     def test__categorize_command(
         self,
-        mock_config,  # noqa: ARG002
+        mock_config,
         fixture_file,
         code_regex,
         comment_regex,

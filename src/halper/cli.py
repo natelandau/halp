@@ -255,6 +255,7 @@ def main(  # noqa: PLR0917, C901
         edit_command_description(edit_description_id)
 
     if search_code or search_name:
+        # TODO: Testing this function is difficult because of the custom regex function not working in the mocked database
         search_type, pattern = (
             (SearchType.CODE, search_code) if search_code else (SearchType.NAME, search_name)
         )

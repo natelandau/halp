@@ -393,7 +393,7 @@ def test_parse_function(comment_placement, input, return_value, mock_specific_co
         assert result == return_value
 
 
-def test_parse_comments_in_functions() -> None:
+def test_parse_comments_in_functions(mock_config) -> None:
     """Test the parse_file function."""
     text = """
 no_comment() {echo "Hello World"; }
