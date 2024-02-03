@@ -34,6 +34,7 @@ MODELS = [
     TempCategory,
     TempCommandCategory,
 ]
+TEST_CONFIG = Path(__file__).resolve().parent / "fixtures/configs/default_test_config.toml"
 
 
 @pytest.fixture()
@@ -77,7 +78,7 @@ def config_data():
             override_data["categories"] = cats
 
         return [
-            FileSource("tests/fixtures/configs/default_test_config.toml"),
+            FileSource(TEST_CONFIG),
             DataSource(data=override_data),
         ]
 
@@ -91,9 +92,7 @@ def mock_config():  # noqa: PT004
     Returns:
         HalpConfig: The mock configuration.
     """
-    with HalpConfig.change_config_sources(
-        FileSource("tests/fixtures/configs/default_test_config.toml")
-    ):
+    with HalpConfig.change_config_sources(FileSource(TEST_CONFIG)):
         yield
 
 
