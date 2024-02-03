@@ -134,9 +134,11 @@ Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor 
         ),
     ],
 )
-def test_parse_alias(comment_placement, input, return_value, config_data) -> None:
+def test_parse_alias(comment_placement, input, return_value, mock_specific_config) -> None:
     """Test the parse_alias function."""
-    with HalpConfig.change_config_sources(config_data(comment_placement=comment_placement)):
+    with HalpConfig.change_config_sources(
+        mock_specific_config(comment_placement=comment_placement)
+    ):
         result = parse_alias.parse(input)
         assert result == return_value
 
@@ -260,9 +262,11 @@ def test_parse_alias(comment_placement, input, return_value, config_data) -> Non
         ),
     ],
 )
-def test_parse_export(comment_placement, input, return_value, config_data) -> None:
+def test_parse_export(comment_placement, input, return_value, mock_specific_config) -> None:
     """Test the parse_export function."""
-    with HalpConfig.change_config_sources(config_data(comment_placement=comment_placement)):
+    with HalpConfig.change_config_sources(
+        mock_specific_config(comment_placement=comment_placement)
+    ):
         result = parse_export.parse(input)
         assert result == return_value
 
@@ -380,9 +384,11 @@ def test_parse_export(comment_placement, input, return_value, config_data) -> No
         ),
     ],
 )
-def test_parse_function(comment_placement, input, return_value, config_data) -> None:
+def test_parse_function(comment_placement, input, return_value, mock_specific_config) -> None:
     """Test the parse_function function."""
-    with HalpConfig.change_config_sources(config_data(comment_placement=comment_placement)):
+    with HalpConfig.change_config_sources(
+        mock_specific_config(comment_placement=comment_placement)
+    ):
         result = parse_function.parse(input)
         assert result == return_value
 
@@ -450,9 +456,9 @@ structured_comment() {
     }
 
 
-def test_parse_file(config_data) -> None:
+def test_parse_file(mock_specific_config) -> None:
     """Test the parse_file function."""
-    with HalpConfig.change_config_sources(config_data(comment_placement="best")):
+    with HalpConfig.change_config_sources(mock_specific_config(comment_placement="best")):
         result = parse_file.many().parse(SAMPLE_FILE)
 
         aliases = [i for i in result if i["command_type"] == CommandType.ALIAS]
