@@ -277,8 +277,8 @@ class TestIndexing:
             for string in return_strings:
                 assert string in strip_ansi(result.output)
 
-    def test_reindexing(self, fixture_file, mock_specific_config):
-        """Test indexing commands."""
+    def test_reindexing_hidden(self, fixture_file, mock_specific_config):
+        """Test indexing commands maintaining hidden status."""
         self._clear_test_data()
 
         # GIVEN a dotfile
@@ -307,3 +307,112 @@ class TestIndexing:
             # THEN the command should not be hidden
             assert result.exit_code == 0
             assert Command.select().where(Command.name == "two").get().hidden is False
+
+    def test_reindexing_description(self, fixture_file, mock_specific_config):
+        """Test indexing commands maintaining custom descriptions."""
+        self._clear_test_data()
+
+        # GIVEN a dotfile
+        test_file = fixture_file(
+            "alias one='echo one' # description\nalias two='echo two' # description\n"
+        )
+
+        with HalpConfig.change_config_sources(mock_specific_config(file_globs=[f"{test_file}"])):
+            # WHEN the index command is run the first time
+            result = runner.invoke(app, ["--index"])
+
+            # THEN the description should be set
+            assert result.exit_code == 0
+            cmd = Command.get(name="one")
+            assert cmd.description == "description"
+            assert not cmd.has_custom_description
+
+            # WHEN the description is updated and index is run again
+            cmd.description = "new description"
+            cmd.has_custom_description = True
+            cmd.save()
+            result = runner.invoke(app, ["--index"])
+
+            # THEN the description should not be updated
+            assert result.exit_code == 0
+            cmd = Command.get(name="one")
+            assert cmd.description == "new description"
+            assert cmd.has_custom_description
+
+    def test_reindexing_recategorization(self, fixture_file, mock_specific_config, debug):
+        """Test indexing commands maintaining custom categories."""
+        self._clear_test_data()
+
+        # GIVEN a dotfile
+        test_file = fixture_file(
+            "alias one='echo one' # description\nalias two='echo two' # description\n"
+        )
+
+        with HalpConfig.change_config_sources(
+            mock_specific_config(
+                file_globs=[f"{test_file}"],
+                categories={
+                    "cat1": {
+                        "name": "cat1",
+                        "code_regex": "two",
+                        "comment_regex": "",
+                        "description": "category",
+                        "command_name_regex": "",
+                        "path_regex": "",
+                    },
+                    "cat2": {
+                        "name": "cat2",
+                        "code_regex": "two",
+                        "comment_regex": "",
+                        "description": "category",
+                        "command_name_regex": "",
+                        "path_regex": "",
+                    },
+                    "cat3": {
+                        "name": "cat3",
+                        "code_regex": "",
+                        "comment_regex": "",
+                        "description": "category",
+                        "command_name_regex": "",
+                        "path_regex": "",
+                    },
+                },
+            )
+        ):
+            # WHEN the index command is run the first time
+            result = runner.invoke(app, ["--index"])
+
+            # THEN the command should be categorized
+            assert result.exit_code == 0
+            cc1 = CommandCategory.get(1)
+            cc2 = CommandCategory.get(2)
+            cc3 = CommandCategory.get(3)
+
+            assert cc1.command.name == "one"
+            assert cc1.category.name == HalpConfig().uncategorized_name
+            assert cc2.command.name == "two"
+            assert cc2.category.name == "cat1"
+            assert cc3.command.name == "two"
+            assert cc3.category.name == "cat2"
+            assert CommandCategory.select().count() == 3
+
+            # WHEN a command is recategorized and halp --index is run again
+            CommandCategory.create(
+                command=Command.get(Command.name == "two"),
+                category=Category.get(Category.name == "cat3"),
+                is_custom=True,
+            )
+            cc2.delete_instance()
+            cc3.delete_instance()
+            result = runner.invoke(app, ["--index"])
+
+            # Then the command should still be categorized to the custom category
+            assert result.exit_code == 0
+
+            cc1 = CommandCategory.get(1)
+            cc2 = CommandCategory.get(2)
+            assert cc1.command.name == "one"
+            assert cc1.category.name == HalpConfig().uncategorized_name
+            assert cc2.command.name == "two"
+            assert cc2.category.name == "cat3"
+            assert CommandCategory.select().count() == 2

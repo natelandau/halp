@@ -293,3 +293,52 @@ class TestCLI:
         assert result.exit_code == 0
         assert "7 commands" in strip_ansi(result.output)
         assert "alias1" in strip_ansi(result.output)
+
+    def test_recategorize(self, debug, mock_config):
+        """Test recategorizing commands."""
+        # Given a populated database
+        self._populate_database()
+
+        # WHEN recategorizing a command that doesn't exist
+        result = runner.invoke(app, ["--categorize", "10000"])
+        # debug("output", strip_ansi(result.output))
+
+        # THEN the script should fail
+        assert result.exit_code == 1
+
+        # WHEN recategorizing a command
+        result = runner.invoke(app, ["--categorize", "1"], input="2\ry\r")
+        # debug("output", strip_ansi(result.output))
+
+        # THEN the command is recategorized
+        assert result.exit_code == 0
+        assert "Command alias1 has been categorized to cat2" in strip_ansi(result.output)
+
+        # WHEN viewing the command
+        result = runner.invoke(app, ["alias1"])
+        # debug("output", strip_ansi(result.output))
+
+        # THEN the command is in the new category
+        assert result.exit_code == 0
+        assert "Categories:  cat2" in strip_ansi(result.output)
+
+    def test_new_description(self, debug, mock_config):
+        """Test recategorizing commands."""
+        # Given a populated database
+        self._populate_database()
+
+        # WHEN editing a command that doesn't exist
+        result = runner.invoke(app, ["--description", "10000"])
+        # debug("output", strip_ansi(result.output))
+
+        # THEN the script should fail
+        assert result.exit_code == 1
+
+        # WHEN editing the description of a command
+        result = runner.invoke(app, ["--description", "1"], input="this is a new description\ry\r")
+        # debug("output", strip_ansi(result.output))
+
+        # THEN the command's description is updated
+        assert result.exit_code == 0
+        cmd = Command.get(1)
+        assert cmd.description == "this is a new description"

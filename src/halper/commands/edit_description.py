@@ -10,13 +10,9 @@ from halper.utils import console
 
 def edit_command_description(command_id: int) -> None:
     """Edit command description by ID."""
-    if not command_id or not isinstance(command_id, int):
-        console.print("No command ID provided")
-        raise typer.Exit(code=1)
-
     command = Command.get_or_none(Command.id == command_id)
     if not command:
-        console.print(f"No command found with ID {command_id}")
+        logger.error(f"No command found with ID {command_id}")
         raise typer.Exit(code=1)
 
     console.print(f"Editing description for command [code]{command.name}[/code]")
@@ -25,7 +21,7 @@ def edit_command_description(command_id: int) -> None:
     new_description = Prompt.ask("New description")
 
     confirm = Prompt.ask(f"Set description to [code]{new_description}[/code]?", choices=["y", "n"])
-    if confirm == "n":
+    if confirm.lower() == "n":
         raise typer.Abort()
 
     command.description = new_description
