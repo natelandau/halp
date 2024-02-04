@@ -15,9 +15,10 @@ runner = CliRunner()
 
 
 @pytest.fixture(autouse=True)
-def _mock_db_instantiate(mocker):
-    """Bypass the production database instantiation."""
+def _bypass_functions(mocker):
+    """Bypass functionality which requires a production environment."""
     mocker.patch.object(Database, "instantiate", MagicMock())
+    mocker.patch("halper.cli.validate_config", return_value=None)
 
 
 @pytest.mark.usefixtures("mock_db")
@@ -231,7 +232,7 @@ class TestIndexing:
     def test_indexing(
         self,
         fixtures,
-        config_data,
+        mock_specific_config,
         globs,
         exclude_regex,
         case_sensitive,
@@ -248,7 +249,7 @@ class TestIndexing:
         self._clear_test_data()
 
         with HalpConfig.change_config_sources(
-            config_data(
+            mock_specific_config(
                 file_globs=[f"{fixtures}/{glob}" for glob in globs],
                 file_exclude_regex=exclude_regex,
                 case_sensitive=case_sensitive,
@@ -276,14 +277,14 @@ class TestIndexing:
             for string in return_strings:
                 assert string in strip_ansi(result.output)
 
-    def test_reindexing(self, fixture_file, config_data):
+    def test_reindexing(self, fixture_file, mock_specific_config):
         """Test indexing commands."""
         self._clear_test_data()
 
         # GIVEN a dotfile
         test_file = fixture_file("alias one='echo one'\nalias two='echo two'\n")
 
-        with HalpConfig.change_config_sources(config_data(file_globs=[f"{test_file}"])):
+        with HalpConfig.change_config_sources(mock_specific_config(file_globs=[f"{test_file}"])):
             # WHEN the index command is run
             result = runner.invoke(app, ["--index"])
 

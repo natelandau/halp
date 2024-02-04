@@ -7,6 +7,11 @@ from halper.config import HalpConfig
 from halper.constants import CommandType
 from halper.models import Category, Command, CommandCategory, File, Parser
 
+# @pytest.fixture(autouse=True)
+# def _bypass_functions(mocker):
+#     """Bypass functionality which requires a production environment."""
+#     mocker.patch("halper.cli.validate_config", return_value=None)
+
 
 @pytest.mark.usefixtures("mock_db")
 class TestParserClass:
@@ -19,11 +24,11 @@ class TestParserClass:
             for t in table.select():
                 t.delete_instance(recursive=True, delete_nullable=True)
 
-    def test_parser_instantiation(self, fixture_file, config_data) -> None:
+    def test_parser_instantiation(self, fixture_file, mock_specific_config) -> None:
         """Test the parser instantiation."""
         self._clear_tests()
 
-        with HalpConfig.change_config_sources(config_data(case_sensitive=True)):
+        with HalpConfig.change_config_sources(mock_specific_config(case_sensitive=True)):
             # Create a test file
             test_file = fixture_file()
 
@@ -55,7 +60,7 @@ class TestParserClass:
     )
     def test__categorize_command(
         self,
-        mock_config,  # noqa: ARG002
+        mock_config,
         fixture_file,
         code_regex,
         comment_regex,
@@ -135,7 +140,7 @@ class TestParserClass:
             ),
         ],
     )
-    def test_parser_parse(self, config_data, fixture_file, file_content, expected):
+    def test_parser_parse(self, mock_specific_config, fixture_file, file_content, expected):
         """Test the parser parse() method."""
         self._clear_tests()
         # GIVEN categories in the database, a file, and a configuration file
@@ -160,7 +165,7 @@ class TestParserClass:
 
         test_file = fixture_file(file_content)
 
-        with HalpConfig.change_config_sources(config_data(command_name_ignore_regex="_")):
+        with HalpConfig.change_config_sources(mock_specific_config(command_name_ignore_regex="_")):
             # WHEN the parse method is called
             p = Parser(test_file)
             result = p.parse()

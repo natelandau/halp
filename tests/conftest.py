@@ -34,10 +34,12 @@ MODELS = [
     TempCategory,
     TempCommandCategory,
 ]
+FIXTURE_CONFIG = Path(__file__).resolve().parent / "fixtures/configs/default_test_config.toml"
+FIXTURE_DOTFILES = Path(__file__).resolve().parent / "fixtures/dotfiles"
 
 
 @pytest.fixture()
-def config_data():
+def mock_specific_config():
     """Mock specific configuration data for use in tests."""
 
     def _inner(
@@ -76,23 +78,22 @@ def config_data():
                 cats[name] = new_cat
             override_data["categories"] = cats
 
-        return [
-            FileSource("tests/fixtures/configs/default_test_config.toml"),
-            DataSource(data=override_data),
-        ]
+        return [FileSource(FIXTURE_CONFIG), DataSource(data=override_data)]
 
     return _inner
 
 
 @pytest.fixture()
 def mock_config():  # noqa: PT004
-    """Override configuration file with mock configuration for use in tests. To override a default use the `config_data` fixture.
+    """Override configuration file with mock configuration for use in tests. To override a default use the `mock_specific_config` fixture.
 
     Returns:
         HalpConfig: The mock configuration.
     """
+    override_data = {"file_globs": [f"{FIXTURE_DOTFILES}/**/*.bash"]}
+
     with HalpConfig.change_config_sources(
-        FileSource("tests/fixtures/configs/default_test_config.toml")
+        [FileSource(FIXTURE_CONFIG), DataSource(data=override_data)]
     ):
         yield
 

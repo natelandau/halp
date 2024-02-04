@@ -6,7 +6,6 @@ from pathlib import Path
 
 import typer
 from loguru import logger
-from peewee import PeeweeException
 from rich.progress import track
 from rich.table import Table
 
@@ -150,9 +149,7 @@ class Indexer:
         config_categories = [d.model_dump() for d in HalpConfig().categories.values()]  # type: ignore [union-attr]
 
         # Add categories to the database
-        with DB.atomic():
-            num_categories = Category.insert_many(config_categories).execute()
-
+        num_categories = Category.insert_many(config_categories).execute()
         logger.debug(f"Added {num_categories} categories from config")
 
         if not num_categories or num_categories == 0:
@@ -171,87 +168,69 @@ class Indexer:
             int: The number of commands successfully added to the database.
         """
         for command in command_list:
-            with DB.atomic():
-                row = Command.insert(
-                    name=command["name"],
-                    code=command["code"],
-                    file=command["file"],
-                    command_type=command["command_type"].name,
-                    description=command["description"],
-                ).execute()
+            row = Command.insert(
+                name=command["name"],
+                code=command["code"],
+                file=command["file"],
+                command_type=command["command_type"].name,
+                description=command["description"],
+            ).execute()
 
-                CommandCategory.insert_many(
-                    [{"command": row, "category": category} for category in command["categories"]]
-                ).execute()
+            CommandCategory.insert_many(
+                [{"command": row, "category": category} for category in command["categories"]]
+            ).execute()
 
         return len(command_list)
 
     @staticmethod
     def _create_temporary_tables() -> None:
         """Create temporary tables for storing file and category data during the indexing process."""
-        with DB.atomic() as transaction:
-            try:
-                # Create temporary tables
-                TempFile.create_table(safe=True)
-                TempCategory.create_table(safe=True)
-                TempCommand.create_table(safe=True)
-                TempCommandCategory.create_table(safe=True)
+        # Create temporary tables
+        TempFile.create_table(safe=True)
+        TempCategory.create_table(safe=True)
+        TempCommand.create_table(safe=True)
+        TempCommandCategory.create_table(safe=True)
 
-                # Copy data to TempFile
-                for file in File.select():
-                    TempFile.create(name=file.name, path=file.path)
+        # Copy data to TempFile
+        for file in File.select():
+            TempFile.create(name=file.name, path=file.path)
 
-                # Copy data to TempCategory
-                for category in Category.select():
-                    TempCategory.create(
-                        name=category.name,
-                        description=category.description,
-                        code_regex=category.code_regex,
-                        comment_regex=category.comment_regex,
-                        command_name_regex=category.command_name_regex,
-                        path_regex=category.path_regex,
-                    )
+        # Copy data to TempCategory
+        for category in Category.select():
+            TempCategory.create(
+                name=category.name,
+                description=category.description,
+                code_regex=category.code_regex,
+                comment_regex=category.comment_regex,
+                command_name_regex=category.command_name_regex,
+                path_regex=category.path_regex,
+            )
 
-                # Copy data to TempCommand
-                for command in Command.select():
-                    TempCommand.create(
-                        code=command.code,
-                        command_type=command.command_type,
-                        description=command.description,
-                        file=TempFile.get_or_none(TempFile.path == command.file.path) or None,
-                        name=command.name,
-                        hidden=command.hidden,
-                        has_custom_description=command.has_custom_description,
-                    )
+        # Copy data to TempCommand
+        for command in Command.select():
+            TempCommand.create(
+                code=command.code,
+                command_type=command.command_type,
+                description=command.description,
+                file=TempFile.get_or_none(TempFile.path == command.file.path) or None,
+                name=command.name,
+                hidden=command.hidden,
+                has_custom_description=command.has_custom_description,
+            )
 
-                # Copy data to TempCommandCategory
-                for command_category in CommandCategory.select():
-                    temp_command = TempCommand.get(
-                        TempCommand.name == command_category.command.name
-                    )
-                    temp_category = TempCategory.get(
-                        TempCategory.name == command_category.category.name
-                    )
-                    TempCommandCategory.create(command=temp_command, category=temp_category)
-
-            except PeeweeException:  # pragma: no cover
-                # Rollback the transaction in case of an error
-                transaction.rollback()
-                raise  # You might want to handle or log this exception
+        # Copy data to TempCommandCategory
+        for command_category in CommandCategory.select():
+            temp_command = TempCommand.get(TempCommand.name == command_category.command.name)
+            temp_category = TempCategory.get(TempCategory.name == command_category.category.name)
+            TempCommandCategory.create(command=temp_command, category=temp_category)
 
     @staticmethod
     def _drop_temporary_tables() -> None:
         """Remove temporary tables used during the indexing process."""
-        with DB.atomic() as transaction:
-            try:
-                TempCommandCategory.drop_table()
-                TempCommand.drop_table()
-                TempCategory.drop_table()
-                TempFile.drop_table()
-            except PeeweeException:  # pragma: no cover
-                # Rollback the transaction in case of an error
-                transaction.rollback()
-                raise  # You might want to handle or log this exception
+        TempCommandCategory.drop_table()
+        TempCommand.drop_table()
+        TempCategory.drop_table()
+        TempFile.drop_table()
 
     def do_index(self) -> None:
         """Execute the indexing process to create or update the command index in the database.
@@ -288,7 +267,9 @@ class Indexer:
         # Add commands to the database
         for file in track(File.select(), description="Processing files...", transient=True):
             p = Parser(file.path)
+
             found_commands = p.parse()
+
             if not found_commands:
                 grid_rows.append(("🤷", "", f"[dim]No commands found in '{file.path}'"))
                 continue
