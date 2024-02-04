@@ -1,3 +1,14 @@
+## v0.3.0 (2024-02-03)
+
+### Feat
+
+- customize command descriptions (#16)
+- above and inline comments for descriptions (#15)
+
+### Refactor
+
+- **typing**: enforce mypy strict_optional
+
 ## v0.2.0 (2024-01-24)
 
 ### Feat
