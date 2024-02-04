@@ -25,7 +25,7 @@ def categorize_command(command_id: int | None = None) -> None:
 
     choices = [str(category.id) for category in categories]
     choices.extend(["A", "a"])
-    new_category = Prompt.ask(
+    new_category_id = Prompt.ask(
         "\nCategory ID",
         choices=choices,
         show_choices=False,
@@ -34,17 +34,26 @@ def categorize_command(command_id: int | None = None) -> None:
         show_default=False,
     )
 
-    if new_category.upper() == "A":
+    if new_category_id.upper() == "A":
         console.print("\nAborting categorization")
         raise typer.Exit()
+
+    new_category_obj = Category.get(int(new_category_id))
+
+    confirm = Prompt.ask(
+        f"Categorize [bold]{command.name}[/bold] to [code]{new_category_obj.name}[/code]?",
+        choices=["y", "n"],
+    )
+    if confirm.lower() == "n":
+        raise typer.Abort()
 
     all_command_categories = CommandCategory.select().where(CommandCategory.command == command)
     for command_category in all_command_categories:
         command_category.delete_instance()
 
-    CommandCategory.create(command=command, category=new_category, is_custom=True)
+    CommandCategory.create(command=command, category=new_category_obj, is_custom=True)
 
     console.print(
-        f"\nCommand [bold]{command.name}[/bold] has been categorized to [bold]{Category.get(2).name}[/bold]"
+        f"\nCommand [bold]{command.name}[/bold] has been categorized to [code]{new_category_obj.name}[/code]"
     )
     raise typer.Exit()
