@@ -9,7 +9,6 @@ from confz import DataSource, FileSource
 from peewee import SqliteDatabase
 
 from halper.config import CategoryConfig, HalpConfig
-from halper.constants import CommentPlacement
 
 from halper.utils import console  # isort:skip
 from halper.models import (
@@ -17,6 +16,7 @@ from halper.models import (
     Command,
     CommandCategory,
     File,
+    HalpInfo,
     TempCategory,
     TempCommand,
     TempCommandCategory,
@@ -33,6 +33,7 @@ MODELS = [
     TempCommand,
     TempCategory,
     TempCommandCategory,
+    HalpInfo,
 ]
 FIXTURE_CONFIG = Path(__file__).resolve().parent / "fixtures/configs/default_test_config.toml"
 FIXTURE_DOTFILES = Path(__file__).resolve().parent / "fixtures/dotfiles"
