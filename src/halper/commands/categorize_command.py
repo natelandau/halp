@@ -46,7 +46,7 @@ def categorize_command(command_id: int | None = None) -> None:
     for command_category in all_command_categories:
         command_category.delete_instance()
 
-    CommandCategory.create(command=command, category=new_category)
+    CommandCategory.create(command=command, category=new_category, is_custom=True)
 
     console.print(
         f"\nCommand [bold]{command.name}[/bold] has been categorized to [bold]{new_category}[/bold]"

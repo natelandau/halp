@@ -111,11 +111,37 @@ class Indexer:
         ).where(TempCommand.has_custom_description == True)  # noqa: E712
 
         for temp_command in matching_commands:
-            update_query = Command.update(description=temp_command.description).where(
-                (Command.name == temp_command.name) & (Command.code == temp_command.code)
-            )
+            update_query = Command.update(
+                description=temp_command.description,
+                has_custom_description=True,
+            ).where((Command.name == temp_command.name) & (Command.code == temp_command.code))
             update_query.execute()
             logger.debug(f"Updated description for: {temp_command.name}")
+
+        # Persist custom categories for existing commands
+        matching_command_cats = TempCommandCategory.select().where(
+            TempCommandCategory.is_custom == True  # noqa: E712
+        )
+
+        for temp_command_cat in matching_command_cats:
+            command = Command.get_or_none(
+                (Command.name == temp_command_cat.command.name)
+                & (Command.code == temp_command_cat.command.code)
+            )
+            category = Category.get_or_none(name=temp_command_cat.category.name)
+
+            if not command or not category:
+                continue
+
+            # Delete auto-assigned categories
+            CommandCategory.delete().where(
+                (CommandCategory.command == command) & (CommandCategory.category != category)
+            ).execute()
+
+            # Add custom category
+            CommandCategory.create(command=command, category=category, is_custom=True)
+
+            logger.debug(f"Updated category for: {temp_command_cat.command.name}")
 
     @staticmethod
     def _command_output() -> list[tuple[str, str, str]]:
@@ -192,12 +218,13 @@ class Indexer:
         TempCommandCategory.create_table(safe=True)
 
         # Copy data to TempFile
-        for file in File.select():
-            TempFile.create(name=file.name, path=file.path)
+        tmp_files_to_insert = [TempFile(name=file.name, path=file.path) for file in File.select()]
+        with DB.atomic():
+            TempFile.bulk_create(tmp_files_to_insert, batch_size=100)
 
         # Copy data to TempCategory
-        for category in Category.select():
-            TempCategory.create(
+        tmp_categories_to_insert = [
+            TempCategory(
                 name=category.name,
                 description=category.description,
                 code_regex=category.code_regex,
@@ -205,10 +232,14 @@ class Indexer:
                 command_name_regex=category.command_name_regex,
                 path_regex=category.path_regex,
             )
+            for category in Category.select()
+        ]
+        with DB.atomic():
+            TempCategory.bulk_create(tmp_categories_to_insert, batch_size=100)
 
         # Copy data to TempCommand
-        for command in Command.select():
-            TempCommand.create(
+        tmp_commands_to_insert = [
+            TempCommand(
                 code=command.code,
                 command_type=command.command_type,
                 description=command.description,
@@ -217,12 +248,25 @@ class Indexer:
                 hidden=command.hidden,
                 has_custom_description=command.has_custom_description,
             )
+            for command in Command.select()
+        ]
+        with DB.atomic():
+            TempCommand.bulk_create(tmp_commands_to_insert, batch_size=100)
 
         # Copy data to TempCommandCategory
-        for command_category in CommandCategory.select():
-            temp_command = TempCommand.get(TempCommand.name == command_category.command.name)
-            temp_category = TempCategory.get(TempCategory.name == command_category.category.name)
-            TempCommandCategory.create(command=temp_command, category=temp_category)
+        tmp_command_cats_to_insert = [
+            TempCommandCategory(
+                command=TempCommand.get(
+                    TempCommand.name == command_cat.command.name,
+                    TempCommand.code == command_cat.command.code,
+                ),
+                category=TempCategory.get(TempCategory.name == command_cat.category.name),
+                is_custom=command_cat.is_custom,
+            )
+            for command_cat in CommandCategory.select()
+        ]
+        with DB.atomic():
+            TempCommandCategory.bulk_create(tmp_command_cats_to_insert, batch_size=100)
 
     @staticmethod
     def _drop_temporary_tables() -> None:

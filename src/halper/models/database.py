@@ -168,6 +168,11 @@ class CommandCategory(BaseModel):
 
     command = ForeignKeyField(Command, backref="categories")
     category = ForeignKeyField(Category, backref="commands")
+    is_custom = BooleanField(default=False)
+
+    def __str__(self) -> str:
+        """Return string representation of command category."""
+        return f"{self.command=}, {self.category=}, {self.is_custom=}"
 
 
 class TempCommandCategory(BaseModel):
@@ -175,6 +180,7 @@ class TempCommandCategory(BaseModel):
 
     command = ForeignKeyField(TempCommand, backref="categories")
     category = ForeignKeyField(TempCategory, backref="commands")
+    is_custom = BooleanField(default=False)
 
 
 # Custom regexp function for SQLite. Registered in Database.instantiate()
