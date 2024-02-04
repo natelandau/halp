@@ -1,5 +1,4 @@
 """Database models for the HALP app."""
-
 import os
 import re
 
@@ -233,6 +232,9 @@ class Database:
         # Register the regexp function with the SQLite database
         DB.register_function(regexp, "REGEXP")
 
+        # Migrate the db if necessary
+        self.migrate_db(current_version)
+
         # Add current version to the database
         try:
             halp_info, created = HalpInfo.get_or_create(id=1, defaults={"version": current_version})
@@ -250,6 +252,10 @@ class Database:
     def is_empty(self) -> bool:
         """Check if database has no commands."""
         return not self.has_data([Command])
+
+    def migrate_db(self, current_version: str) -> None:
+        """Migrate the database from old to new versions."""
+        pass
 
     @staticmethod
     def clear_data(tables: list[Model]) -> None:
