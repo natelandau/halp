@@ -11,6 +11,7 @@ from halper.__version__ import __version__
 
 # isort:skip
 from halper.commands import (
+    categorize_command,
     category_display,
     command_display,
     command_list,
@@ -56,6 +57,10 @@ def main(  # noqa: PLR0917, C901
             "--category", "--cat", help="Show commands organized by categories", show_default=False
         ),
     ] = False,
+    categorize: Annotated[
+        Optional[int],
+        typer.Option("--categorize", help="Categorize command by ID", show_default=False),
+    ] = None,
     edit_description_id: Annotated[
         Optional[int],
         typer.Option(
@@ -253,6 +258,9 @@ def main(  # noqa: PLR0917, C901
 
     if edit_description_id:
         edit_command_description(edit_description_id)
+
+    if categorize:
+        categorize_command(categorize)
 
     if search_code or search_name:
         # TODO: Testing this function is difficult because of the custom regex function not working in the mocked database
