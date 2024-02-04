@@ -224,7 +224,7 @@ def main(  # noqa: PLR0917, C901
     # Instantiate Database
     try:
         db = Database(DB)
-        db.instantiate()
+        db.instantiate(current_version=__version__)
     except peewee.OperationalError as e:
         logger.exception(f"Unable to instantiate database: {e}")
         raise typer.Exit(code=1) from e

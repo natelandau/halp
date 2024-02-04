@@ -22,6 +22,12 @@ class BaseModel(Model):
         database = DB
 
 
+class HalpInfo(BaseModel):
+    """HALP info model."""
+
+    version = TextField()
+
+
 class File(BaseModel):
     """Files model."""
 
@@ -193,7 +199,7 @@ class Database:
         """Initialize database."""
         self.db = database
 
-    def instantiate(self) -> None:
+    def instantiate(self, current_version: str) -> None:
         """Instantiate database."""
         logger.trace(f"Instantiating database. {APP_DIR=} {DB_PATH=}")
 
@@ -214,11 +220,22 @@ class Database:
                 Command,
                 CommandCategory,
                 File,
+                HalpInfo,
             ]
         )
 
         # Register the regexp function with the SQLite database
         DB.register_function(regexp, "REGEXP")
+
+        # Add current version to the database
+        try:
+            halp_info, created = HalpInfo.get_or_create(id=1, defaults={"version": current_version})
+            if not created:
+                halp_info.version = current_version
+                halp_info.save()
+        except PeeweeException as e:
+            logger.error(f"Failed to add current version to the database: {e}")
+            raise
 
     def close(self) -> None:
         """Close database."""
