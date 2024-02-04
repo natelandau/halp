@@ -10,10 +10,6 @@ from halper.utils import console
 
 def categorize_command(command_id: int | None = None) -> None:
     """Categorize command by ID."""
-    if not command_id:
-        logger.error("No ID provided")
-        raise typer.Exit(code=1)
-
     command = Command.get_or_none(Command.id == command_id)
     if not command:
         logger.error(f"Command with ID {command_id} not found")
@@ -49,6 +45,6 @@ def categorize_command(command_id: int | None = None) -> None:
     CommandCategory.create(command=command, category=new_category, is_custom=True)
 
     console.print(
-        f"\nCommand [bold]{command.name}[/bold] has been categorized to [bold]{new_category}[/bold]"
+        f"\nCommand [bold]{command.name}[/bold] has been categorized to [bold]{Category.get(2).name}[/bold]"
     )
     raise typer.Exit()
