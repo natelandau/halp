@@ -29,7 +29,7 @@ halp <command>
 See full output of a command
 
 ```bash
-halp --full  <command>
+halp --full <command>
 ```
 
 List all your custom commands
@@ -84,7 +84,7 @@ halp --help
 
 Note: Halp requires Python 3.10 or higher.
 
-[pipx](https://pipx.pypa.io/) is strongly recommended for installing Halp
+Install with [pipx](https://pipx.pypa.io/)
 
 ```bash
 pipx install halper
