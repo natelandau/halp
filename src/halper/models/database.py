@@ -271,7 +271,7 @@ class Database:
 
         if db_version <= Version.parse("0.3.0") and current_version > Version.parse("0.3.0"):
             # Add 'is_instance' column to CommandCategory
-            logger.warning(f"Upgrade database from {db_version} to {current_version}")
+            logger.debug(f"Upgrade database from {db_version} to {current_version}")
             with self.db.atomic():
                 migrate(
                     migrator.add_column("commandcategory", "is_custom", BooleanField(default=False))
