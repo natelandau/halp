@@ -4,7 +4,6 @@ import re
 
 from loguru import logger
 from peewee import BooleanField, ForeignKeyField, Model, PeeweeException, SqliteDatabase, TextField
-from playhouse.migrate import SqliteMigrator, migrate
 from rich.syntax import Syntax
 from rich.table import Table
 from semver.version import Version
@@ -258,10 +257,15 @@ class Database:
     def migrate_db(self, current: str) -> None:
         """Migrate the database from old to new versions."""
         current_version = Version.parse(current)
-        db_version = Version.parse(HalpInfo.get_by_id(1).version)
+        halp_info = HalpInfo.get_or_none(1)
+        if not halp_info:
+            return
 
+        db_version = Version.parse(HalpInfo.get_by_id(1).version)
         if db_version == current_version:
             return
+
+        from playhouse.migrate import SqliteMigrator, migrate  # noqa: PLC0415
 
         migrator = SqliteMigrator(self.db)
 
