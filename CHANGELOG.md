@@ -1,3 +1,13 @@
+## v0.4.0 (2024-02-04)
+
+### Feat
+
+- recategorize commands (#22)
+
+### Fix
+
+- **db**: track cli version for future migrations (#21)
+
 ## v0.3.0 (2024-02-03)
 
 ### Feat
