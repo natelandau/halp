@@ -45,7 +45,9 @@ def display_commands(
             console.rule()
 
         console.print(
-            command.table(full_output=full_output, found_in_tldr=found_in_tldr, show_id=show_id)
+            command.table(
+                full_output=full_output, found_in_tldr=found_in_tldr, show_id=full_output or show_id
+            )
         )
 
     if show_id:
@@ -95,7 +97,13 @@ def command_list_table(  # noqa: PLR0917
     if not commands_to_display:
         return None
 
-    table = Table(box=box.SIMPLE, expand=False, show_header=True, title=title)
+    table = Table(
+        box=box.SIMPLE,
+        expand=False,
+        show_header=True,
+        title=title,
+        caption=f"{len(commands_to_display)} commands",
+    )
     columns = [
         ("Command", "bold", True),
         ("Categories", "dim", show_categories),
