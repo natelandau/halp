@@ -261,7 +261,7 @@ class Database:
         if not halp_info:
             return
 
-        db_version = Version.parse(HalpInfo.get_by_id(1).version)
+        db_version = Version.parse(halp_info.version)
         if db_version == current_version:
             return
 
