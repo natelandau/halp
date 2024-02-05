@@ -103,6 +103,7 @@ def command_list_table(  # noqa: PLR0917
         show_header=True,
         title=title,
         caption=f"{len(commands_to_display)} commands",
+        caption_justify="right",
     )
     columns = [
         ("Command", "bold", True),

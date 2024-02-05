@@ -208,9 +208,11 @@ class Indexer:
 
         return len(command_list)
 
-    @staticmethod
-    def _create_temporary_tables() -> None:
+    def _create_temporary_tables(self) -> None:
         """Create temporary tables for storing file and category data during the indexing process."""
+        if TempFile.table_exists():
+            self._drop_temporary_tables()
+
         # Create temporary tables
         TempFile.create_table(safe=True)
         TempCategory.create_table(safe=True)

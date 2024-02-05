@@ -4,8 +4,10 @@ import re
 
 from loguru import logger
 from peewee import BooleanField, ForeignKeyField, Model, PeeweeException, SqliteDatabase, TextField
+from playhouse.migrate import SqliteMigrator, migrate
 from rich.syntax import Syntax
 from rich.table import Table
+from semver.version import Version
 
 from halper.config import HalpConfig
 from halper.constants import APP_DIR, DB, DB_PATH, CommandType
@@ -253,9 +255,23 @@ class Database:
         """Check if database has no commands."""
         return not self.has_data([Command])
 
-    def migrate_db(self, current_version: str) -> None:
+    def migrate_db(self, current: str) -> None:
         """Migrate the database from old to new versions."""
-        pass
+        current_version = Version.parse(current)
+        db_version = Version.parse(HalpInfo.get_by_id(1).version)
+
+        if db_version == current_version:
+            return
+
+        migrator = SqliteMigrator(self.db)
+
+        if db_version <= Version.parse("0.3.0") and current_version > Version.parse("0.3.0"):
+            # Add 'is_instance' column to CommandCategory
+            logger.warning(f"Upgrade database from {db_version} to {current_version}")
+            with self.db.atomic():
+                migrate(
+                    migrator.add_column("commandcategory", "is_custom", BooleanField(default=False))
+                )
 
     @staticmethod
     def clear_data(tables: list[Model]) -> None:
