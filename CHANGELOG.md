@@ -1,3 +1,14 @@
+## v1.0.0 (2024-02-04)
+
+### Feat
+
+- Release v1.0.0
+- migrate to > v0.3.0
+
+### Fix
+
+- show number of commands as table footer
+
 ## v0.4.0 (2024-02-04)
 
 ### Feat
