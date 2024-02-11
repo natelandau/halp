@@ -39,13 +39,17 @@ jobs:
                       githubapp.com:443
                       docker.com:443
 
+            # ----------------------------------------------
+            #    Checkout repository
+            # ----------------------------------------------
+
             - name: Checkout repository
               uses: actions/checkout@v4
               with:
                   fetch-depth: 0
 
             # ----------------------------------------------
-            #    Install poetry and project dependencies
+            #    Install Python, Poetry, and project dependencies
             # ----------------------------------------------
 
             - name: Setup Python and Poetry
@@ -71,12 +75,6 @@ jobs:
                   echo $PROJECT_VERSION
                   if [[ "$TAG" != "v$PROJECT_VERSION" ]]; then exit 1; fi
                   echo "current_tag=refs/tags/${TAG}" >> $GITHUB_ENV
-
-            # ----------------------------------------------
-            #    copy config file to runner
-            # ----------------------------------------------
-            - name: Create empty configuration file
-              run: mkdir -p /home/runner/.config/halp && cp ./src/halper/default_config.toml /home/runner/.config/halp/config.toml
 
             # ----------------------------------------------
             # Test and then build the package
