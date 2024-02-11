@@ -40,21 +40,19 @@ jobs:
               with:
                   python-version: ${{ matrix.python-version }}
 
+            # ----------------------------------------------
+            #    Checkout repository
+            # ----------------------------------------------
+
             - name: Checkout repository
               uses: actions/checkout@v4
 
             # ----------------------------------------------
-            #    Install poetry and project dependencies
+            #    Install Python, Poetry, and project dependencies
             # ----------------------------------------------
 
-            - name: Setup Poetry
+            - name: Setup Python and Poetry
               uses: ./.github/actions/setup-poetry
-
-            # ----------------------------------------------
-            #    copy config file to runner
-            # ----------------------------------------------
-            - name: Create empty configuration file
-              run: mkdir -p /home/runner/.config/halp && cp ./src/halper/default_config.toml /home/runner/.config/halp/config.toml
 
             # ----------------------------------------------
             # Test before building and uploading the package

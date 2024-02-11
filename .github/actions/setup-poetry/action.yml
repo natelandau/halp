@@ -24,13 +24,20 @@ runs:
     using: composite
     steps:
         # ----------------------------------------------
-        #    Install python and checkout repository
+        #    Install Python
         # ----------------------------------------------
 
         - name: Set up Python ${{ matrix.python-version }}
           uses: actions/setup-python@v5
           with:
               python-version: ${{ matrix.python-version }}
+
+        # ----------------------------------------------
+        #    copy config file to runner
+        # ----------------------------------------------
+        - name: Create empty configuration file
+          shell: bash
+          run: mkdir -p /home/runner/.config/halp && cp ./src/halper/default_config.toml /home/runner/.config/halp/config.toml
 
         # ----------------------------------------------
         #    Install poetry and project dependencies
