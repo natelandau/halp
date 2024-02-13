@@ -1,3 +1,9 @@
+## v1.0.2 (2024-02-13)
+
+### Fix
+
+- **index**: improve persisting customizations (#25)
+
 ## v1.0.1 (2024-02-05)
 
 ### Fix
