@@ -93,42 +93,77 @@ class Indexer:
     @staticmethod
     def _persist_command_settings() -> None:
         """Update the database with user configurable data from the temporary command settings."""
-        # Persist hidden status for existing commands
-        matching_commands = TempCommand.select(
-            TempCommand.name, TempCommand.code, TempCommand.hidden
-        ).where(TempCommand.hidden == True)  # noqa: E712
+        # Find commands with values to persist
+        commands_to_persist = TempCommand.select().where(
+            (TempCommand.hidden == True) | (TempCommand.has_custom_description == True)  # noqa: E712
+        )
 
-        for temp_command in matching_commands:
-            update_query = Command.update(hidden=temp_command.hidden).where(
-                (Command.name == temp_command.name) & (Command.code == temp_command.code)
-            )
-            update_query.execute()
-            logger.debug(f"Updated hidden status for: {temp_command.name}")
+        for c in commands_to_persist:
+            # Update commands
+            if c.hidden and not c.has_custom_description:
+                update_type = "hidden status"
+                num_rows = (
+                    Command.update(hidden=c.hidden)
+                    .where(
+                        (Command.name == c.name)
+                        & (Command.code == c.code)
+                        & (Command.file == c.file)
+                        & (Command.description == c.description)
+                    )
+                    .execute()
+                )
 
-        # Persist descriptions for existing commands
-        matching_commands = TempCommand.select(
-            TempCommand.name, TempCommand.code, TempCommand.description
-        ).where(TempCommand.has_custom_description == True)  # noqa: E712
+            elif c.hidden and c.has_custom_description:
+                update_type = "hidden status and custom description"
+                num_rows = (
+                    Command.update(
+                        hidden=c.hidden,
+                        description=c.description,
+                        has_custom_description=c.has_custom_description,
+                    )
+                    .where(
+                        (Command.name == c.name)
+                        & (Command.code == c.code)
+                        & (Command.file == c.file)
+                    )
+                    .execute()
+                )
 
-        for temp_command in matching_commands:
-            update_query = Command.update(
-                description=temp_command.description,
-                has_custom_description=True,
-            ).where((Command.name == temp_command.name) & (Command.code == temp_command.code))
-            update_query.execute()
-            logger.debug(f"Updated description for: {temp_command.name}")
+            elif not c.hidden and c.has_custom_description:
+                update_type = "custom description"
+                num_rows = (
+                    Command.update(
+                        description=c.description,
+                        has_custom_description=c.has_custom_description,
+                    )
+                    .where(
+                        (Command.name == c.name)
+                        & (Command.code == c.code)
+                        & (Command.file == c.file)
+                    )
+                    .execute()
+                )
+
+            if num_rows > 1:
+                logger.warning(f"Persist {update_type} for: {c.name}. {num_rows} commands matched.")
+            else:
+                logger.debug(f"Persist {update_type} for: {c.name}")
 
         # Persist custom categories for existing commands
-        matching_command_cats = TempCommandCategory.select().where(
+        command_cats_to_persist = TempCommandCategory.select().where(
             TempCommandCategory.is_custom == True  # noqa: E712
         )
 
-        for temp_command_cat in matching_command_cats:
+        for c in command_cats_to_persist:
             command = Command.get_or_none(
-                (Command.name == temp_command_cat.command.name)
-                & (Command.code == temp_command_cat.command.code)
+                (Command.name == c.command.name)
+                & (Command.code == c.command.code)
+                & (Command.file == c.command.file)
+                & (Command.description == c.command.description)
+                & (Command.hidden == c.command.hidden)
+                & (Command.has_custom_description == c.command.has_custom_description)
             )
-            category = Category.get_or_none(name=temp_command_cat.category.name)
+            category = Category.get_or_none(name=c.category.name)
 
             if not command or not category:
                 continue
@@ -141,7 +176,7 @@ class Indexer:
             # Add custom category
             CommandCategory.create(command=command, category=category, is_custom=True)
 
-            logger.debug(f"Updated category for: {temp_command_cat.command.name}")
+            logger.debug(f"Persist custom category for: {c.command.name}")
 
     @staticmethod
     def _command_output() -> list[tuple[str, str, str]]:
