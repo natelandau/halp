@@ -37,7 +37,7 @@ export TEXT="two" # comment inline
         echo "Hello World";
     }
 
-    alias ls='two' # comment inline
+    alias ls='two' # comment inline [arg]
 
 function three() {echo "Hello World"; }
 
@@ -67,8 +67,8 @@ Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor 
         ),
         (
             "best",
-            "alias ls='ls -l' # comment is here\n",
-            {"name": "ls", "code": "ls -l", "description": "comment is here"},
+            "alias ls='ls -l' # comment is [here]\n",
+            {"name": "ls", "code": "ls -l", "description": "comment is [here]"},
         ),
         (
             "best",
@@ -505,7 +505,7 @@ def test_parse_file(mock_specific_config) -> None:
             {
                 "name": "ls",
                 "code": "two",
-                "description": "comment inline",
+                "description": "comment inline [arg]",
                 "command_type": CommandType.ALIAS,
             },
             {

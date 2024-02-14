@@ -126,7 +126,7 @@ def command_list_table(  # noqa: PLR0917
             continue
 
         description = (
-            c.description
+            c.escaped_desc
             if c.description
             else c.code_syntax()
             if c.command_type in {CommandType.ALIAS.name, CommandType.EXPORT.name}

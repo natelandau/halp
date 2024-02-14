@@ -16,11 +16,14 @@ def edit_command_description(command_id: int) -> None:
         raise typer.Exit(code=1)
 
     console.print(f"Editing description for command [code]{command.name}[/code]")
-    console.print(f"Current description: [code]{command.description}[/code]")
+    console.print(f"Current description: [code]{command.escaped_desc}[/code]")
     console.rule()
     new_description = Prompt.ask("New description")
 
-    confirm = Prompt.ask(f"Set description to [code]{new_description}[/code]?", choices=["y", "n"])
+    new_description_display = new_description.replace("[", "\\[")
+    confirm = Prompt.ask(
+        f"Set description to [code]{new_description_display}[/code]?", choices=["y", "n"]
+    )
     if confirm.lower() == "n":
         raise typer.Abort()
 
