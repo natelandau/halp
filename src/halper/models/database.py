@@ -82,6 +82,11 @@ class Command(BaseModel):
         )
 
     @property
+    def escaped_desc(self) -> str:
+        """Return escaped description."""
+        return self.description.replace("[", "\\[")
+
+    @property
     def category_names(self) -> list[str]:
         """Return a list of category names associated with this command.
 
@@ -122,7 +127,7 @@ class Command(BaseModel):
         grid.add_row("Command:", f"[bold]{self.name}[/bold]")
         if show_id:
             grid.add_row("ID:", f"[cyan]{self.id!s}[/cyan]")
-        grid.add_row("Description:", self.description)
+        grid.add_row("Description:", self.escaped_desc)
         grid.add_row("Categories:", ", ".join(self.category_names))
         grid.add_row("Type:", self.command_type.title())
         grid.add_row("File:", f"[dim]{self.file.path}[/dim]")
