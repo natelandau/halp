@@ -45,3 +45,4 @@ APP_DIR = Path(typer.get_app_dir("halp"))
 CONFIG_PATH = APP_DIR / "config.toml"
 DB_PATH = APP_DIR / "halp.sqlite"
 DB = SqliteDatabase(DB_PATH)
+VERSION = "0.1.0"

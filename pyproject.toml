@@ -53,15 +53,14 @@
         shellcheck-py  = "^0.9.0.5"
         types-requests = "^2.31.0.20240106"
         typos          = "^1.17.1"
-        vulture        = "^2.10"
 
 [tool.commitizen]
     bump_message               = "bump(release): v$current_version → v$new_version"
     changelog_merge_prerelease = true
     tag_format                 = "v$version"
     update_changelog_on_bump   = true
-    version                    = "1.0.2"
-    version_files              = ["pyproject.toml:version", "src/halper/__version__.py:__version__"]
+    version_files              = ["pyproject.toml:version", "src/halper/constants.py:VERSION"]
+    version_provider           = "poetry"
 
 [tool.coverage.report] # https://coverage.readthedocs.io/en/latest/config.html#report
     exclude_lines = [
@@ -94,12 +93,6 @@
 
 [tool.coverage.xml]
     output = "reports/coverage.xml"
-
-[tool.interrogate]
-    exclude            = ["build", "docs", "tests"]
-    fail-under         = 90
-    ignore-init-method = true
-    verbose            = 2
 
 [tool.mypy] # https://mypy.readthedocs.io/en/latest/config_file.html
     disallow_any_unimported = false
@@ -166,9 +159,6 @@
     target-version = "py310"
 
     [tool.ruff.lint]
-        # Avoiding flagging (and removing) `V101` from any `# noqa`
-        # directives, despite Ruff's lack of support for `vulture`.
-        external = ["V"]
         ignore = [
             "B006",    # mutable-argument-default
             "B008",    # function-call-in-default-argument
@@ -266,16 +256,6 @@
     quote-style               = "double"
     skip-magic-trailing-comma = false
 
-[tool.vulture] # https://pypi.org/project/vulture/
-    # exclude = ["file*.py", "dir/"]
-    # ignore_decorators = ["@app.route", "@require_*"]
-    ignore_names = ["args", "kwargs", "mock_config", "request", "version"]
-    # make_whitelist = true
-    min_confidence = 80
-    paths          = ["src", "tests"]
-    sort_by_size   = true
-    verbose        = false
-
 [tool.poe.tasks]
 
     [tool.poe.tasks.docs]
@@ -304,9 +284,6 @@ src/halp
 
         [[tool.poe.tasks.lint.sequence]]
             shell = "typos"
-
-        [[tool.poe.tasks.lint.sequence]]
-            shell = "vulture src/ tests/ --exclude src/valentina/cogs/test_cog.py"
 
         [[tool.poe.tasks.lint.sequence]]
             shell = "yamllint ."
