@@ -7,8 +7,6 @@ import peewee
 import typer
 from loguru import logger
 
-from halper.__version__ import __version__
-
 # isort:skip
 from halper.commands import (
     categorize_command,
@@ -22,7 +20,7 @@ from halper.commands import (
     unhide_commands,
 )
 from halper.config import HalpConfig
-from halper.constants import APP_DIR, DB, SearchType
+from halper.constants import APP_DIR, DB, VERSION, SearchType
 from halper.models import Database, Indexer
 from halper.utils import (
     check_python_version,
@@ -39,7 +37,7 @@ typer.rich_utils.STYLE_HELPTEXT = ""
 def version_callback(value: bool) -> None:
     """Print version and exit."""
     if value:
-        console.print(f"halp version: {__version__}")
+        console.print(f"halp version: {VERSION}")
         raise typer.Exit()
 
 
@@ -229,7 +227,7 @@ def main(  # noqa: PLR0917, C901
     # Instantiate Database
     try:
         db = Database(DB)
-        db.instantiate(current_version=__version__)
+        db.instantiate(current_version=VERSION)
     except peewee.OperationalError as e:
         logger.exception(f"Unable to instantiate database: {e}")
         raise typer.Exit(code=1) from e
