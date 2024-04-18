@@ -52,32 +52,9 @@ def mock_specific_config():
         uncategorized_name: str | None = None,
         comment_placement: str | None = None,
     ):
-        override_data = {}
-        if case_sensitive:
-            override_data["case_sensitive"] = case_sensitive
-        if file_globs:
-            override_data["file_globs"] = file_globs
-        if command_name_ignore_regex:
-            override_data["command_name_ignore_regex"] = command_name_ignore_regex
-        if comment_placement:
-            override_data["comment_placement"] = comment_placement
-        if file_exclude_regex:
-            override_data["file_exclude_regex"] = file_exclude_regex
-        if uncategorized_name:
-            override_data["uncategorized_name"] = uncategorized_name
-        if categories and isinstance(categories, dict):
-            cats = {}
-            for name, category in categories.items():
-                new_cat = CategoryConfig(
-                    name=category["name"],
-                    code_regex=category["code_regex"],
-                    comment_regex=category["comment_regex"],
-                    description=category["description"],
-                    command_name_regex=category["command_name_regex"],
-                    path_regex=category["path_regex"],
-                )
-                cats[name] = new_cat
-            override_data["categories"] = cats
+        """Collects provided arguments into a dictionary, omitting any that are None, and prepares data sources with the overridden configuration for file processing."""
+        # Use dictionary comprehension to filter out None values and assign to override_data
+        override_data = {key: value for key, value in locals().items() if value is not None}
 
         return [FileSource(FIXTURE_CONFIG), DataSource(data=override_data)]
 

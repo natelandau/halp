@@ -1,6 +1,7 @@
 # Scratch folder for temporary files
 scratch/
 dev_config.toml
+.devdbrc
 
 # Caches
 *_cache/
