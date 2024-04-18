@@ -33,7 +33,7 @@ def get_mankier_description(input_string: str) -> str:
 
     try:
         response = requests.get(url, timeout=15)
-    except Exception as e:  # noqa: BLE001
+    except Exception as e:
         raise typer.Exit(1) from e
 
     if response.status_code != 200:  # noqa: PLR2004
@@ -54,7 +54,7 @@ def get_mankier_explanation(input_string: str) -> str:
 
     try:
         response = requests.get(url, params=params, timeout=15)
-    except Exception as e:  # noqa: BLE001
+    except Exception as e:
         raise typer.Exit(1) from e
 
     if response.status_code != 200:  # noqa: PLR2004

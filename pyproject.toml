@@ -18,18 +18,18 @@
 
     [tool.poetry.dependencies]
         confz       = "^2.0.1"
-        inflect     = "^7.0.0"
+        inflect     = "^7.2.1"
         loguru      = "^0.7.2"
-        markdownify = "^0.11.6"
+        markdownify = "^0.12.1"
         parsy       = "^2.1"
-        peewee      = "^3.17.0"
+        peewee      = "^3.17.3"
         python      = "^3.10"
         requests    = "^2.31.0"
-        rich        = "^13.7.0"
+        rich        = "^13.7.1"
         semver      = "^3.0.2"
         sh          = "^2.0.6"
         tomli       = "^2.0.1"
-        typer       = { extras = ["all"], version = "^0.12.0" }
+        typer       = "^0.12.3"
 
     [tool.poetry.group.test.dependencies]
         pytest                 = "^7.4.3"
@@ -42,17 +42,16 @@
         pytest-xdist           = "^3.3.1"
 
     [tool.poetry.group.dev.dependencies]
-        commitizen     = "^3.12.0"
-        coverage       = "^7.3.1"
-        mypy           = "^1.8.0"
-        pdoc           = "^14.0.0"
-        poethepoet     = "^0.24.2"
-        pre-commit     = "^3.5.0"
-        ruff           = "^0.2.0"
-        sh             = "^2.0.4"
+        commitizen     = "^3.24.0"
+        coverage       = "^7.5.0"
+        mypy           = "^1.10.0"
+        pdoc           = "^14.4.0"
+        poethepoet     = "^0.26.0"
+        pre-commit     = "^3.7.0"
+        ruff           = "^0.4.2"
         shellcheck-py  = "^0.9.0.5"
         types-requests = "^2.31.0.20240106"
-        typos          = "^1.17.1"
+        typos          = "^1.20.10"
 
 [tool.commitizen]
     bump_message               = "bump(release): v$current_version → v$new_version"
@@ -286,7 +285,11 @@ src/halp
             shell = "typos"
 
         [[tool.poe.tasks.lint.sequence]]
-            shell = "yamllint ."
+            cmd = """
+                pre-commit run
+                    --all-files
+                    --color always
+                """
 
 [tool.poe.tasks.test]
     help = "Test this package"
