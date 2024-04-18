@@ -31,18 +31,3 @@ updates:
           runtime-dependencies:
               patterns:
                   - "*"
-    - package-ecosystem: pip
-      directory: /
-      schedule:
-          interval: monthly
-      commit-message:
-          prefix: "chore"
-          prefix-development: "build"
-          include: scope
-      versioning-strategy: increase
-      allow:
-          - dependency-type: development
-      groups:
-          runtime-dependencies:
-              patterns:
-                  - "*"

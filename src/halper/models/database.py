@@ -1,4 +1,5 @@
 """Database models for the HALP app."""
+
 import os
 import re
 
