@@ -11,7 +11,7 @@
     name        = "halper"
     readme      = "README.md"
     repository  = "https://github.com/natelandau/halp"
-    version     = "1.0.2"
+    version     = "1.0.3"
 
     [tool.poetry.scripts] # https://python-poetry.org/docs/pyproject/#scripts
         halp = "halper.cli:app"

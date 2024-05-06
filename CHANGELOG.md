@@ -1,3 +1,13 @@
+## v1.0.3 (2024-05-06)
+
+### Fix
+
+- no longer strip words in brackets from descriptions (#26)
+
+### Refactor
+
+- move version to constants (#27)
+
 ## v1.0.2 (2024-02-13)
 
 ### Fix
