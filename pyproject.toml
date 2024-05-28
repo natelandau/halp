@@ -176,7 +176,7 @@
             "S311",    # suspicious-non-cryptographic-random-usage
             "UP007",   # non-pep604-annotation
         ]
-        ignore-init-module-imports = true
+
         per-file-ignores = { "cli.py" = [
             "PLR0912",
             "PLR0913",
