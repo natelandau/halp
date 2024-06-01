@@ -24,7 +24,7 @@
         parsy       = "^2.1"
         peewee      = "^3.17.3"
         python      = "^3.10"
-        requests    = "^2.31.0"
+        requests    = "^2.32.3"
         rich        = "^13.7.1"
         semver      = "^3.0.2"
         sh          = "^2.0.6"
