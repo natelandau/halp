@@ -45,10 +45,9 @@
         commitizen     = "^3.24.0"
         coverage       = "^7.5.0"
         mypy           = "^1.10.0"
-        pdoc           = "^14.4.0"
         poethepoet     = "^0.26.0"
         pre-commit     = "^3.7.0"
-        ruff           = "^0.4.3"
+        ruff           = "^0.5.0"
         shellcheck-py  = "^0.9.0.5"
         types-requests = "^2.31.0.20240106"
         typos          = "^1.20.10"
@@ -159,8 +158,11 @@
 
     [tool.ruff.lint]
         ignore = [
+            "ANN204",  # Missing return type annotation for special method `__init__`
             "B006",    # mutable-argument-default
             "B008",    # function-call-in-default-argument
+            "COM812",  # Trailing comma missing"
+            "CPY001",  # Missing copyright notice at top of file
             "D107",    # undocumented-public-init
             "D213",    # multi-line-summary-second-line
             "D215",    # section-underline-not-over-indented
@@ -170,16 +172,24 @@
             "D409",    # section-underline-matches-section-length
             "D413",    # blank-line-after-last-section
             "E501",    # line-too-long
+            "FBT001",  # Boolean-typed positional argument in function definition
+            "FBT002",  # Boolean-typed positional argument in function definition
+            "FIX002",  # Line contains TODO, consider resolving the issue
             "ISC001",  # single-line-implicit-string-concatenation
             "N805",    # invalid-first-argument-name-for-method
             "PLR0913", # too-many-arguments
+            "RSE102",  # Unnecessary parentheses on raised exception
             "S311",    # suspicious-non-cryptographic-random-usage
+            "TD002",   # Missing author in TODO
+            "TD003",   # Missing issue link on the line following this TODO
             "UP007",   # non-pep604-annotation
         ]
 
         per-file-ignores = { "cli.py" = [
             "PLR0912",
             "PLR0913",
+        ], "text_parsers.py" = [
+            "B901",
         ], "tests/*.py" = [
             "A002",
             "A003",
@@ -195,49 +205,7 @@
             "S101",
         ] }
         preview = true
-        select = [
-            "A",     # flake8-builtins
-            "ARG",   # flake8-unused-arguments
-            "ASYNC", # flake8-async
-            "B",     # flake8-bugbear
-            "BLE",   # flake8-blind-exception
-            "C4",    # flake8-comprehensions
-            "C90",   # McCabe
-            "D",     # pydocstyle
-            "E",     # pycodestyle Errors
-            "EM",    # flake8-errmsg
-            "ERA",   # flake8-eradicate
-            "EXE",   # flake8-executable
-            "F",     # pyflakes
-            "FA",    # flake8-future
-            "FLY",   # flynt
-            "FURB",  # refurb
-            "I",     # iSort
-            "ISC",   # flake8-implicit-str-concat
-            "N",     # Pep8-naming
-            "NPY",   # flake8-numpy
-            "PERF",  # Perflint
-            "PGH",   # pygrep-hooks
-            "PL",    # pylint
-            "PLC",   # pylint Convention
-            "PLE",   # pylint Error
-            "PLR",   # pylint Refactor
-            "PLW",   # pylint Warning
-            "PT",    # flake8-pytest-style
-            "PTH",   # flake8-use-pathlib
-            "Q",     # flake8-quotes
-            "RET",   # flake8-return
-            "RUF",   # Ruff-specific rules
-            "S",     # flake8-bandit
-            "SIM",   # flake8-simplify
-            "T20",   # flake8-print
-            "TID",   # flake8-tidy-imports
-            "TRY",   # tryceratops
-            "UP",    # pyupgrade
-            "W",     # pycodestyle Warnings
-            "YTT",   # flake8-2020
-            # "DTZ",   # flake8-datetimez
-        ]
+        select = ["ALL"]
         unfixable = ["E712", "ERA001", "F401", "F841", "UP007"]
         [tool.ruff.lint.mccabe]
             # Unlike Flake8, default to a complexity level of 10.
@@ -257,20 +225,11 @@
 
 [tool.poe.tasks]
 
-    [tool.poe.tasks.docs]
-        cmd = """
-pdoc
-      --docformat google
---output-directory docs
-src/halp
-    """
-        help = "Generate this package's docs"
-
     [tool.poe.tasks.lint]
         help = "Lint this package"
 
         [[tool.poe.tasks.lint.sequence]]
-            shell = "ruff --no-fix src/"
+            shell = "ruff check --no-fix src/"
 
         [[tool.poe.tasks.lint.sequence]]
             shell = "ruff format --check src/ tests/"
