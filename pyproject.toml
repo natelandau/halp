@@ -18,16 +18,16 @@
 
     [tool.poetry.dependencies]
         confz       = "^2.0.1"
-        inflect     = "^7.2.1"
+        inflect     = "^7.3.0"
         loguru      = "^0.7.2"
         markdownify = "^0.12.1"
         parsy       = "^2.1"
         peewee      = "^3.17.3"
         python      = "^3.10"
-        requests    = "^2.31.0"
+        requests    = "^2.32.3"
         rich        = "^13.7.1"
         semver      = "^3.0.2"
-        sh          = "^2.0.6"
+        sh          = "^2.0.7"
         tomli       = "^2.0.1"
         typer       = "^0.12.3"
 
