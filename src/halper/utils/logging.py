@@ -1,4 +1,4 @@
-"""Logging utilities for Halp."""
+"""Logging utilities for Halp."""  # noqa: A005
 
 import logging
 import sys
@@ -34,9 +34,6 @@ def instantiate_logger(
             > 2: Include debug from installed libraries
         log_file (Path): The path to the log file where the log messages will be written.
         log_to_file (bool): Whether to log the messages to the file specified by `log_file`.
-
-    Returns:
-        None
     """
     level = verbosity if verbosity < 3 else 2  # noqa: PLR2004
 
@@ -108,7 +105,7 @@ class InterceptHandler(logging.Handler):  # pragma: no cover
         # Find caller from where originated the logged message.
         frame, depth = sys._getframe(6), 6  # noqa: SLF001
         while frame and frame.f_code.co_filename == logging.__file__:
-            frame = frame.f_back  # type: ignore [assignment]
+            frame = frame.f_back
             depth += 1
 
         logger.opt(depth=depth, exception=record.exc_info).log(level, record.getMessage())

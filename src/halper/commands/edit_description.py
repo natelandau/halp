@@ -13,7 +13,7 @@ def edit_command_description(command_id: int) -> None:
     command = Command.get_or_none(Command.id == command_id)
     if not command:
         logger.error(f"No command found with ID {command_id}")
-        raise typer.Exit(code=1)
+        raise typer.Exit(code=1)  # noqa: DOC501
 
     console.print(f"Editing description for command [code]{command.name}[/code]")
     console.print(f"Current description: [code]{command.escaped_desc}[/code]")
@@ -25,7 +25,7 @@ def edit_command_description(command_id: int) -> None:
         f"Set description to [code]{new_description_display}[/code]?", choices=["y", "n"]
     )
     if confirm.lower() == "n":
-        raise typer.Abort()
+        raise typer.Abort()  # noqa: DOC501
 
     command.description = new_description
     command.has_custom_description = True

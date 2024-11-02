@@ -212,7 +212,15 @@ class Database:
         self.db = database
 
     def instantiate(self, current_version: str) -> None:
-        """Instantiate database."""
+        """Instantiate database.
+
+        Args:
+            current_version (str): Current version of the app.
+
+        Raises:
+            errors.AppDirectoryError: If the directory does not exist or is not writable.
+            PeeweeException: If a Peewee-specific error occurs during instantiation.
+        """
         logger.trace(f"Instantiating database. {APP_DIR=} {DB_PATH=}")
 
         # Check if the directory exists
@@ -257,7 +265,11 @@ class Database:
         self.db.close()
 
     def is_empty(self) -> bool:
-        """Check if database has no commands."""
+        """Check if database has no commands.
+
+        Returns:
+            bool: True if database has no commands, False otherwise.
+        """
         return not self.has_data([Command])
 
     def migrate_db(self, current: str) -> None:
@@ -295,7 +307,6 @@ class Database:
 
         Raises:
             PeeweeException: If a Peewee-specific error occurs during deletion.
-            DatabaseError: If a database error occurs during deletion.
         """
         try:
             for table in tables:

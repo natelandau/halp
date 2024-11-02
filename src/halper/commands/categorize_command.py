@@ -13,7 +13,7 @@ def categorize_command(command_id: int | None = None) -> None:
     command = Command.get_or_none(Command.id == command_id)
     if not command:
         logger.error(f"Command with ID {command_id} not found")
-        raise typer.Exit(code=1)
+        raise typer.Exit(code=1)  # noqa: DOC501
 
     categories = Category.select()
 
@@ -45,7 +45,7 @@ def categorize_command(command_id: int | None = None) -> None:
         choices=["y", "n"],
     )
     if confirm.lower() == "n":
-        raise typer.Abort()
+        raise typer.Abort()  # noqa: DOC501
 
     all_command_categories = CommandCategory.select().where(CommandCategory.command == command)
     for command_category in all_command_categories:

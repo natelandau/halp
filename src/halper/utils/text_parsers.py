@@ -68,7 +68,7 @@ def parse_alias() -> Generator[None, None, dict[str, str | None]]:
 
     yield NEWLINE.optional()
 
-    return {"name": name, "code": value, "description": inline_comment or above_comment}
+    return {"name": name, "code": value, "description": inline_comment or above_comment}  # noqa: B901
 
 
 @generate
@@ -120,7 +120,7 @@ def parse_export() -> Generator[None, None, dict[str, str | None]]:
 
     yield NEWLINE.optional()
 
-    return {"name": name, "code": value, "description": inline_comment or above_comment}
+    return {"name": name, "code": value, "description": inline_comment or above_comment}  # noqa: B901
 
 
 @generate
@@ -164,7 +164,7 @@ def parse_function() -> Generator[None, None, dict[str, str | None]]:
 
     yield func_end
 
-    return {
+    return {  # noqa: B901
         "name": name,
         "args": args,
         "code": body,
@@ -202,7 +202,7 @@ def parse_function_body_comment() -> Generator[None, None, str]:
     comment = yield comment.optional()
     yield any_further_text
 
-    return comment
+    return comment  # noqa: B901
 
 
 @generate
@@ -214,6 +214,9 @@ def parse_file() -> Generator[None, None, dict[str, str | CommandType]]:
 
     Returns:
         dict[str, str | CommandType]: A dictionary containing the parsed command details.
+
+    Raises:
+        ValueError: If the parser results are None.
     """
     # Grammar
 
@@ -251,4 +254,4 @@ def parse_file() -> Generator[None, None, dict[str, str | CommandType]]:
     yield non_matching_line.many().optional()
     yield NEWLINE.optional()
 
-    return result
+    return result  # noqa: B901
