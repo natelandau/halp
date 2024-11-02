@@ -55,6 +55,9 @@ class Indexer:
 
         Returns:
             list[tuple[str, str, str]]: A list of tuples containing status indicators and messages for file indexing.
+
+        Raises:
+            errors.NoFilesFoundError: If no files are found matching the globs.
         """
         case_sensitive_regex = 0 if self.case_sensitive else re.IGNORECASE
         files = []
@@ -207,7 +210,7 @@ class Indexer:
         if HalpConfig().categories is None:
             return ("❓", "", "No categories from config")
 
-        config_categories = [d.model_dump() for d in HalpConfig().categories.values()]  # type: ignore [union-attr]
+        config_categories = [d.model_dump() for d in HalpConfig().categories.values()]
 
         # Add categories to the database
         num_categories = Category.insert_many(config_categories).execute()
@@ -343,7 +346,7 @@ class Indexer:
             grid_rows.extend(files_result)
         except errors.NoFilesFoundError as e:
             logger.error("No files found matching the globs in your configuration.")
-            raise typer.Exit(code=1) from e
+            raise typer.Exit(code=1) from e  # noqa: DOC501
 
         # Add commands to the database
         for file in track(File.select(), description="Processing files...", transient=True):

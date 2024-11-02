@@ -11,7 +11,11 @@ from halper.utils import errors, strip_last_two_lines
 
 
 def get_mankier_table(input_text: str) -> Table:
-    """Display an individual command's information from mankier.com."""
+    """Display an individual command's information from mankier.com.
+
+    Returns:
+        Table: A rich Table object.
+    """
     grid = Table.grid(expand=False, padding=(0, 1))
     grid.add_column(style="bold")
     grid.add_column()
@@ -27,7 +31,15 @@ def get_mankier_table(input_text: str) -> Table:
 
 
 def get_mankier_description(input_string: str) -> str:
-    """Query mankier.com for a command's description."""
+    """Query mankier.com for a command's description.
+
+    Returns:
+        str: A string containing the command's description.
+
+    Raises:
+        typer.Exit: If there is an error contacting mankier.com.
+        errors.MankierCommandNotFoundError: If the command is not found on mankier.com.
+    """
     # Get the command description as markdown
     url = f"https://www.mankier.com/api/v2/mans/{input_string.split(' ')[0]}.1/sections/Description"
 
@@ -48,7 +60,14 @@ def get_mankier_description(input_string: str) -> str:
 
 
 def get_mankier_explanation(input_string: str) -> str:
-    """Query mankier.com for a command's explanation."""
+    """Query mankier.com for a command's explanation.
+
+    Returns:
+        str: A string containing the command's explanation.
+
+    Raises:
+        typer.Exit: If there is an error contacting mankier.com.
+    """
     url = "https://www.mankier.com/api/explain/"
     params = {"q": input_string}
 

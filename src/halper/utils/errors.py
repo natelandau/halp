@@ -10,7 +10,7 @@ class MankierCommandNotFoundError(Exception):
         e: Exception | None = None,
         *args: str | int,
         **kwargs: int | str | bool,
-    ):
+    ) -> None:
         formatted_msg = (
             f"Command not found on mankier.com: {msg}"
             if msg
@@ -30,7 +30,7 @@ class InvalidConfigError(Exception):
         e: Exception | None = None,
         *args: str | int,
         **kwargs: int | str | bool,
-    ):
+    ) -> None:
         formatted_msg = (
             f"The configuration file is malformed: {msg}"
             if msg
@@ -50,7 +50,7 @@ class ConfigRebuildError(Exception):
         e: Exception | None = None,
         *args: str | int,
         **kwargs: int | str | bool,
-    ):
+    ) -> None:
         formatted_msg = (
             f"The configuration cannot be rebuilt: {msg}"
             if msg
@@ -70,7 +70,7 @@ class NoFilesFoundError(Exception):
         e: Exception | None = None,
         *args: str | int,
         **kwargs: int | str | bool,
-    ):
+    ) -> None:
         formatted_msg = (
             f"No files are found to parse: {msg}" if msg else "No files are found to parse."
         )
@@ -88,7 +88,7 @@ class AppDirectoryError(Exception):
         e: Exception | None = None,
         *args: str | int,
         **kwargs: int | str | bool,
-    ):
+    ) -> None:
         formatted_msg = (
             f"The app directory is not configured correctly: {msg}"
             if msg

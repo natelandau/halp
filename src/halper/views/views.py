@@ -13,7 +13,11 @@ p = inflect.engine()
 
 
 def strings_to_columns(name: str, strings: list[str], equal: bool = True) -> Columns:
-    """Convert a list of strings to a rich Columns object."""
+    """Convert a list of strings to a rich Columns object.
+
+    Returns:
+        Columns: A rich Columns object.
+    """
     return Columns(
         strings,
         equal=equal,
@@ -54,7 +58,7 @@ def display_commands(
         console.rule()
 
 
-def command_list_table(  # noqa: PLR0917
+def command_list_table(
     category: Category | None = None,
     commands: list[Command] | None = None,
     show_hidden: bool = False,

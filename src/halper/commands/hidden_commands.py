@@ -13,7 +13,7 @@ def list_hidden_commands(full_output: bool = False, only_exports: bool = False) 
     commands = Command.select().where(Command.hidden == True).order_by(Command.name)  # noqa: E712
     if not commands:
         console.print("No hidden commands")
-        raise typer.Exit(code=0)
+        raise typer.Exit(code=0)  # noqa: DOC501
 
     table = command_list_table(
         commands=commands,
@@ -32,7 +32,7 @@ def unhide_commands(command_ids: str | None = None) -> None:
     """Unhide a command by ID."""
     if not command_ids or not isinstance(command_ids, str):
         console.print("No command ID provided")
-        raise typer.Exit(code=1)
+        raise typer.Exit(code=1)  # noqa: DOC501
 
     for command_id in command_ids.split(","):
         try:
@@ -57,7 +57,7 @@ def hide_commands(command_ids: str | None = None) -> None:
     """Hide a command by ID."""
     if not command_ids or not isinstance(command_ids, str):
         console.print("No command ID provided")
-        raise typer.Exit(code=1)
+        raise typer.Exit(code=1)  # noqa: DOC501
 
     for command_id in command_ids.split(","):
         try:

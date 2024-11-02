@@ -1,65 +1,37 @@
 ---
-name: Cached Python and Poetry setup
-description: Cache Poetry with additional extras key
+name: Install uv, Python, and project dependencies
+description: Install uv, Python, and project dependencies using cached uv and Python installations
 
 inputs:
-    python-version:
-        description: >
-            Version range or exact version of a Python version to use, using SemVer's version range syntax.
-        required: false
-        default: 3.x
+  python-version:
+    description: >
+      Version range or exact version of a Python version to use, using SemVer's version range syntax.
+    required: false
+    default: 3.x
 
 outputs:
-    python-version:
-        description: The installed python version. Useful when given a version range as input.
-        value: ${{ steps.setup-python.outputs.python-version }}
-    cache-hit:
-        description: A boolean value to indicate projects dependencies were cached
-        value: ${{ steps.setup-python.outputs.cache-hit }}
-    poetry-cache-hit:
-        description: A boolean value to indicate Poetry installation was cached
-        value: ${{ steps.pipx-cache.outputs.cache-hit }}
+  python-version:
+    description: The installed python version. Useful when given a version range as input.
+    value: ${{ steps.setup-python.outputs.python-version }}
 
 runs:
-    using: composite
-    steps:
-        # ----------------------------------------------
-        #    Install Python
-        # ----------------------------------------------
+  using: composite
+  steps:
+    - name: Setup uv with cache
+      uses: astral-sh/setup-uv@v3
+      with:
+        version: "latest"
+        enable-cache: true
+        cache-dependency-glob: "uv.lock"
 
-        - name: Set up Python ${{ matrix.python-version }}
-          uses: actions/setup-python@v5
-          with:
-              python-version: ${{ matrix.python-version }}
+    - name: Set up Python ${{ matrix.python-version }}
+      shell: bash
+      run: uv python install ${{ matrix.python-version }}
 
-        # ----------------------------------------------
-        #    copy config file to runner
-        # ----------------------------------------------
-        - name: Create empty configuration file
-          shell: bash
-          run: mkdir -p /home/runner/.config/halp && cp ./src/halper/default_config.toml /home/runner/.config/halp/config.toml
+    - name: Install the project
+      shell: bash
+      run: uv sync --all-extras --dev
 
-        # ----------------------------------------------
-        #    Install poetry and project dependencies
-        # ----------------------------------------------
-        # poetry config installer.max-workers 1
-        - name: Install Poetry
-          uses: snok/install-poetry@v1
-          with:
-              virtualenvs-create: true
-              virtualenvs-in-project: true
-              installer-parallel: true
-
-        # Load cached venv if cache exists
-        - name: Load cached venv
-          id: cached-poetry-dependencies
-          uses: actions/cache@v4
-          with:
-              path: .venv
-              key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
-
-        # Install dependencies if cache does not exist
-        - name: Install dependencies
-          if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
-          shell: bash
-          run: poetry install --all-extras
+    - name: Minimize uv cache
+      shell: bash
+      run: uv cache prune --ci

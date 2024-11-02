@@ -86,15 +86,11 @@ Config location: '{CONFIG_PATH}'
 [dim]Attempting to open file...[/dim]"""
     console.print(msg)
     typer.launch(str(CONFIG_PATH), locate=True)
-    raise typer.Exit(code=exit_code)
+    raise typer.Exit(code=exit_code)  # noqa: DOC501
 
 
 def validate_config() -> None:
-    """Validate the configuration file.
-
-    Returns:
-        bool: True if the configuration file is valid, False otherwise.
-    """
+    """Validate the configuration file."""
     # Create a default configuration file if one does not exist
     if not CONFIG_PATH.exists():
         create_default_config()
@@ -106,7 +102,7 @@ def validate_config() -> None:
         for error in e.errors():
             console.print(f"           [red]{error['loc'][0]}: {error['msg']}[/red]")
 
-        raise typer.Exit(code=1) from e
+        raise typer.Exit(code=1) from e  # noqa: DOC501
 
     # Confirm we don't have a default configuration file
     if (

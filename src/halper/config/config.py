@@ -9,7 +9,11 @@ from halper.constants import CONFIG_PATH, CommentPlacement
 
 
 def valid_comment_placement(value: str) -> CommentPlacement:
-    """Convert a string to a CommentPlacement enum."""
+    """Convert a string to a CommentPlacement enum.
+
+    Returns:
+        CommentPlacement: The CommentPlacement enum.
+    """
     return CommentPlacement(value)
 
 

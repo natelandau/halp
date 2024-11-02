@@ -18,48 +18,27 @@ jobs:
             matrix:
                 python-version: ["3.11"]
         steps:
-            - name: Harden Security Runner
-              uses: step-security/harden-runner@v2
-              with:
-                  egress-policy: block
-                  disable-sudo: true
-                  allowed-endpoints: >
-                      api.github.com:443
-                      files.pythonhosted.org:443
-                      github.com:443
-                      install.python-poetry.org:443
-                      pypi.org:443
-                      python-poetry.org:443
-                      upload.pypi.org:443
-
-            # ----------------------------------------------
-            #    Checkout repository
-            # ----------------------------------------------
-
             - name: Checkout repository
               uses: actions/checkout@v4
 
             # ----------------------------------------------
-            #    Install Python, Poetry, and project dependencies
+            # Setup Python, uv, and install project dependencies
             # ----------------------------------------------
 
-            - name: Setup Python and Poetry
-              uses: ./.github/actions/setup-poetry
+            - name: Setup Python, uv, and the package
+              uses: ./.github/actions/uv-python-package
 
             # ----------------------------------------------
-            # Test before building and uploading the package
+            # Run tasks
             # ----------------------------------------------
-            - name: run poetry checks
-              run: |
-                  poetry run poetry check
-                  poetry run coverage run
+            - name: Run tests
+              shell: bash
+              run: uv run pytest tests/
 
-            # ----------------------------------------------
-            # Publish to PyPi
-            # ----------------------------------------------
-            - name: Publish
-              env:
-                  PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}
-              run: |
-                  poetry config pypi-token.pypi $PYPI_TOKEN
-                  poetry publish --build
+            - name: Build the package
+              shell: bash
+              run: uvx --from build pyproject-build --installer uv
+
+            - name: Upload to PyPi
+              shell: bash
+              run: uvx twine upload dist/*
