@@ -39,7 +39,6 @@
         "mypy>=1.13.0",
         "poethepoet>=0.29.0",
         "pre-commit>=4.0.1",
-        "pytest-asyncio>=0.24.0",
         "pytest-clarity>=1.0.1",
         "pytest-env>=1.1.5",
         "pytest-mock>=3.14.0",
@@ -51,7 +50,7 @@
         "shellcheck-py>=0.10.0.1",
         "types-requests>=2.32.0.20241016",
         "typos>=1.27.0",
-]
+    ]
 
 [tool.commitizen]
     bump_message               = "bump(release): v$current_version → v$new_version"
