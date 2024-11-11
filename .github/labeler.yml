@@ -1,26 +1,14 @@
 ---
 ci:
-    - changed-files:
-          - any-glob-to-any-file: ".github/**"
-configuration:
-    - changed-files:
-          - any-glob-to-any-file: ".*"
-          - any-glob-to-any-file: "*.js"
-          - any-glob-to-any-file: "*.json"
-          - any-glob-to-any-file: "*.toml"
-          - any-glob-to-any-file: "*.yaml"
-          - any-glob-to-any-file: "*.yml"
+  - changed-files:
+      - any-glob-to-any-file: ".github/**"
 documentation:
-    - changed-files:
-          - any-glob-to-any-file: "**.md"
-          - any-glob-to-any-file: "docs/**"
-tests:
-    - changed-files:
-          #   - any-glob-to-any-file: "src/**"
-          - any-glob-to-any-file: "tests/**"
+  - changed-files:
+      - any-glob-to-any-file: "**.md"
+      - any-glob-to-any-file: "docs/**"
 deps:
-    - changed-files:
-          - any-glob-to-any-file: "*.lock"
+  - changed-files:
+      - any-glob-to-any-file: "*.lock"
 halp:
-    - changed-files:
-          - any-glob-to-any-file: "src/**"
+  - changed-files:
+      - any-glob-to-any-file: "src/**"
