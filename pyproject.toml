@@ -40,6 +40,7 @@
         "poethepoet>=0.29.0",
         "pre-commit>=4.0.1",
         "pytest-clarity>=1.0.1",
+        "pytest-cov>=6.0.0",
         "pytest-env>=1.1.5",
         "pytest-mock>=3.14.0",
         "pytest-pretty-terminal>=1.1.0",
@@ -50,7 +51,7 @@
         "shellcheck-py>=0.10.0.1",
         "types-requests>=2.32.0.20241016",
         "typos>=1.27.0",
-    ]
+]
 
 [tool.commitizen]
     bump_message               = "bump(release): v$current_version → v$new_version"
@@ -247,13 +248,5 @@
                 """
 
 [tool.poe.tasks.test]
-    help = "Test this package"
-
-    [[tool.poe.tasks.test.sequence]]
-        cmd = "coverage run"
-
-    [[tool.poe.tasks.test.sequence]]
-        cmd = "coverage report"
-
-    [[tool.poe.tasks.test.sequence]]
-        cmd = "coverage xml"
+    cmd  = "pytest --cov --cov-config=pyproject.toml --cov-report=xml --cov-report=term tests/"
+    help = "Test this package and generate coverage reports"
