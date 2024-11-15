@@ -51,7 +51,7 @@
         "shellcheck-py>=0.10.0.1",
         "types-requests>=2.32.0.20241016",
         "typos>=1.27.0",
-]
+    ]
 
 [tool.commitizen]
     bump_message               = "bump(release): v$current_version → v$new_version"
@@ -184,6 +184,10 @@
         ], "tests/*.py" = [
             "A002",
             "A003",
+            "ANN001",
+            "ANN201",
+            "ANN202",
+            "ANN205",
             "ARG001",
             "ARG002",
             "ARG005",

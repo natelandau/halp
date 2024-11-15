@@ -10,7 +10,7 @@ from rich.table import Table
 from semver.version import Version
 
 from halper.config import HalpConfig
-from halper.constants import APP_DIR, DB, DB_PATH, CommandType
+from halper.constants import DB, DB_PATH, CommandType
 from halper.utils import errors
 
 
@@ -221,12 +221,7 @@ class Database:
             errors.AppDirectoryError: If the directory does not exist or is not writable.
             PeeweeException: If a Peewee-specific error occurs during instantiation.
         """
-        logger.trace(f"Instantiating database. {APP_DIR=} {DB_PATH=}")
-
-        # Check if the directory exists
-        if not DB_PATH.parent.exists():
-            msg = f"Directory does not exist: {DB_PATH.parent}"
-            raise errors.AppDirectoryError(msg)
+        logger.debug(f"Instantiating database. {DB_PATH=}")
 
         # Check file permissions
         if not os.access(DB_PATH.parent, os.W_OK):

@@ -20,7 +20,7 @@ from halper.commands import (
     unhide_commands,
 )
 from halper.config import HalpConfig
-from halper.constants import APP_DIR, DB, VERSION, SearchType
+from halper.constants import DB, STATE_DIR, VERSION, SearchType
 from halper.models import Database, Indexer
 from halper.utils import (
     check_python_version,
@@ -30,7 +30,12 @@ from halper.utils import (
     validate_config,
 )
 
-app = typer.Typer(add_completion=False, rich_markup_mode="rich")
+app = typer.Typer(
+    add_completion=False,
+    rich_markup_mode="rich",
+    no_args_is_help=True,
+    context_settings={"help_option_names": ["-h", "--help"]},
+)
 typer.rich_utils.STYLE_HELPTEXT = ""
 
 
@@ -145,7 +150,7 @@ def main(  # noqa: C901
             exists=False,
             rich_help_panel="Output Settings",
         ),
-    ] = Path(f"{APP_DIR}/halp.log"),
+    ] = STATE_DIR / "halp.log",
     log_to_file: Annotated[
         bool,
         typer.Option(
