@@ -103,6 +103,13 @@ Before you can use Halp, you must first
 1. Create a configuration file by running `halp --edit-config``.
 2. Index your commands. You can do this by running `halp --index``.
 
+## File locations
+
+Halp uses the [XDG specification](https://specifications.freedesktop.org/basedir-spec/latest/) for determining the locations of configuration files, logs, and caches.
+
+-   Configuration file: `~/.config/halp/config.toml`
+-   Database: `~/.local/share/halp/halp.sqlite`
+
 ## Known issues
 
 -   Does not associate comments with a command on the following line
