@@ -1,3 +1,9 @@
+## v1.1.1 (2024-11-15)
+
+### Fix
+
+- nothing changed but bump version to kick-off release
+
 ## v1.1.0 (2024-11-15)
 
 ### Feat
