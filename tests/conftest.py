@@ -39,9 +39,13 @@ FIXTURE_CONFIG = Path(__file__).resolve().parent / "fixtures/configs/default_tes
 FIXTURE_DOTFILES = Path(__file__).resolve().parent / "fixtures/dotfiles"
 
 
-@pytest.fixture()
+@pytest.fixture
 def mock_specific_config():
-    """Mock specific configuration data for use in tests."""
+    """Mock specific configuration data for use in tests.
+
+    Returns:
+        Callable[[], list[DataSource]]: A function that returns a list of data sources.
+    """
 
     def _inner(
         case_sensitive: bool | None = None,
@@ -52,7 +56,11 @@ def mock_specific_config():
         uncategorized_name: str | None = None,
         comment_placement: str | None = None,
     ):
-        """Collects provided arguments into a dictionary, omitting any that are None, and prepares data sources with the overridden configuration for file processing."""
+        """Collects provided arguments into a dictionary, omitting any that are None, and prepares data sources with the overridden configuration for file processing.
+
+        Returns:
+            list[DataSource]: The data sources.
+        """
         # Use dictionary comprehension to filter out None values and assign to override_data
         override_data = {key: value for key, value in locals().items() if value is not None}
 
@@ -61,11 +69,11 @@ def mock_specific_config():
     return _inner
 
 
-@pytest.fixture()
-def mock_config():  # noqa: PT004
+@pytest.fixture
+def mock_config():
     """Override configuration file with mock configuration for use in tests. To override a default use the `mock_specific_config` fixture.
 
-    Returns:
+    Yields:
         HalpConfig: The mock configuration.
     """
     override_data = {"file_globs": [f"{FIXTURE_DOTFILES}/**/*.bash"]}
@@ -96,11 +104,11 @@ def mock_db() -> SqliteDatabase:
     test_db.close()
 
 
-@pytest.fixture()
+@pytest.fixture
 def fixtures(tmp_path) -> Path:
     """Copy all directories and files from tests/fixtures into a temporary directory.
 
-    Returns:
+    Yields:
         Path: The temporary directory containing all fixture files.
     """
     test_dir = tmp_path / "fixtures"
@@ -112,7 +120,7 @@ def fixtures(tmp_path) -> Path:
     shutil.rmtree(test_dir)
 
 
-@pytest.fixture()
+@pytest.fixture
 def fixture_file(tmp_path):  # noqa: D417
     """Create a single file for testing.
 
@@ -132,9 +140,13 @@ def fixture_file(tmp_path):  # noqa: D417
     return _method
 
 
-@pytest.fixture()
+@pytest.fixture
 def debug():
-    """Print debug information to the console. This is used to debug tests while writing them."""
+    """Print debug information to the console. This is used to debug tests while writing them.
+
+    Returns:
+        Callable[[str, str | Path, bool], bool]: A function that prints debug information to the console.
+    """
 
     def _debug_inner(label: str, value: str | Path, breakpoint: bool = False):
         """Print debug information to the console. This is used to debug tests while writing them.
