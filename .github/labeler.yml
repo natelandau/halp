@@ -2,10 +2,6 @@
 ci:
   - changed-files:
       - any-glob-to-any-file: ".github/**"
-documentation:
-  - changed-files:
-      - any-glob-to-any-file: "**.md"
-      - any-glob-to-any-file: "docs/**"
 deps:
   - changed-files:
       - any-glob-to-any-file: "*.lock"

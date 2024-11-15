@@ -9,7 +9,11 @@ from halper.utils import console
 
 
 def categorize_command(command_id: int | None = None) -> None:
-    """Categorize command by ID."""
+    """Assign a category to a command identified by its ID.
+
+    Prompt user to select a category from available options and update the command's
+    categorization in the database. Abort if command ID not found or user cancels.
+    """
     command = Command.get_or_none(Command.id == command_id)
     if not command:
         logger.error(f"Command with ID {command_id} not found")
