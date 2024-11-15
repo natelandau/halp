@@ -1,5 +1,6 @@
 """Constants for Halp."""
 
+import os
 from enum import Enum
 from pathlib import Path
 
@@ -41,8 +42,16 @@ class SearchType(str, Enum):
     NAME = "name"
 
 
+CONFIG_DIR = Path(os.getenv("XDG_CONFIG_HOME", "~/.config")).expanduser().absolute() / "halp"
+DATA_DIR = Path(os.getenv("XDG_DATA_HOME", "~/.local/share")).expanduser().absolute() / "halp"
+STATE_DIR = Path(os.getenv("XDG_STATE_HOME", "~/.local/state")).expanduser().absolute() / "halp"
+CACHE_DIR = Path(os.getenv("XDG_CACHE_HOME", "~/.cache")).expanduser().absolute() / "halp"
+CONFIG_PATH = CONFIG_DIR / "config.toml"
+# DB_PATH = DATA_DIR / "halp.sqlite"  # noqa: ERA001
+
+
 APP_DIR = Path(typer.get_app_dir("halp"))
-CONFIG_PATH = APP_DIR / "config.toml"
+# CONFIG_PATH = APP_DIR / "config.toml"  # noqa: ERA001
 DB_PATH = APP_DIR / "halp.sqlite"
 DB = SqliteDatabase(DB_PATH)
 VERSION = "0.1.0"
