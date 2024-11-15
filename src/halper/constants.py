@@ -53,5 +53,8 @@ DB_PATH = DATA_DIR / "halp.sqlite"
 APP_DIR = Path(typer.get_app_dir("halp"))
 # CONFIG_PATH = APP_DIR / "config.toml"  # noqa: ERA001
 # DB_PATH = APP_DIR / "halp.sqlite"  # noqa: ERA001
+print("--------------------------------------------------")  # noqa: T201
+print(f"{DB_PATH=}")  # noqa: T201
+print("--------------------------------------------------")  # noqa: T201
 DB = SqliteDatabase(DB_PATH)
 VERSION = "0.1.0"
