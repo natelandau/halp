@@ -228,8 +228,6 @@ class Database:
         #     msg = f"Directory does not exist: {DB_PATH.parent}"  # noqa: ERA001
         #     raise errors.AppDirectoryError(msg)  # noqa: ERA001
 
-        DB_PATH.parent.mkdir(parents=True, exist_ok=True)
-
         # Check file permissions
         if not os.access(DB_PATH.parent, os.W_OK):
             msg = f"Write permission is not available on {DB_PATH.parent}"

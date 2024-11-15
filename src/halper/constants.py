@@ -48,13 +48,11 @@ STATE_DIR = Path(os.getenv("XDG_STATE_HOME", "~/.local/state")).expanduser().abs
 CACHE_DIR = Path(os.getenv("XDG_CACHE_HOME", "~/.cache")).expanduser().absolute() / "halp"
 CONFIG_PATH = CONFIG_DIR / "config.toml"
 DB_PATH = DATA_DIR / "halp.sqlite"
-
+DATA_DIR.mkdir(parents=True, exist_ok=True)
 
 APP_DIR = Path(typer.get_app_dir("halp"))
 # CONFIG_PATH = APP_DIR / "config.toml"  # noqa: ERA001
 # DB_PATH = APP_DIR / "halp.sqlite"  # noqa: ERA001
-print("--------------------------------------------------")  # noqa: T201
-print(f"{DB_PATH=}")  # noqa: T201
-print("--------------------------------------------------")  # noqa: T201
+
 DB = SqliteDatabase(DB_PATH)
 VERSION = "0.1.0"
