@@ -223,10 +223,12 @@ class Database:
         """
         logger.trace(f"Instantiating database. {APP_DIR=} {DB_PATH=}")
 
-        # Check if the directory exists
-        if not DB_PATH.parent.exists():
-            msg = f"Directory does not exist: {DB_PATH.parent}"
-            raise errors.AppDirectoryError(msg)
+        # # Check if the directory exists
+        # if not DB_PATH.parent.exists():
+        #     msg = f"Directory does not exist: {DB_PATH.parent}"  # noqa: ERA001
+        #     raise errors.AppDirectoryError(msg)  # noqa: ERA001
+
+        DB_PATH.parent.mkdir(parents=True, exist_ok=True)
 
         # Check file permissions
         if not os.access(DB_PATH.parent, os.W_OK):
