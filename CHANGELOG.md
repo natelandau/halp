@@ -1,3 +1,9 @@
+## v1.1.0 (2024-11-15)
+
+### Feat
+
+- use XDG specification for file locations (#40)
+
 ## v1.0.3 (2024-05-06)
 
 ### Fix

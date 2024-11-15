@@ -19,7 +19,7 @@
     name = "halper"
     readme = "README.md"
     requires-python = ">=3.11"
-    version = "1.0.3"
+    version = "1.1.0"
 
     [project.urls]
         Homepage   = "https://github.com/natelandau/halp"
