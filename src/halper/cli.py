@@ -20,7 +20,7 @@ from halper.commands import (
     unhide_commands,
 )
 from halper.config import HalpConfig
-from halper.constants import APP_DIR, DB, VERSION, SearchType
+from halper.constants import DB, STATE_DIR, VERSION, SearchType
 from halper.models import Database, Indexer
 from halper.utils import (
     check_python_version,
@@ -150,7 +150,7 @@ def main(  # noqa: C901
             exists=False,
             rich_help_panel="Output Settings",
         ),
-    ] = Path(f"{APP_DIR}/halp.log"),
+    ] = STATE_DIR / "halp.log",
     log_to_file: Annotated[
         bool,
         typer.Option(
