@@ -223,6 +223,7 @@ def main(  # noqa: C901
         raise typer.Exit(0)
 
     validate_config()
+    console.print("Validated config")
 
     # Instantiate Database
     try:
