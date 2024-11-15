@@ -1,6 +1,6 @@
 # Halp
 
-[![Changelog](https://img.shields.io/github/v/release/natelandau/halper?include_prereleases&label=changelog)](https://github.com/natelandau/halper/releases) [![PyPI version](https://badge.fury.io/py/halper.svg)](https://badge.fury.io/py/halper) ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/halper) [![Tests](https://github.com/natelandau/halper/actions/workflows/test.yml/badge.svg)](https://github.com/natelandau/halper/actions/workflows/test.yml) [![codecov](https://codecov.io/gh/natelandau/halper/graph/badge.svg?token=NHBKL0B6CL)](https://codecov.io/gh/natelandau/halper)
+[![Changelog](https://img.shields.io/github/v/release/natelandau/halp?include_prereleases&label=changelog)](https://github.com/natelandau/halp/releases) [![PyPI version](https://badge.fury.io/py/halper.svg)](https://badge.fury.io/py/halper) [![Tests](https://github.com/natelandau/halp/actions/workflows/test.yml/badge.svg)](https://github.com/natelandau/halp/actions/workflows/test.yml) [![codecov](https://codecov.io/gh/natelandau/halp/graph/badge.svg?token=NHBKL0B6CL)](https://codecov.io/gh/natelandau/halp)
 
 Halp is a command line tool that reminds you how to use your custom shell commands. It finds aliases and functions from your dotfiles and indexes them so you can query them later. Simply type `halp <command>` to see what it does or `halp --list` to see all your custom commands.
 
