@@ -9,15 +9,26 @@ from halper.utils import console
 
 
 def categorize_command(command_id: int | None = None) -> None:
-    """Assign a category to a command identified by its ID.
+    """Assign a category to a command by prompting user for selection.
 
-    Prompt user to select a category from available options and update the command's
-    categorization in the database. Abort if command ID not found or user cancels.
+    Interactively prompt user to select a category from available options and update the command's
+    categorization in the database. This allows organizing commands into logical groups for easier
+    discovery and management. The function handles all user interaction, database updates, and error cases.
+
+    Args:
+        command_id: Optional[int] - ID of the command to categorize. If None or invalid ID, will exit with error.
+
+    Raises:
+        typer.Exit: If command ID not found, user aborts, or on successful completion.
+        typer.Abort: If user declines confirmation prompt.
+
+    Example:
+        categorize_command(5)  # Will prompt user to categorize command with ID 5
     """
     command = Command.get_or_none(Command.id == command_id)
     if not command:
         logger.error(f"Command with ID {command_id} not found")
-        raise typer.Exit(code=1)  # noqa: DOC501
+        raise typer.Exit(code=1)
 
     categories = Category.select()
 
@@ -49,7 +60,7 @@ def categorize_command(command_id: int | None = None) -> None:
         choices=["y", "n"],
     )
     if confirm.lower() == "n":
-        raise typer.Abort()  # noqa: DOC501
+        raise typer.Abort()
 
     all_command_categories = CommandCategory.select().where(CommandCategory.command == command)
     for command_category in all_command_categories:

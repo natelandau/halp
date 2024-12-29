@@ -43,7 +43,7 @@ def version_callback(value: bool) -> None:
     """Print version and exit."""
     if value:
         console.print(f"halp version: {VERSION}")
-        raise typer.Exit()  # noqa: DOC501
+        raise typer.Exit()
 
 
 @app.command()
@@ -221,7 +221,7 @@ def main(  # noqa: C901
 
     if not check_python_version():
         logger.error("Python version must be >= 3.10")
-        raise typer.Exit(code=1)  # noqa: DOC501
+        raise typer.Exit(code=1)
 
     if edit_configuration:
         edit_config()
