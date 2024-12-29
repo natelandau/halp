@@ -2,17 +2,17 @@
     authors = [{ name = "Nate Landau", email = "github@natenate.org" }]
     dependencies = [
         "confz>=2.0.1",
-        "inflect>=7.4.0",
-        "loguru>=0.7.2",
-        "markdownify>=0.13.1",
+        "inflect>=7.5.0",
+        "loguru>=0.7.3",
+        "markdownify>=0.14.1",
         "parsy>=2.1",
-        "peewee>=3.17.7",
+        "peewee>=3.17.8",
         "requests>=2.32.3",
         "rich>=13.9.4",
         "semver>=3.0.2",
         "sh>=2.1.0",
-        "tomli>=2.0.2",
-        "typer>=0.12.5",
+        "tomli>=2.2.1",
+        "typer>=0.15.1",
     ]
     description = "One stop shop for command line help."
     license = { file = "LICENSE" }
@@ -34,10 +34,10 @@
 
 [tool.uv]
     dev-dependencies = [
-        "commitizen>=3.30.0",
-        "coverage>=7.6.4",
-        "mypy>=1.13.0",
-        "poethepoet>=0.29.0",
+        "commitizen>=4.1.0",
+        "coverage>=7.6.10",
+        "mypy>=1.14.0",
+        "poethepoet>=0.32.0",
         "pre-commit>=4.0.1",
         "pytest-clarity>=1.0.1",
         "pytest-cov>=6.0.0",
@@ -46,11 +46,11 @@
         "pytest-pretty-terminal>=1.1.0",
         "pytest-sugar>=1.0.0",
         "pytest-xdist>=3.6.1",
-        "pytest>=8.3.3",
-        "ruff>=0.7.2",
+        "pytest>=8.3.4",
+        "ruff>=0.8.4",
         "shellcheck-py>=0.10.0.1",
         "types-requests>=2.32.0.20241016",
-        "typos>=1.27.0",
+        "typos>=1.28.4",
     ]
 
 [tool.commitizen]
@@ -179,6 +179,7 @@
             "UP007",   # non-pep604-annotation
         ]
         per-file-ignores = { "cli.py" = [
+            "DOC501",
             "PLR0912",
             "PLR0913",
         ], "tests/*.py" = [
@@ -214,11 +215,11 @@
         [tool.ruff.lint.pylint]
             max-args = 6
 
-[tool.ruff.format]
-    indent-style              = "space"
-    line-ending               = "auto"
-    quote-style               = "double"
-    skip-magic-trailing-comma = false
+    [tool.ruff.format]
+        indent-style              = "space"
+        line-ending               = "auto"
+        quote-style               = "double"
+        skip-magic-trailing-comma = false
 
 [tool.poe.tasks]
     [tool.poe.tasks.upgrade]
@@ -251,6 +252,6 @@
                     --color always
                 """
 
-[tool.poe.tasks.test]
-    cmd  = "pytest --cov --cov-config=pyproject.toml --cov-report=xml --cov-report=term tests/"
-    help = "Test this package and generate coverage reports"
+    [tool.poe.tasks.test]
+        cmd  = "pytest --cov --cov-config=pyproject.toml --cov-report=xml --cov-report=term tests/"
+        help = "Test this package and generate coverage reports"

@@ -77,7 +77,19 @@ Empty configuration created, edit before continuing
 
 
 def edit_config(exit_code: int = 0) -> None:
-    """Edit the configuration file."""
+    """Open the configuration file in the default editor.
+
+    Launch the system's default editor to modify Halp's configuration file. If the config file
+    doesn't exist, create a default one first. This function provides a convenient way for users
+    to customize Halp's behavior by editing categories, file globs, and other settings.
+
+    Args:
+        exit_code (int): Exit code to use when terminating the program after launching editor.
+            Defaults to 0.
+
+    Raises:
+        typer.Exit: Always exits after launching editor with the specified exit_code.
+    """
     if not CONFIG_PATH.exists():
         create_default_config()
 
@@ -86,11 +98,22 @@ Config location: '{CONFIG_PATH}'
 [dim]Attempting to open file...[/dim]"""
     console.print(msg)
     typer.launch(str(CONFIG_PATH), locate=True)
-    raise typer.Exit(code=exit_code)  # noqa: DOC501
+    raise typer.Exit(code=exit_code)
 
 
 def validate_config() -> None:
-    """Validate the configuration file."""
+    """Validate the configuration file and ensure it is properly configured.
+
+    Verify that the configuration file exists, contains valid settings according to the schema,
+    and is not using default values. This helps prevent runtime errors by ensuring the application
+    is properly configured before execution.
+
+    Raises:
+        typer.Exit: If the config file is invalid, missing, or using defaults. Exit code 1.
+            - Creates default config if missing
+            - Displays validation errors if schema invalid
+            - Prompts for edits if using default values
+    """
     # Create a default configuration file if one does not exist
     if not CONFIG_PATH.exists():
         create_default_config()
@@ -102,7 +125,7 @@ def validate_config() -> None:
         for error in e.errors():
             console.print(f"           [red]{error['loc'][0]}: {error['msg']}[/red]")
 
-        raise typer.Exit(code=1) from e  # noqa: DOC501
+        raise typer.Exit(code=1) from e
 
     # Confirm we don't have a default configuration file
     if (

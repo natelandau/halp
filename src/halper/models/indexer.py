@@ -317,10 +317,25 @@ class Indexer:
         TempFile.drop_table()
 
     def do_index(self) -> None:
-        """Execute the indexing process to create or update the command index in the database.
+        """Index commands from configured files into the database.
 
-        Manages the indexing workflow including setting up temporary tables, clearing existing data,
-        processing files and categories, and cleaning up after indexing.
+        Execute a full indexing workflow to discover and store commands from source files. The workflow:
+        1. Creates temporary tables to preserve existing command settings during rebuild
+        2. Clears existing database entries
+        3. Loads configured categories
+        4. Scans and indexes files matching configured globs
+        5. Parses each file to extract commands
+        6. Persists command settings from temporary tables if not rebuilding
+        7. Cleans up temporary tables
+
+        This function enables maintaining an up-to-date searchable index of commands as source files change.
+        Run this after modifying command files or changing the configuration.
+
+        Args:
+            None
+
+        Raises:
+            typer.Exit: If no files are found matching the configured globs.
         """
         # Setup table
         grid = Table.grid(expand=False, padding=(0, 1))
@@ -346,7 +361,7 @@ class Indexer:
             grid_rows.extend(files_result)
         except errors.NoFilesFoundError as e:
             logger.error("No files found matching the globs in your configuration.")
-            raise typer.Exit(code=1) from e  # noqa: DOC501
+            raise typer.Exit(code=1) from e
 
         # Add commands to the database
         for file in track(File.select(), description="Processing files...", transient=True):
