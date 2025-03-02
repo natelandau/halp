@@ -23,7 +23,11 @@ settings = Dynaconf(
     settings_files=[DEFAULT_CONFIG_PATH, USER_CONFIG_PATH, PROJECT_ROOT_PATH / "dev-config.toml"],
     environments=False,
     validators=[
-        Validator("db_path", default=DB_PATH, cast=lambda x: Path(x).expanduser().absolute())
+        Validator(
+            "db_path",
+            default=DB_PATH,
+            cast=lambda x: Path(x).expanduser().absolute() if x != ":memory:" else x,
+        )
     ],
 )
 

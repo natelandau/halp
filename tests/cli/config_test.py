@@ -24,6 +24,8 @@ def test_new_default_config(mock_config, clean_stdout, debug, tmp_path, mocker) 
 
     # Then: Verify config file matches default template
     output = clean_stdout()
+    debug(output, "output")
+
     assert "configuration created" in output
     assert path_to_config.exists() is True
     # Config should be exact copy of default template

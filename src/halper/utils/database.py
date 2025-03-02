@@ -44,10 +44,10 @@ def init_database(current_version: str) -> None:
         This function must be called before any database operations can be performed.
         The database location is determined by settings.db_path.
     """
-    pp.debug(f"Instantiating database. {settings.db_path}")
+    pp.error(f"Instantiating database. {settings.db_path}")
 
     # Check file permissions
-    if not os.access(settings.db_path.parent, os.W_OK):
+    if settings.db_path != ":memory:" and not os.access(settings.db_path.parent, os.W_OK):
         msg = f"Write permission is not available on {settings.db_path.parent}"
         raise AppDirectoryError(msg)
 
