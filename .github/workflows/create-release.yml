@@ -56,6 +56,9 @@ jobs:
             # Test and then build the package
             # ----------------------------------------------
 
+            - name: Setup Latest SQLite Version
+              uses: actions/setup-sqlite@v1
+
             - name: Run tests
               shell: bash
               run: uv run duty test
