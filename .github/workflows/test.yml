@@ -44,7 +44,7 @@ jobs:
 
             - name: Run tests
               shell: bash
-              run: duty test
+              run: uv run duty test
 
             - name: Upload coverage to Codecov
               if: ${{ matrix.python-version == '3.13' }}
