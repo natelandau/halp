@@ -38,7 +38,7 @@ runs:
 
     - name: Install SQLite
       shell: bash
-      run: apt install sqlite3
+      run: sudo apt install -y sqlite3
 
     # ----------------------------------------------
     #    copy config file to runner
