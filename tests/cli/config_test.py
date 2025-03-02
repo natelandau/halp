@@ -8,7 +8,6 @@ from halper.halp import Halp
 from halper.utils import settings
 
 
-@pytest.mark.no_db
 def test_new_default_config(mock_config, clean_stdout, debug, tmp_path, mocker) -> None:
     """Verify that config command creates a new default configuration file in non-interactive mode."""
     # Given: Configure a clean temporary directory for the config file
@@ -32,7 +31,6 @@ def test_new_default_config(mock_config, clean_stdout, debug, tmp_path, mocker) 
     assert path_to_config.read_text() == DEFAULT_CONFIG_PATH.read_text()
 
 
-@pytest.mark.no_db
 def test_overwrite_existing_config(mock_config, clean_stdout, debug, tmp_path, mocker) -> None:
     """Verify that config command overwrites existing configuration file when user confirms."""
     # Given: An existing config file and user confirmation to overwrite
@@ -54,7 +52,6 @@ def test_overwrite_existing_config(mock_config, clean_stdout, debug, tmp_path, m
     assert path_to_config.read_text() == DEFAULT_CONFIG_PATH.read_text()
 
 
-@pytest.mark.no_db
 def test_overwrite_existing_config_false(
     mock_config, clean_stdout, debug, tmp_path, mocker
 ) -> None:
@@ -78,7 +75,6 @@ def test_overwrite_existing_config_false(
     assert path_to_config.read_text() != DEFAULT_CONFIG_PATH.read_text()
 
 
-@pytest.mark.no_db
 def test_new_default_interactive(mock_config, clean_stdout, debug, tmp_path, mocker) -> None:
     """Verify that config command creates a new default configuration file in non-interactive mode."""
     # Given: Configure a clean temporary directory for the config file

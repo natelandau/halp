@@ -352,7 +352,7 @@ def mock_config(debug, tmp_path):
             "FILE_GLOBS": [],
             "CATEGORIES": {},
             # "DB_PATH": tmp_path / "test.db",
-            "DB_PATH": ":memory:",
+            # "DB_PATH": ":memory:",
         }
 
         override_data = {key: value for key, value in kwargs.items() if value is not None}
