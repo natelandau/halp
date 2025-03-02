@@ -34,6 +34,7 @@ def initialize_subcommand(
     *,
     require_db_content: bool = False,
     require_config: bool = True,
+    no_db: bool = False,
 ) -> None:
     """Initialize and validate a CLI subcommand environment.
 
@@ -44,6 +45,7 @@ def initialize_subcommand(
         subcommand (cappa.Command): The subcommand instance being initialized
         require_db_content (bool, optional): If True, verify that the database contains indexed commands. Defaults to False.
         require_config (bool, optional): If True, verify that the configuration file exists. Defaults to True.
+        no_db (bool, optional): If True, do not initialize the database. Defaults to False.
 
     Raises:
         cappa.Exit: Exit with code 1 if Python version is < 3.10 or if database content is required but missing
@@ -71,7 +73,8 @@ def initialize_subcommand(
         pp.trace(f"Subcommand Args: {subcommand.__dict__}")
         pp.trace(f"Settings: {settings.to_dict()}")
 
-    init_database(VERSION)
+    if not no_db:
+        init_database(VERSION)
 
     if require_db_content and not db_tables_have_data([Command]):
         pp.warning("No indexed commands found in database.")

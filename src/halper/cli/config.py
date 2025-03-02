@@ -142,9 +142,7 @@ def update_config_file(
 ) -> None:
     """Update configuration file with new user-provided values using regex substitution.
 
-    Replace existing configuration values in the TOML file with new values provided by the user.
-    Uses regex patterns to find and replace specific configuration keys while preserving the
-    file structure.
+    Replace existing configuration values in the TOML file with new values provided by the user. Uses regex patterns to find and replace specific configuration keys while preserving the file structure.
 
     Args:
         file_globs (list[str]): List of file glob patterns pointing to files that should be indexed
@@ -153,9 +151,7 @@ def update_config_file(
         comment_placement (str): How to parse command descriptions ("best", "above", or "inline")
 
     Note:
-        This function modifies the USER_CONFIG_PATH file in place. The regex patterns are
-        case-insensitive to handle variations in the TOML file format. Use this function
-        after collecting new configuration values to persist them to disk.
+        This function modifies the USER_CONFIG_PATH file in place. The regex patterns are case-insensitive to handle variations in the TOML file format. Use this function after collecting new configuration values to persist them to disk.
     """
     text = USER_CONFIG_PATH.read_text()
     text = re.sub(r"file_globs += +\[.*\]", f"file_globs = {file_globs}", text, flags=re.IGNORECASE)
@@ -195,7 +191,9 @@ def config_command(halp: Halp, cmd: ConfigCommand) -> None:
     Note:
         Use this command to set up halp for first time use or to reconfigure settings. The interactive mode provides helpful explanations and validation, while non-interactive mode creates an empty config file that can be manually edited.
     """
-    initialize_subcommand(halp=halp, subcommand=cmd, require_db_content=False, require_config=False)
+    initialize_subcommand(
+        halp=halp, subcommand=cmd, require_db_content=False, require_config=False, no_db=True
+    )
 
     if USER_CONFIG_PATH.exists() and not Confirm.ask(
         "Configuration file already exists. Overwrite?"
