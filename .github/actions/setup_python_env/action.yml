@@ -36,6 +36,10 @@ runs:
       shell: bash
       run: uv cache prune --ci
 
+    - name: Install SQLite
+      shell: bash
+      run: apt install sqlite3
+
     # ----------------------------------------------
     #    copy config file to runner
     # ----------------------------------------------
