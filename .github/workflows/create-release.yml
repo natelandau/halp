@@ -57,7 +57,7 @@ jobs:
             # ----------------------------------------------
 
             - name: Setup Latest SQLite Version
-              uses: actions/setup-sqlite@v1
+              uses: ccorsi/setup-sqlite@v1
 
             - name: Run tests
               shell: bash

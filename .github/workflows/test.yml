@@ -40,7 +40,7 @@ jobs:
               uses: actions/checkout@v4
 
             - name: Setup Latest SQLite Version
-              uses: actions/setup-sqlite@v1
+              uses: ccorsi/setup-sqlite@v1
 
             - name: Setup Python, uv, and the package
               uses: ./.github/actions/setup_python_env
