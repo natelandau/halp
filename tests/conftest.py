@@ -312,7 +312,7 @@ def mock_db(request) -> SqliteExtDatabase | None:
 
 
 @pytest.fixture
-def mock_config(debug):
+def mock_config(debug, tmp_path):
     """Create a fixture that provides a mock configuration function for testing.
 
     Create a function that allows overriding default configuration settings during tests. The returned function accepts keyword arguments to override specific settings while preserving defaults for unspecified values. This enables testing configuration-dependent functionality in isolation without modifying actual config files.
@@ -351,6 +351,7 @@ def mock_config(debug):
             "FILE_EXCLUDE_REGEX": "",
             "FILE_GLOBS": [],
             "CATEGORIES": {},
+            "DB_PATH": tmp_path / "test.db",
         }
 
         override_data = {key: value for key, value in kwargs.items() if value is not None}
