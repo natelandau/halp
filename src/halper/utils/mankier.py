@@ -1,16 +1,17 @@
 """Interact with mankier.com."""
 
-import requests
-import typer
-from loguru import logger
+import cappa
+import httpx
 from markdownify import markdownify as md
 from rich.markdown import Markdown
 from rich.table import Table
 
-from halper.utils import errors, strip_last_two_lines
+from . import errors
+from .printer import pp
+from .utilities import strip_last_two_lines
 
 
-def get_mankier_table(input_text: str) -> Table:
+def get_mankier_table(input_text: str) -> Table:  # pragma: no cover
     """Display an individual command's information from mankier.com.
 
     Returns:
@@ -30,27 +31,27 @@ def get_mankier_table(input_text: str) -> Table:
     return grid
 
 
-def get_mankier_description(input_string: str) -> str:
+def get_mankier_description(input_string: str) -> str:  # pragma: no cover
     """Query mankier.com for a command's description.
 
     Returns:
         str: A string containing the command's description.
 
     Raises:
-        typer.Exit: If there is an error contacting mankier.com.
+        cappa.Exit: If there is an error contacting mankier.com.
         errors.MankierCommandNotFoundError: If the command is not found on mankier.com.
     """
     # Get the command description as markdown
     url = f"https://www.mankier.com/api/v2/mans/{input_string.split(' ')[0]}.1/sections/Description"
 
     try:
-        response = requests.get(url, timeout=15)
+        response = httpx.get(url, timeout=15)
     except Exception as e:
-        raise typer.Exit(1) from e
+        raise cappa.Exit(code=1) from e
 
     if response.status_code != 200:  # noqa: PLR2004
-        logger.error(f"Error contacting mankier.com: {response.status_code} {response.reason}")
-        raise typer.Exit(1)
+        pp.error(f"Error contacting mankier.com: {response.status_code}")
+        raise cappa.Exit(code=1)
 
     if "html" not in response.json():
         raise errors.MankierCommandNotFoundError(input_string)
@@ -59,25 +60,25 @@ def get_mankier_description(input_string: str) -> str:
     return "\n".join(converted_to_markdown.splitlines()[3:4])
 
 
-def get_mankier_explanation(input_string: str) -> str:
+def get_mankier_explanation(input_string: str) -> str:  # pragma: no cover
     """Query mankier.com for a command's explanation.
 
     Returns:
         str: A string containing the command's explanation.
 
     Raises:
-        typer.Exit: If there is an error contacting mankier.com.
+        cappa.Exit: If there is an error contacting mankier.com.
     """
     url = "https://www.mankier.com/api/explain/"
     params = {"q": input_string}
 
     try:
-        response = requests.get(url, params=params, timeout=15)
+        response = httpx.get(url, params=params, timeout=15)
     except Exception as e:
-        raise typer.Exit(1) from e
+        raise cappa.Exit(code=1) from e
 
     if response.status_code != 200:  # noqa: PLR2004
-        logger.error(f"Error contacting mankier.com: {response.status_code} {response.reason}")
-        raise typer.Exit(1)
+        pp.error(f"Error contacting mankier.com: {response.status_code}")
+        raise cappa.Exit(code=1)
 
     return strip_last_two_lines(response.text)

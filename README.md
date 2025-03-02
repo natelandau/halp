@@ -125,12 +125,10 @@ On first run, a TOML configuration file will be created for you.
 IMPORTANT: You must add at least one path to the `file_globs` list and then run `halp --index`. Otherwise, no commands will be indexed.
 
 ```toml
-case_sensitive            = false           # Whether or not to match case sensitively with regexes
 command_name_ignore_regex = ''              # Exclude commands who's names match this regex
 comment_placement         = "BEST"          # Where you place comments to describe your code. One of "BEST", "ABOVE", "INLINE"
 file_exclude_regex        = ''              # Exclude files who's paths match this regex
 file_globs                = []              # Absolute path globs to files to parse for commands
-uncategorized_name        = "uncategorized" # The name of the uncategorized category
 
 [categories] # Commands are matched against these categories
     [categories.example]
@@ -172,6 +170,28 @@ func command() {
 
 ## Developing
 
+### Development Configuration
+
+Override settings while developing by adding a `dev-config.toml` file to the root level of the project. Any settings in this file will override settings in the default (user space) configuration file.
+
+```toml
+# ~/.config/halp/config.toml
+file_globs = ["~/.config/dotfiles/**/*.sh"]
+
+# ./dev-config.toml
+file_globs = ["./tmp/dev_dotfiles/**/*.sh"]
+db_path = "./tmp/halp.sqlite"
+```
+
+Specific settings used for development that are not used in the user space configuration file.
+
+| Setting   | Description                                                                                    |
+| --------- | ---------------------------------------------------------------------------------------------- |
+| `db_path` | The path to the SQLite database used for development. Overrides the default database location. |
+
+### Development Commands
+
+-   This project follows the [Conventional Commits](https://www.conventionalcommits.org/) standard to automate [Semantic Versioning](https://semver.org/) and [Keep A Changelog](https://keepachangelog.com/) with [Commitizen](https://github.com/commitizen-tools/commitizen).
 -   This project follows the [Conventional Commits](https://www.conventionalcommits.org/) standard to automate [Semantic Versioning](https://semver.org/) and [Keep A Changelog](https://keepachangelog.com/) with [Commitizen](https://github.com/commitizen-tools/commitizen).
     -   When you're ready to commit changes run `cz c`
 -   Run `poe` from within the development environment to print a list of [Poe the Poet](https://github.com/nat-n/poethepoet) tasks available to run on this project. Common commands:

@@ -1,1 +1,1 @@
-"""Halp test suite."""
+"""Tests for halper."""
