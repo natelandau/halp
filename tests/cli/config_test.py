@@ -105,8 +105,10 @@ def test_new_default_interactive(mock_config, clean_stdout, debug, tmp_path, moc
 
     # Then: Verify config file matches default template
     output = clean_stdout()
+
     # debug(output)
-    file_contents = path_to_config.read_text()
+
+    assert "Config created successfully" in output
 
     lines_to_check = [
         "dotfiles.sh']",
@@ -114,9 +116,8 @@ def test_new_default_interactive(mock_config, clean_stdout, debug, tmp_path, moc
         "command_name_ignore_regex = 'command_ignore_regex'",
         'comment_placement = "best"',
     ]
-
+    file_contents = path_to_config.read_text()
     for line in lines_to_check:
-        assert line in output
         assert line in file_contents
 
     # debug(path_to_config.read_text(), "config_file")
