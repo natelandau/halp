@@ -22,8 +22,11 @@ VERSION = "0.1.0"
 UNCATEGORIZED_NAME = "uncategorized"
 
 
-class LOGLEVEL(Enum):
-    """Log levels. Numbering scheme reflects the usage of the -v flag allowing increasing verbosity from INFO (default) to TRACE (highest)."""
+class PrintLevel(Enum):
+    """Define verbosity levels for console output.
+
+    Use these levels to control the amount of information displayed to users. Higher levels include all information from lower levels plus additional details.
+    """
 
     INFO = 0
     DEBUG = 1

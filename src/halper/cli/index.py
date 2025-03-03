@@ -2,7 +2,7 @@
 
 import cappa
 
-from halper.constants import LOGLEVEL
+from halper.constants import PrintLevel
 from halper.controllers import Indexer
 from halper.halp import Halp, IndexCommand
 from halper.views import index_command_view
@@ -20,6 +20,6 @@ def index_command(halp: Halp, cmd: IndexCommand) -> None:
 
     indexer = Indexer(rebuild=cmd.rebuild)
     indexer.do_index()
-    index_command_view(indexer.result, show_all_files=halp.verbosity != LOGLEVEL.INFO)
+    index_command_view(indexer.result, show_all_files=halp.verbosity != PrintLevel.INFO)
 
     raise cappa.Exit(code=0)

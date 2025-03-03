@@ -2,7 +2,7 @@
 
 import cappa
 
-from halper.constants import LOGLEVEL, USER_CONFIG_PATH, VERSION
+from halper.constants import USER_CONFIG_PATH, VERSION, PrintLevel
 from halper.halp import (
     ConfigCommand,
     Halp,
@@ -54,8 +54,8 @@ def initialize_subcommand(
         When require_db_content is True, this function will check if commands have been indexed and provide guidance to run the index command if needed. This is useful for subcommands that depend on having commands in the database to function.
     """
     pp.configure(
-        debug=halp.verbosity in {LOGLEVEL.DEBUG, LOGLEVEL.TRACE},
-        trace=halp.verbosity == LOGLEVEL.TRACE,
+        debug=halp.verbosity in {PrintLevel.DEBUG, PrintLevel.TRACE},
+        trace=halp.verbosity == PrintLevel.TRACE,
     )
     validate_settings()
 
@@ -67,7 +67,7 @@ def initialize_subcommand(
         pp.error("No configuration file found, create one with [code]halp config[/code]")
         raise cappa.Exit(code=1)
 
-    if halp.verbosity == LOGLEVEL.TRACE:
+    if halp.verbosity == PrintLevel.TRACE:
         pp.trace(f"Halper v{VERSION} Trace")
         pp.trace(f"Propagated Args: {halp.__dict__}")
         pp.trace(f"Subcommand Args: {subcommand.__dict__}")

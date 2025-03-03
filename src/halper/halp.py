@@ -8,7 +8,7 @@ from typing import Annotated
 import cappa
 from rich.console import Console
 
-from halper.constants import DB_PATH, LOGLEVEL
+from halper.constants import DB_PATH, PrintLevel
 from halper.utils import validate_settings
 
 console = Console()
@@ -35,16 +35,16 @@ class Halp:
     ]
 
     verbosity: Annotated[
-        LOGLEVEL,
+        PrintLevel,
         cappa.Arg(
             short=True,
             count=True,
-            help="Verbosity level. INFO (default), DEBUG (-v), TRACE (-vv)",
-            propagate=True,
+            help="Verbosity level (`-v` or `-vv`)",
             choices=[],
             show_default=False,
+            propagate=True,
         ),
-    ] = LOGLEVEL.INFO
+    ] = PrintLevel.INFO
 
 
 @cappa.command(

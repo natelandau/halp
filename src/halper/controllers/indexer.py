@@ -294,11 +294,7 @@ class Indexer:
         6. Persists command settings from temporary tables if not rebuilding
         7. Cleans up temporary tables
 
-        This function enables maintaining an up-to-date searchable index of commands as source files change.
-        Run this after modifying command files or changing the configuration.
-
-        Args:
-            None
+        This function enables maintaining an up-to-date searchable index of commands as source files change. Run this after modifying command files or changing the configuration.
 
         Raises:
             cappa.Exit: If no files are found matching the configured globs.

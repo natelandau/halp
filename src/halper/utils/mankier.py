@@ -14,6 +14,9 @@ from .utilities import strip_last_two_lines
 def get_mankier_table(input_text: str) -> Table:  # pragma: no cover
     """Display an individual command's information from mankier.com.
 
+    Args:
+        input_text (str): The command to get the information for.
+
     Returns:
         Table: A rich Table object.
     """
@@ -33,6 +36,9 @@ def get_mankier_table(input_text: str) -> Table:  # pragma: no cover
 
 def get_mankier_description(input_string: str) -> str:  # pragma: no cover
     """Query mankier.com for a command's description.
+
+    Args:
+        input_string (str): The command to get the description for.
 
     Returns:
         str: A string containing the command's description.
@@ -62,6 +68,9 @@ def get_mankier_description(input_string: str) -> str:  # pragma: no cover
 
 def get_mankier_explanation(input_string: str) -> str:  # pragma: no cover
     """Query mankier.com for a command's explanation.
+
+    Args:
+        input_string (str): The command to get the explanation for.
 
     Returns:
         str: A string containing the command's explanation.

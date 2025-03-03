@@ -53,8 +53,7 @@ class Command(Model):
     def category_names(self) -> list[str]:
         """Return a list of category names associated with this command.
 
-        Retrieves the names of categories linked to the current command instance
-        from the database, ordered alphabetically by category name.
+        Retrieve the names of categories linked to the current command instance from the database, ordered alphabetically by category name.
 
         Returns:
             list[str]: A list of category names.
