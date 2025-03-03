@@ -1,3 +1,9 @@
+## v2.0.1 (2025-03-02)
+
+### Fix
+
+- **config**: fix error finding config file
+
 ## v2.0.0 (2025-03-02)
 
 ### BREAKING CHANGE
