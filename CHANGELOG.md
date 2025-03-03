@@ -1,3 +1,13 @@
+## v2.0.0 (2025-03-02)
+
+### BREAKING CHANGE
+
+- Move from using flags to subcommands for major functionality.
+
+### Feat
+
+- new CLI interface (#47)
+
 ## v1.1.1 (2024-11-15)
 
 ### Fix
