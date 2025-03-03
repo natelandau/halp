@@ -15,7 +15,7 @@ PROJECT_ROOT_PATH = Path(__file__).parents[2].absolute()
 PACKAGE_ROOT_PATH = Path(__file__).parents[0].absolute()
 
 
-USER_CONFIG_PATH = CONFIG_DIR / "config.tomls"
+USER_CONFIG_PATH = CONFIG_DIR / "config.toml"
 DEFAULT_CONFIG_PATH = PACKAGE_ROOT_PATH / "default_config.toml"
 DB_PATH = DATA_DIR / "halp.sqlite"
 VERSION = "0.1.0"

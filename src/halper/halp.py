@@ -56,7 +56,7 @@ This command is helpful to hide commands that you don't want to see in the list 
 - Multiple commands with the same name within your dotfiles
 - Private functions or aliases
 
-You can get the ID of a command by running `halper list --full`
+You can get the ID of a command by running `halp list --full`
 
 You can hide multiple commands by passing a comma separated list of IDs.
     """,
@@ -74,7 +74,7 @@ class HideCommand:
     name="unhide",
     invoke="halper.cli.unhide.unhide_command",
     help="Unhide subcommand by ID",
-    description="You can get the ID of a command by running `halper list --full`",
+    description="You can get the ID of a command by running `halp list --full`",
 )
 class UnhideCommand:
     """Unhide subcommand."""
@@ -191,9 +191,9 @@ If paired with `--regex`, the search string will be used as a regex pattern.""",
 @cappa.command(
     name="config",
     invoke="halper.cli.config.config_command",
-    help="Configure halper",
+    help="Create a configuration file",
     description="""\
-Creates a configuration file at `~/.config/halper/config.toml` if it doesn't exist populated with default values.
+Creates a configuration file at `~/.config/halp/config.toml` if it doesn't exist populated with default values.
 
 Optionally, you can run the command with `--interactive` to modify the default values.
                """,
