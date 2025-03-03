@@ -2,7 +2,7 @@
 
 [![Changelog](https://img.shields.io/github/v/release/natelandau/halp?include_prereleases&label=changelog)](https://github.com/natelandau/halp/releases) [![PyPI version](https://badge.fury.io/py/halper.svg)](https://badge.fury.io/py/halper) [![Tests](https://github.com/natelandau/halp/actions/workflows/test.yml/badge.svg)](https://github.com/natelandau/halp/actions/workflows/test.yml) [![codecov](https://codecov.io/gh/natelandau/halp/graph/badge.svg?token=NHBKL0B6CL)](https://codecov.io/gh/natelandau/halp)
 
-Halp is a command line tool that reminds you how to use your custom shell commands. It finds aliases and functions from your dotfiles and indexes them so you can query them later. Simply type `halp <command>` to see what it does or `halp --list` to see all your custom commands.
+Halp is a command line tool that reminds you how to use your custom shell commands. It finds aliases and functions from your dotfiles and indexes them so you can query them later. Simply type `halp search <command>` to see what the command does or `halp list` to see all your custom commands.
 
 Point Halp at the appropriate dotfiles and it will index all your custom commands and add them to categories you specify. Then you can query it to find your commands and their usage.
 
@@ -23,13 +23,13 @@ Note: To enable TLDR integration, you must have a TLDR client installed and in y
 Remind yourself what a command does (Your own aliases and functions or TLDR pages)
 
 ```bash
-halp search<command>
+halp search <command>
 ```
 
 See full output of a command
 
 ```bash
-halp search--full <command>
+halp search --full <command>
 ```
 
 Search for commands who's code matches a regex pattern
@@ -163,46 +163,3 @@ func command() {
     some code
 }
 ```
-
-# Contributing
-
-## Setup: Once per project
-
-1. Install Python >=3.11 and [uv](https://docs.astral.sh/uv/)
-2. Clone this repository. `git clone https://github.com/natelandau/halp`
-3. Install the virtual environment with `uv sync`.
-4. Activate your virtual environment with `source .venv/bin/activate`
-5. Install the pre-commit hooks with `pre-commit install --install-hooks`.
-
-## Developing
-
-### Development Configuration
-
-Override settings while developing by adding a `dev-config.toml` file to the root level of the project. Any settings in this file will override settings in the default (user space) configuration file.
-
-```toml
-# ~/.config/halp/config.toml
-file_globs = ["~/.config/dotfiles/**/*.sh"]
-
-# ./dev-config.toml
-file_globs = ["./tmp/dev_dotfiles/**/*.sh"]
-db_path = "./tmp/halp.sqlite"
-```
-
-Specific settings used for development that are not used in the user space configuration file.
-
-| Setting   | Description                                                                                    |
-| --------- | ---------------------------------------------------------------------------------------------- |
-| `db_path` | The path to the SQLite database used for development. Overrides the default database location. |
-
-### Development Commands
-
--   This project follows the [Conventional Commits](https://www.conventionalcommits.org/) standard to automate [Semantic Versioning](https://semver.org/) and [Keep A Changelog](https://keepachangelog.com/) with [Commitizen](https://github.com/commitizen-tools/commitizen).
--   This project follows the [Conventional Commits](https://www.conventionalcommits.org/) standard to automate [Semantic Versioning](https://semver.org/) and [Keep A Changelog](https://keepachangelog.com/) with [Commitizen](https://github.com/commitizen-tools/commitizen).
-    -   When you're ready to commit changes run `cz c`
--   Run `duty --list` from within the development environment to print a list of [Duty](https://pawamoy.github.io/duty/) tasks available to run on this project. Common commands:
-    -   `duty lint` runs all linters
-    -   `duty test` runs all tests with Pytest
--   Run `uv add {package}` from within the development environment to install a run time dependency and add it to `pyproject.toml` and `uv.lock`.
--   Run `uv remove {package}` from within the development environment to uninstall a run time dependency and remove it from `pyproject.toml` and `uv.lock`.
--   Run `duty upgrade` from within the development environment to upgrade all dependencies to the latest versions allowed by `pyproject.toml`.
