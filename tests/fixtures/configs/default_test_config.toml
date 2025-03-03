@@ -1,9 +1,0 @@
-case_sensitive            = false
-command_name_ignore_regex = ''
-comment_placement         = "best"
-file_exclude_regex        = ''
-file_globs                = [""]            # mock_config overrides this with path to fixtures/dotfiles
-uncategorized_name        = "uncategorized"
-
-[categories]
-    # Intentionally blank

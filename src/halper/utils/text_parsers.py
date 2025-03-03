@@ -5,8 +5,9 @@ from collections.abc import Generator
 
 from parsy import generate, regex, string
 
-from halper.config import HalpConfig
 from halper.constants import CommandType, CommentPlacement
+
+from .config import settings
 
 # Define shared grammar elements for parsing.
 WS = regex(r"[ \t]+").desc("whitespace")
@@ -23,10 +24,7 @@ STANDALONE_COMMENT = (
 def parse_alias() -> Generator[None, None, dict[str, str | None]]:
     """Parse a string to extract an alias definition.
 
-    The function looks for a line starting with 'alias', followed by the alias name, an equal sign,
-    and the alias value. It supports optional single or double quotes around the alias value and
-    optionally parses a comment at the end of the line. The function returns a dictionary with the
-    alias name, value, and comment (if any).
+    The function looks for a line starting with 'alias', followed by the alias name, an equal sign, and the alias value. It supports optional single or double quotes around the alias value andoptionally parses a comment at the end of the line. The function returns a dictionary with the alias name, value, and comment (if any).
 
     When CommentPlacement.BEST, we will favor inline comments over above comments.
 
@@ -40,7 +38,7 @@ def parse_alias() -> Generator[None, None, dict[str, str | None]]:
 
     # Parse
     above_comment = None
-    if HalpConfig().comment_placement in {CommentPlacement.BEST, CommentPlacement.ABOVE}:
+    if settings.comment_placement in {CommentPlacement.BEST, CommentPlacement.ABOVE}:
         above_comment = yield STANDALONE_COMMENT.optional()
     else:
         yield STANDALONE_COMMENT.optional()
@@ -61,7 +59,7 @@ def parse_alias() -> Generator[None, None, dict[str, str | None]]:
         value = yield regex(r"[^\s\n]+")
 
     inline_comment = None
-    if HalpConfig().comment_placement in {CommentPlacement.INLINE, CommentPlacement.BEST}:
+    if settings.comment_placement in {CommentPlacement.INLINE, CommentPlacement.BEST}:
         inline_comment = yield COMMENT_ON_LINE.optional()
     else:
         yield COMMENT_ON_LINE.optional()
@@ -93,7 +91,7 @@ def parse_export() -> Generator[None, None, dict[str, str | None]]:
     yield NEWLINE.optional()
 
     above_comment = None
-    if HalpConfig().comment_placement in {CommentPlacement.BEST, CommentPlacement.ABOVE}:
+    if settings.comment_placement in {CommentPlacement.BEST, CommentPlacement.ABOVE}:
         above_comment = yield STANDALONE_COMMENT.optional()
     else:
         yield STANDALONE_COMMENT.optional()
@@ -113,7 +111,7 @@ def parse_export() -> Generator[None, None, dict[str, str | None]]:
         value = yield regex(r"[^\s\n]+")
 
     inline_comment = None
-    if HalpConfig().comment_placement in {CommentPlacement.INLINE, CommentPlacement.BEST}:
+    if settings.comment_placement in {CommentPlacement.INLINE, CommentPlacement.BEST}:
         inline_comment = yield COMMENT_ON_LINE.optional()
     else:
         yield COMMENT_ON_LINE.optional()
@@ -144,7 +142,7 @@ def parse_function() -> Generator[None, None, dict[str, str | None]]:
 
     # Parse
     above_comment = None
-    if HalpConfig().comment_placement in {CommentPlacement.BEST, CommentPlacement.ABOVE}:
+    if settings.comment_placement in {CommentPlacement.BEST, CommentPlacement.ABOVE}:
         above_comment = yield STANDALONE_COMMENT.optional()
     else:
         yield STANDALONE_COMMENT.optional()
@@ -159,7 +157,7 @@ def parse_function() -> Generator[None, None, dict[str, str | None]]:
     body = yield func_body
 
     inline_comment = None
-    if HalpConfig().comment_placement in {CommentPlacement.INLINE, CommentPlacement.BEST}:
+    if settings.comment_placement in {CommentPlacement.INLINE, CommentPlacement.BEST}:
         inline_comment = parse_function_body_comment.parse(body)
 
     yield func_end

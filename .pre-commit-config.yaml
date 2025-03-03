@@ -5,7 +5,7 @@ default_stages: [pre-commit, manual]
 fail_fast: true
 repos:
   - repo: "https://github.com/commitizen-tools/commitizen"
-    rev: v4.1.0
+    rev: v4.4.1
     hooks:
       - id: commitizen
       - id: commitizen-branch
@@ -32,6 +32,7 @@ repos:
       - id: check-builtin-literals
       - id: check-case-conflict
       - id: check-docstring-first
+      - id: check-executables-have-shebangs
       - id: check-json
         exclude: .devcontainer/|.vscode/
       - id: check-merge-conflict
@@ -42,6 +43,7 @@ repos:
       - id: check-xml
       - id: check-yaml
       - id: debug-statements
+      - id: destroyed-symlinks
       - id: detect-private-key
       - id: fix-byte-order-marker
       - id: mixed-line-ending
@@ -59,30 +61,27 @@ repos:
         entry: yamllint --strict --config-file .yamllint.yml
 
   - repo: "https://github.com/charliermarsh/ruff-pre-commit"
-    rev: "v0.8.4"
+    rev: "v0.9.9"
     hooks:
       - id: ruff
-        args: ["--extend-ignore", "I001,D401"]
         exclude: tests/
+        args: [--no-fix]
       - id: ruff-format
+        args: [--check]
 
   - repo: "https://github.com/crate-ci/typos"
-    rev: v1.28.4
+    rev: v1.30.0
     hooks:
       - id: typos
+        args: ["--force-exclude"]
+
+  - repo: "https://github.com/gitleaks/gitleaks"
+    rev: v8.24.0
+    hooks:
+      - id: gitleaks
 
   - repo: local
     hooks:
-      # This calls a custom pre-commit script.
-      # Disable if you don't have it.
-      - id: stopwords
-        name: stopwords
-        entry: git-stopwords
-        # args: ["-v"]
-        language: system
-        pass_filenames: true
-        types: [text]
-
       - id: shellcheck
         name: shellcheck
         entry: shellcheck --check-sourced --severity=warning
@@ -92,20 +91,20 @@ repos:
       - id: mypy
         name: mypy
         entry: mypy --config-file pyproject.toml
-        exclude: tests/
+        exclude: "tests/|duties.py"
         language: system
         types: [python]
 
       - id: pytest
         name: pytest
-        entry: poe test
+        entry: pytest -c pyproject.toml src/
         language: system
         pass_filenames: false
         files: |
           (?x)^(
           src/|
           tests/|
-          poetry\.lock|
+          uv\.lock|
           pyproject\.toml
           )
 
@@ -117,5 +116,5 @@ ci:
   autofix_prs: true
   autoupdate_commit_msg: "build: pre-commit autoupdate"
   autoupdate_schedule: quarterly
-  skip: [stopwords, pytest, mypy, shellcheck]
+  skip: [pytest, mypy, shellcheck]
   submodules: false

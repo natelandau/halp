@@ -1,25 +1,21 @@
-"""Shared utilities for Halp."""
+"""Utility functions for halper."""
 
-from .console import console  # isort:skip
-from .logging import InterceptHandler, instantiate_logger  # isort:skip
-
-from .helpers import (
-    check_python_version,
-    edit_config,
-    get_tldr_command,
-    strip_last_two_lines,
-    validate_config,
-)
+from .printer import console, pp  # isort: skip
+from .config import settings, validate_settings  # isort: skip
+from .database import db_clear_table_data, db_tables_have_data, init_database
 from .mankier import get_mankier_table
+from .utilities import check_python_version, get_tldr_command, strip_last_two_lines
 
 __all__ = [
-    "InterceptHandler",
     "check_python_version",
     "console",
-    "edit_config",
+    "db_clear_table_data",
+    "db_tables_have_data",
     "get_mankier_table",
     "get_tldr_command",
-    "instantiate_logger",
+    "init_database",
+    "pp",
+    "settings",
     "strip_last_two_lines",
-    "validate_config",
+    "validate_settings",
 ]

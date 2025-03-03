@@ -1,55 +1,17 @@
-# Scratch folder for temporary files
+# Temporary files
 scratch/
-dev_config.toml
-.devdbrc
+tmp/
 
-# Caches
+# Caches and environments
 *_cache/
 __pycache__/
-
-# Coverage.py
-htmlcov/
-reports/
-
-# cruft
-*.rej
-
-# Data
-*.csv*
-*.dat*
-*.pickle*
-*.xls*
-*.zip*
-
-.envrc
-.env
-
-# Jupyter
-*.ipynb
-.ipynb_checkpoints/
-notebooks/
-
-# macOS
-.DS_Store
-
-# mypy
-.dmypy.json
-
-# Node.js
-node_modules/
-
-# Poetry
+.reports/
+.mypy_cache/
 .venv/
-dist/
-
-# PyCharm
-.idea/
-
-# pyenv
-.python-version
-
-# Python
 *.py[cdo]
-
-# act run workflows locally
 bin/act
+
+# Other
+.DS_Store
+.devdbrc
+dev-config.toml

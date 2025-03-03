@@ -72,7 +72,9 @@ class NoFilesFoundError(Exception):
         **kwargs: int | str | bool,
     ) -> None:
         formatted_msg = (
-            f"No files are found to parse: {msg}" if msg else "No files are found to parse."
+            f"No files are found to parse: {msg}"
+            if msg
+            else "No files are found to parse. Check your glob patterns in the configuration file."
         )
         if e:
             formatted_msg += f"\nRaised from: {e.__class__.__name__}: {e}"

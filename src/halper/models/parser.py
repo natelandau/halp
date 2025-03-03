@@ -3,20 +3,20 @@
 import re
 from pathlib import Path
 
-from loguru import logger
 from parsy import ParseError
 
-from halper.config import HalpConfig
-from halper.models import Category, File
+from halper.constants import UNCATEGORIZED_NAME
+from halper.utils import pp, settings
 from halper.utils.text_parsers import parse_file
+
+from .category import Category
+from .file import File
 
 
 class Parser:
     """Extract shell script components from files and categorize them for database storage.
 
-    This class handles parsing of command files, extracting relevant details like command names,
-    code, and descriptions. It then categorizes these commands based on predefined patterns in
-    the configuration before updating the database with this information.
+    This class handles parsing of command files, extracting relevant details like command names, code, and descriptions. It then categorizes these commands based on predefined patterns in the configuration before updating the database with this information.
     """
 
     def __init__(self, path: Path | str) -> None:
@@ -32,7 +32,7 @@ class Parser:
             path = Path(path)
 
         self.path = path.expanduser().resolve()
-        self.regex_flags = 0 if HalpConfig().case_sensitive else re.IGNORECASE
+        self.regex_flags = re.IGNORECASE
         self.file = self._fetch_file_record()
 
     def _fetch_file_record(self) -> File:
@@ -50,17 +50,16 @@ class Parser:
         )
 
         if created:
-            logger.debug(f"Added file '{file.name}' to database")
+            pp.debug(f"Added file '{file.name}' to database")
         else:
-            logger.trace(f"File '{file.name}' already exists in database")
+            pp.trace(f"File '{file.name}' already exists in database")
 
         return file
 
     def _categorize_command(self, result: dict[str, str]) -> list[Category]:
         """Categorize a command based on regex patterns defined in categories.
 
-        Use the provided command details to match against category regex patterns. If a command
-        matches a category pattern, categorize the command accordingly.
+        Use the provided command details to match against category regex patterns. If a command matches a category pattern, categorize the command accordingly.
 
         Args:
             result (dict[str, str]): The parsed command details.
@@ -86,21 +85,20 @@ class Parser:
             return matched_categories
 
         default_cat, _ = Category.get_or_create(
-            name=HalpConfig().uncategorized_name, defaults={"description": "Uncategorized commands"}
+            name=UNCATEGORIZED_NAME, defaults={"description": "Uncategorized commands"}
         )
         return [default_cat]
 
     def parse(self) -> list:
         """Parse the file and update the database with extracted command details.
 
-        Read the file, extract command details, categorize them, and compile a list of commands
-        with their associated categories. Ignore commands based on the ignore regex from the configuration.
+        Read the file, extract command details, categorize them, and compile a list of commands with their associated categories. Ignore commands based on the ignore regex from the configuration.
 
         Returns:
             list: A list of dictionaries, each representing a parsed command with its details.
         """
         # Ignore commands that match the ignore regex
-        command_name_ignore_regex = HalpConfig().command_name_ignore_regex
+        command_name_ignore_regex = settings.command_name_ignore_regex
 
         categorized_commands: list[dict] = []
 
@@ -108,7 +106,7 @@ class Parser:
         try:
             results = parse_file.many().parse(self.path.read_text())
         except ParseError as e:
-            logger.trace(f"No commands found in file {self.path}: {e}")
+            pp.trace(f"No commands found in file {self.path}: {e}")
             return categorized_commands
 
         for result in results:
@@ -116,7 +114,7 @@ class Parser:
             if command_name_ignore_regex and re.search(
                 command_name_ignore_regex, result["name"], flags=self.regex_flags
             ):
-                logger.trace(f"Ignored command '{result['name']}' in {self.path}")
+                pp.trace(f"Ignored command '{result['name']}' in {self.path}")
                 continue
 
             # Find categories for command

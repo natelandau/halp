@@ -1,1 +1,1 @@
-"""Halp package."""
+"""HALP command line tool."""

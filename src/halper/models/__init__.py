@@ -1,29 +1,20 @@
-"""Models for the HALP app."""
+"""Models for the Halper application."""
 
-from .database import (
-    Category,
-    Command,
-    CommandCategory,
-    Database,
-    File,
-    HalpInfo,
-    TempCategory,
-    TempCommand,
-    TempCommandCategory,
-    TempFile,
-)
+from .command import Command, TempCommand
+from .file import File, TempFile
+
+from .category import Category, CommandCategory, TempCategory, TempCommandCategory  # isort: skip
+from .index_result import IndexResult
 from .parser import Parser
-
-from .indexer import Indexer  # isort:skip
+from .user_defined_category import ConfigurationCategory
 
 __all__ = [
     "Category",
     "Command",
     "CommandCategory",
-    "Database",
+    "ConfigurationCategory",
     "File",
-    "HalpInfo",
-    "Indexer",
+    "IndexResult",
     "Parser",
     "TempCategory",
     "TempCommand",

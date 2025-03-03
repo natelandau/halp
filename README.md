@@ -23,55 +23,55 @@ Note: To enable TLDR integration, you must have a TLDR client installed and in y
 Remind yourself what a command does (Your own aliases and functions or TLDR pages)
 
 ```bash
-halp <command>
+halp search<command>
 ```
 
 See full output of a command
 
 ```bash
-halp --full <command>
-```
-
-List all your custom commands
-
-```bash
-halp --list
-```
-
-View all commands in a particular category
-
-```bash
-halp --category <category>
-```
-
-Index your dotfiles
-
-```bash
-halp --index
-```
-
-Hide commands that you don't want to see
-
-```bash
-halp --hide <command ID>,<command ID>,...
-```
-
-Customize the description of a command
-
-```bash
-halp --description <command ID>
-```
-
-Edit the configuration file
-
-```bash
-halp --edit-config
+halp search--full <command>
 ```
 
 Search for commands who's code matches a regex pattern
 
 ```bash
 halp --search-code <regex pattern>
+```
+
+List all your custom commands
+
+```bash
+halp list
+```
+
+View all commands in a particular category
+
+```bash
+halp list <category>
+```
+
+Index your dotfiles
+
+```bash
+halp index
+```
+
+Hide commands that you don't want to see
+
+```bash
+halp hide <command ID>,<command ID>,...
+```
+
+Unhide commands that you don't want to see
+
+```bash
+halp unhide <command ID>,<command ID>,...
+```
+
+Create a new configuration file
+
+```bash
+halp config
 ```
 
 See all options
@@ -90,7 +90,13 @@ Install with [pipx](https://pipx.pypa.io/)
 pipx install halper
 ```
 
-If pipx is not an option, you can install Halp in your Python user directory.
+Install with [uv](https://docs.astral.sh/uv/)
+
+```bash
+uv tool install halper
+```
+
+If pipx or uv is not an option, you can install Halp in your Python user directory.
 
 ```bash
 python -m pip install --user halper
@@ -100,8 +106,8 @@ python -m pip install --user halper
 
 Before you can use Halp, you must first
 
-1. Create a configuration file by running `halp --edit-config``.
-2. Index your commands. You can do this by running `halp --index``.
+1. Create a configuration file by running `halp config``.
+2. Index your commands. You can do this by running `halp index``.
 
 ## File locations
 
@@ -114,7 +120,7 @@ Halp uses the [XDG specification](https://specifications.freedesktop.org/basedir
 
 -   Does not associate comments with a command on the following line
 -   If your function is written with parentheses instead of curly braces, it will not be parsed. ie `func command() (some code)`
--   Does not resolve if statements. ie `if [ -n "$BASH_VERSION" ]; then`. Consequently, if a command is wrapped in an if statement, it will still be indexed. Use `--hide` to hide unwanted commands.
+-   Does not resolve if statements. ie `if [ -n "$BASH_VERSION" ]; then`. Consequently, if a command is wrapped in an if statement, it will still be indexed. Use `halp hide` to hide unwanted commands.
 -   Does not follow `source` or `.` directives within files
 -   Tested on Bash and ZSH files only. Dotfiles for other shells may not work as expected.
 
@@ -122,15 +128,13 @@ Halp uses the [XDG specification](https://specifications.freedesktop.org/basedir
 
 On first run, a TOML configuration file will be created for you.
 
-IMPORTANT: You must add at least one path to the `file_globs` list and then run `halp --index`. Otherwise, no commands will be indexed.
+IMPORTANT: You must add at least one path to the `file_globs` list and then run `halp index`. Otherwise, no commands will be indexed.
 
 ```toml
-case_sensitive            = false           # Whether or not to match case sensitively with regexes
 command_name_ignore_regex = ''              # Exclude commands who's names match this regex
 comment_placement         = "BEST"          # Where you place comments to describe your code. One of "BEST", "ABOVE", "INLINE"
 file_exclude_regex        = ''              # Exclude files who's paths match this regex
 file_globs                = []              # Absolute path globs to files to parse for commands
-uncategorized_name        = "uncategorized" # The name of the uncategorized category
 
 [categories] # Commands are matched against these categories
     [categories.example]
@@ -172,11 +176,33 @@ func command() {
 
 ## Developing
 
+### Development Configuration
+
+Override settings while developing by adding a `dev-config.toml` file to the root level of the project. Any settings in this file will override settings in the default (user space) configuration file.
+
+```toml
+# ~/.config/halp/config.toml
+file_globs = ["~/.config/dotfiles/**/*.sh"]
+
+# ./dev-config.toml
+file_globs = ["./tmp/dev_dotfiles/**/*.sh"]
+db_path = "./tmp/halp.sqlite"
+```
+
+Specific settings used for development that are not used in the user space configuration file.
+
+| Setting   | Description                                                                                    |
+| --------- | ---------------------------------------------------------------------------------------------- |
+| `db_path` | The path to the SQLite database used for development. Overrides the default database location. |
+
+### Development Commands
+
+-   This project follows the [Conventional Commits](https://www.conventionalcommits.org/) standard to automate [Semantic Versioning](https://semver.org/) and [Keep A Changelog](https://keepachangelog.com/) with [Commitizen](https://github.com/commitizen-tools/commitizen).
 -   This project follows the [Conventional Commits](https://www.conventionalcommits.org/) standard to automate [Semantic Versioning](https://semver.org/) and [Keep A Changelog](https://keepachangelog.com/) with [Commitizen](https://github.com/commitizen-tools/commitizen).
     -   When you're ready to commit changes run `cz c`
--   Run `poe` from within the development environment to print a list of [Poe the Poet](https://github.com/nat-n/poethepoet) tasks available to run on this project. Common commands:
-    -   `poe lint` runs all linters
-    -   `poe test` runs all tests with Pytest
+-   Run `duty --list` from within the development environment to print a list of [Duty](https://pawamoy.github.io/duty/) tasks available to run on this project. Common commands:
+    -   `duty lint` runs all linters
+    -   `duty test` runs all tests with Pytest
 -   Run `uv add {package}` from within the development environment to install a run time dependency and add it to `pyproject.toml` and `uv.lock`.
 -   Run `uv remove {package}` from within the development environment to uninstall a run time dependency and remove it from `pyproject.toml` and `uv.lock`.
--   Run `poe upgrade` from within the development environment to upgrade all dependencies to the latest versions allowed by `pyproject.toml`.
+-   Run `duty upgrade` from within the development environment to upgrade all dependencies to the latest versions allowed by `pyproject.toml`.
