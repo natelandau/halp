@@ -106,8 +106,8 @@ python -m pip install --user halper
 
 Before you can use Halp, you must first
 
-1. Create a configuration file by running `halp config``.
-2. Index your commands. You can do this by running `halp index``.
+1. Create a configuration file by running `halp config`.
+2. Index your dotfiles by running `halp index`.
 
 ## File locations
 
@@ -119,7 +119,7 @@ Halp uses the [XDG specification](https://specifications.freedesktop.org/basedir
 ## Known issues
 
 -   Does not associate comments with a command on the following line
--   If your function is written with parentheses instead of curly braces, it will not be parsed. ie `func command() (some code)`
+-   If your function is written with parentheses instead of curly braces, it will not be parsed. Use `func command() { some code }` instead of `func command() (some code)`
 -   Does not resolve if statements. ie `if [ -n "$BASH_VERSION" ]; then`. Consequently, if a command is wrapped in an if statement, it will still be indexed. Use `halp hide` to hide unwanted commands.
 -   Does not follow `source` or `.` directives within files
 -   Tested on Bash and ZSH files only. Dotfiles for other shells may not work as expected.
@@ -163,3 +163,7 @@ func command() {
     some code
 }
 ```
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for more information.

@@ -1,11 +1,11 @@
 [project]
     authors = [{ name = "Nate Landau", email = "github@natenate.org" }]
     dependencies = [
-        "cappa>=0.26.5",
+        "cappa>=0.26.6",
         "dynaconf>=3.2.10",
         "httpx>=0.28.1",
         "inflect>=7.5.0",
-        "markdownify>=1.0.0",
+        "markdownify>=1.1.0",
         "parsy>=2.1",
         "peewee>=3.17.9",
         "rich>=13.9.4",
@@ -45,8 +45,8 @@
         "pytest-sugar>=1.0.0",
         "pytest-xdist>=3.6.1",
         "pytest>=8.3.5",
-        "ruff>=0.9.9",
-        "typos>=1.30.0",
+        "ruff>=0.9.10",
+        "typos>=1.30.1",
     ]
 
 [tool.commitizen]

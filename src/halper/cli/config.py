@@ -196,7 +196,7 @@ def config_command(halp: Halp, cmd: ConfigCommand) -> None:
     )
 
     if USER_CONFIG_PATH.exists() and not Confirm.ask(
-        "Configuration file already exists. Overwrite?"
+        f"Configuration file already exists: [code]{USER_CONFIG_PATH}[/code]\nOverwrite?"
     ):
         pp.info("Exiting...")
         raise cappa.Exit(code=0)

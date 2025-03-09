@@ -61,7 +61,7 @@ repos:
         entry: yamllint --strict --config-file .yamllint.yml
 
   - repo: "https://github.com/charliermarsh/ruff-pre-commit"
-    rev: "v0.9.9"
+    rev: "v0.9.10"
     hooks:
       - id: ruff
         exclude: tests/
@@ -74,6 +74,12 @@ repos:
     hooks:
       - id: typos
         args: ["--force-exclude"]
+
+  - repo: "https://github.com/crate-ci/committed"
+    rev: v1.1.7
+    hooks:
+      - id: committed
+        stages: [commit-msg]
 
   - repo: "https://github.com/gitleaks/gitleaks"
     rev: v8.24.0

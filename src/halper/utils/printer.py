@@ -1,8 +1,6 @@
 """Provide utilities for styled console output using rich formatting.
 
-Implements a singleton pattern for consistent, styled message logging across
-an application. It supports multiple log levels with customizable styling including
-colors, emojis, and prefixes.
+A singleton pattern for consistent, styled message logging across an application. It supports multiple log levels with customizable styling including colors, emojis, and prefixes.
 """
 
 from collections.abc import Callable
