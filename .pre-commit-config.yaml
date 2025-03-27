@@ -54,14 +54,14 @@ repos:
         types: [python]
 
   - repo: "https://github.com/adrienverge/yamllint.git"
-    rev: v1.35.1
+    rev: v1.37.0
     hooks:
       - id: yamllint
         files: ^.*\.(yaml|yml)$
         entry: yamllint --strict --config-file .yamllint.yml
 
   - repo: "https://github.com/charliermarsh/ruff-pre-commit"
-    rev: "v0.9.10"
+    rev: "v0.11.2"
     hooks:
       - id: ruff
         exclude: tests/
@@ -70,10 +70,11 @@ repos:
         args: [--check]
 
   - repo: "https://github.com/crate-ci/typos"
-    rev: v1.30.0
+    rev: v1.30.3
     hooks:
       - id: typos
         args: ["--force-exclude"]
+        stages: [commit-msg, pre-commit]
 
   - repo: "https://github.com/crate-ci/committed"
     rev: v1.1.7
@@ -82,7 +83,7 @@ repos:
         stages: [commit-msg]
 
   - repo: "https://github.com/gitleaks/gitleaks"
-    rev: v8.24.0
+    rev: v8.24.2
     hooks:
       - id: gitleaks
 

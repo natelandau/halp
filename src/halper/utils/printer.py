@@ -1,8 +1,12 @@
 """Provide utilities for styled console output using rich formatting.
 
 A singleton pattern for consistent, styled message logging across an application. It supports multiple log levels with customizable styling including colors, emojis, and prefixes.
+
+Changelog:
+    - v2.2.1: Initial version
 """
 
+import re
 from collections.abc import Callable
 from dataclasses import dataclass
 from typing import ParamSpec, TypeVar
@@ -33,11 +37,17 @@ DEFAULT_STYLES = [
     PrintStyle(name="INFO", style="", prefix="", suffix=""),
     PrintStyle(name="SECONDARY", style="dim"),
     PrintStyle(name="NOTICE", style="bold"),
-    PrintStyle(name="SUCCESS", style="bold green", prefix="✅ "),
-    PrintStyle(name="WARNING", style="dark_orange bold", prefix="🚧 "),
-    PrintStyle(name="ERROR", style="bold red", prefix="❌ "),
-    PrintStyle(name="CRITICAL", style="reverse bold red", prefix="💀 "),
-    PrintStyle(name="DRYRUN", style="blue", prefix="👉 "),
+    PrintStyle(name="SUCCESS", style="", prefix="[bold green]✅ Success:[/bold green] "),
+    PrintStyle(
+        name="WARNING", style="", prefix="[dark_orange bold]🚧 Warning:[/dark_orange bold] "
+    ),
+    PrintStyle(name="ERROR", style="", prefix="[bold red]❌ Error:[/bold red] "),
+    PrintStyle(
+        name="CRITICAL",
+        style="",
+        prefix="[bold red reverse]💀 Critical:[/bold red reverse] ",
+    ),
+    PrintStyle(name="DRYRUN", style="", prefix="[blue bold]👉 Dry run:[/blue bold] "),
 ]
 
 
@@ -97,8 +107,8 @@ class PrettyPrinter:
     - Output consistently formatted log messages
 
     Attributes:
-        debug_enabled (bool): Toggle debug message visibility
-        trace_enabled (bool): Toggle trace message visibility (requires debug_enabled)
+        is_debug (bool): Toggle debug message visibility
+        is_trace (bool): Toggle trace message visibility
         styles (list[PrintStyle]): Style configurations for different message types
     """
 
@@ -114,8 +124,8 @@ class PrettyPrinter:
     def __init__(self) -> None:
         """Initialize the PrettyPrinter instance."""
         if not PrettyPrinter._initialized:
-            self.debug_enabled = False
-            self.trace_enabled = False
+            self.is_debug = False
+            self.is_trace = False
             self.styles = DEFAULT_STYLES
             PrettyPrinter._initialized = True
 
@@ -133,15 +143,15 @@ class PrettyPrinter:
         Args:
             styles (list[PrintStyle], optional): Custom styles to override defaults
             debug (bool, optional): Enable debug level messages. Defaults to False
-            trace (bool, optional): Enable trace level messages (requires debug=True).
+            trace (bool, optional): Enable trace level messages
                 Defaults to False
         """
-        self.debug_enabled = debug
-        self.trace_enabled = trace
+        self.is_debug = debug
+        self.is_trace = trace
 
         self.styles = merge_print_styles(DEFAULT_STYLES, styles)
 
-    def _log(self, style: PrintStyle, message: str | Text, **kwargs: P.kwargs) -> None:  # type: ignore [valid-type]
+    def _print(self, style: PrintStyle, message: str | Text, **kwargs: P.kwargs) -> None:  # type: ignore [valid-type]
         """Output a styled message according to the specified log level.
 
         Internal method that handles message filtering, prefix addition, and style application based on the configured log level.
@@ -152,7 +162,7 @@ class PrettyPrinter:
             **kwargs (P.kwargs): Additional arguments passed to console.print()
         """
         if style.name in {"TRACE", "DEBUG"} and not (
-            self.trace_enabled if style.name == "TRACE" else self.debug_enabled
+            self.is_trace if style.name == "TRACE" else self.is_debug
         ):
             return
 
@@ -160,6 +170,9 @@ class PrettyPrinter:
         suffix = style.suffix
         style_open = f"[{style.style}]" if style.style and not style.style.isspace() else ""
         style_close = f"[/{style.style}]" if style.style and not style.style.isspace() else ""
+
+        if isinstance(message, str):
+            message = re.sub(r"`([^`]+)`", r"[bold cyan on black]\1[/bold cyan on black]", message)
 
         console.print(f"{style_open}{prefix}{message}{suffix}{style_close}", **kwargs)
 
@@ -213,7 +226,7 @@ class PrettyPrinter:
             msg = f"'Printer' object has no attribute '{name}'"
             raise AttributeError(msg)
 
-        return lambda message, **kwargs: self._log(style, message, **kwargs)
+        return lambda message, **kwargs: self._print(style, message, **kwargs)
 
 
 pp = PrettyPrinter()

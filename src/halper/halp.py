@@ -9,7 +9,7 @@ import cappa
 from rich.console import Console
 
 from halper.constants import DB_PATH, PrintLevel
-from halper.utils import validate_settings
+from halper.utils import pp, validate_settings
 
 console = Console()
 
@@ -212,7 +212,11 @@ class ConfigCommand:
 
 def main() -> None:  # pragma: no cover
     """Main function."""
-    cappa.invoke(obj=Halp, deps=[validate_settings])
+    try:
+        cappa.invoke(obj=Halp, deps=[validate_settings])
+    except KeyboardInterrupt as e:
+        pp.info("Exiting...")
+        raise cappa.Exit(code=1) from e
 
 
 if __name__ == "__main__":  # pragma: no cover
