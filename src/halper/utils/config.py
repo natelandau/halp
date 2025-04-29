@@ -19,7 +19,7 @@ console = Console()
 
 
 settings = Dynaconf(
-    envvar_prefix="HALP_",
+    envvar_prefix="HALP",
     settings_files=[DEFAULT_CONFIG_PATH, USER_CONFIG_PATH, PROJECT_ROOT_PATH / "dev-config.toml"],
     environments=False,
     validators=[
