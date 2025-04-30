@@ -46,6 +46,9 @@ def init_database(current_version: str) -> None:
     """
     pp.debug(f"Instantiating database. {settings.db_path}")
 
+    if settings.db_path != ":memory:" and not settings.db_path.parent.exists():
+        settings.db_path.parent.mkdir(parents=True, exist_ok=True)
+
     # Check file permissions
     if settings.db_path != ":memory:" and not os.access(settings.db_path.parent, os.W_OK):
         msg = f"Write permission is not available on {settings.db_path.parent}"

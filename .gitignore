@@ -10,6 +10,7 @@ __pycache__/
 .venv/
 *.py[cdo]
 bin/act
+.cache/
 
 # Other
 .DS_Store
