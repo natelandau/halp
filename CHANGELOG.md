@@ -1,3 +1,11 @@
+## v2.0.2 (2025-04-30)
+
+### Fix
+
+- create data dir before creating database
+- correct environment variable prefix
+- capture keyboard interrupts gracefully
+
 ## v2.0.1 (2025-03-02)
 
 ### Fix
