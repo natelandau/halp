@@ -1,14 +1,14 @@
 [project]
     authors = [{ name = "Nate Landau", email = "github@natenate.org" }]
     dependencies = [
-        "cappa>=0.26.6",
+        "cappa>=0.27.2",
         "dynaconf>=3.2.10",
         "httpx>=0.28.1",
         "inflect>=7.5.0",
         "markdownify>=1.1.0",
         "parsy>=2.1",
-        "peewee>=3.17.9",
-        "rich>=13.9.4",
+        "peewee>=3.18.1",
+        "rich>=14.0.0",
         "semver>=3.0.4",
         "sh>=2.2.2",
     ]
@@ -32,21 +32,21 @@
 
 [dependency-groups]
     dev = [
-        "commitizen>=4.4.1",
-        "coverage>=7.7.1",
+        "commitizen>=4.6.0",
+        "coverage>=7.8.0",
         "duty>=1.6.0",
         "mypy>=1.15.0",
         "pre-commit>=4.2.0",
         "pytest-clarity>=1.0.1",
-        "pytest-cov>=6.0.0",
+        "pytest-cov>=6.1.1",
         "pytest-env>=1.1.5",
         "pytest-mock>=3.14.0",
         "pytest-pretty-terminal>=1.1.0",
         "pytest-sugar>=1.0.0",
         "pytest-xdist>=3.6.1",
         "pytest>=8.3.5",
-        "ruff>=0.11.2",
-        "typos>=1.30.3",
+        "ruff>=0.11.8",
+        "typos>=1.31.2",
     ]
 
 [tool.commitizen]
@@ -80,11 +80,11 @@
 [tool.coverage.run]
     branch       = true
     command_line = "--module pytest"
-    data_file    = ".reports/.coverage"
+    data_file    = ".cache/.coverage"
     source       = ["src"]
 
 [tool.coverage.xml]
-    output = ".reports/coverage.xml"
+    output = ".cache/coverage.xml"
 
 [tool.mypy] # https://mypy.readthedocs.io/en/latest/config_file.html
     cache_dir                   = ".cache/mypy"
@@ -95,7 +95,7 @@
     exclude                     = ["tests/"]
     follow_imports              = "normal"
     ignore_missing_imports      = true
-    junit_xml                   = ".reports/mypy.xml"
+    junit_xml                   = ".cache/mypy.xml"
     no_implicit_optional        = true
     pretty                      = false
     show_column_numbers         = true
@@ -107,7 +107,7 @@
     warn_unused_ignores         = true
 
 [tool.pytest.ini_options]
-    addopts        = "--color=yes --doctest-modules --exitfirst --failed-first --strict-config --strict-markers --junitxml=.reports/pytest.xml"
+    addopts        = "--color=yes --doctest-modules --exitfirst --failed-first --strict-config --strict-markers --junitxml=.cache/pytest.xml"
     cache_dir      = ".cache/pytest"
     filterwarnings = ["error", "ignore::DeprecationWarning", "ignore::ResourceWarning"]
     markers        = ["no_db: marks tests as not needing a database"]
