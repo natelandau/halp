@@ -2,6 +2,7 @@
 
 import os
 
+from nclutils import pp
 from peewee import Model, PeeweeException, TextField
 from playhouse.sqlite_ext import SqliteExtDatabase
 
@@ -9,7 +10,6 @@ from halper.models import Category, Command, CommandCategory, File
 
 from .config import settings
 from .errors import AppDirectoryError
-from .printer import pp
 
 
 class HalpInfo(Model):

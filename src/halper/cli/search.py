@@ -5,16 +5,15 @@ import sys
 
 import cappa
 import sh
+from nclutils import console, pp
 from peewee import PeeweeException, fn
 
 from halper.halp import Halp, SearchCommand
 from halper.models import Command
 from halper.utils import (
-    console,
     errors,
     get_mankier_table,
     get_tldr_command,
-    pp,
 )
 from halper.views import command_detail_view
 

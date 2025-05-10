@@ -3,11 +3,11 @@
 import cappa
 import httpx
 from markdownify import markdownify as md
+from nclutils import pp
 from rich.markdown import Markdown
 from rich.table import Table
 
 from . import errors
-from .printer import pp
 from .utilities import strip_last_two_lines
 
 

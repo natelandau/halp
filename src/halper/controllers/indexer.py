@@ -5,6 +5,7 @@ import re
 from pathlib import Path
 
 import cappa
+from nclutils import pp
 from playhouse.sqlite_ext import SqliteExtDatabase
 from rich.progress import track
 
@@ -20,7 +21,7 @@ from halper.models import (
     TempCommandCategory,
     TempFile,
 )
-from halper.utils import db_clear_table_data, db_tables_have_data, errors, pp, settings
+from halper.utils import db_clear_table_data, db_tables_have_data, errors, settings
 
 
 class Indexer:
