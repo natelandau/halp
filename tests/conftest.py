@@ -7,8 +7,8 @@ from pathlib import Path
 from textwrap import dedent
 
 import pytest
+from nclutils import console
 from playhouse.sqlite_ext import SqliteExtDatabase
-from rich.console import Console
 
 from halper.utils.database import HalpInfo  # isort: skip
 from halper.models import (
@@ -21,8 +21,6 @@ from halper.models import (
     TempCommandCategory,
     TempFile,
 )
-
-console = Console()
 
 
 @pytest.fixture

@@ -5,7 +5,7 @@ from pathlib import Path
 import cappa
 from dynaconf import Dynaconf, ValidationError, Validator
 from dynaconf.utils.boxing import DynaBox
-from rich.console import Console
+from nclutils import console
 
 from halper.constants import (
     DB_PATH,
@@ -14,9 +14,6 @@ from halper.constants import (
     USER_CONFIG_PATH,
     CommentPlacement,
 )
-
-console = Console()
-
 
 settings = Dynaconf(
     envvar_prefix="HALP",

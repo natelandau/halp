@@ -1,6 +1,7 @@
 """Helpers for CLI subcommands."""
 
 import cappa
+from nclutils import check_python_version, pp
 
 from halper.constants import USER_CONFIG_PATH, VERSION, PrintLevel
 from halper.halp import (
@@ -14,10 +15,8 @@ from halper.halp import (
 )
 from halper.models import Command
 from halper.utils import (
-    check_python_version,
     db_tables_have_data,
     init_database,
-    pp,
     settings,
     validate_settings,
 )
@@ -59,7 +58,7 @@ def initialize_subcommand(
     )
     validate_settings()
 
-    if not check_python_version():
+    if not check_python_version(3, 10):
         pp.error("Python version must be >= 3.10")
         raise cappa.Exit(code=1)
 

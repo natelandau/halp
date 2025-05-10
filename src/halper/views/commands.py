@@ -1,7 +1,8 @@
 """Views for commands."""
 
+from nclutils import console, pp
+
 from halper.models import Command
-from halper.utils import console, pp
 
 
 def command_detail_view(commands: list[Command], input_string: str, *, found_in_tldr: bool) -> None:

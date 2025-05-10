@@ -3,11 +3,11 @@
 from pathlib import Path
 
 import inflect
+from nclutils import console
 from rich.markdown import Markdown
 from rich.table import Table
 
 from halper.models import IndexResult
-from halper.utils import console
 
 p = inflect.engine()
 

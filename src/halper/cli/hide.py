@@ -1,11 +1,11 @@
 """Hide subcommand."""
 
 import cappa
+from nclutils import pp
 from peewee import DoesNotExist
 
 from halper.halp import Halp, HideCommand
 from halper.models import Command
-from halper.utils import pp
 
 from .helpers import initialize_subcommand
 

@@ -6,12 +6,10 @@ from dataclasses import dataclass
 from typing import Annotated
 
 import cappa
-from rich.console import Console
+from nclutils import pp
 
 from halper.constants import DB_PATH, PrintLevel
-from halper.utils import pp, validate_settings
-
-console = Console()
+from halper.utils import validate_settings
 
 
 @dataclass

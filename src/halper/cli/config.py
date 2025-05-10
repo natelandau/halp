@@ -1,17 +1,16 @@
 """Config subcommand."""
 
 import re
-import shutil
 from pathlib import Path
 
 import cappa
+from nclutils import console, copy_file, pp
 from rich.markdown import Markdown
 from rich.panel import Panel
 from rich.prompt import Confirm, Prompt
 
 from halper.constants import DEFAULT_CONFIG_PATH, USER_CONFIG_PATH
 from halper.halp import ConfigCommand, Halp
-from halper.utils import console, pp
 
 from .helpers import initialize_subcommand
 
@@ -204,7 +203,7 @@ def config_command(halp: Halp, cmd: ConfigCommand) -> None:
     # Handle non-interactive mode
     if not cmd.interactive:
         USER_CONFIG_PATH.parent.mkdir(parents=True, exist_ok=True)
-        shutil.copy(DEFAULT_CONFIG_PATH, USER_CONFIG_PATH)
+        copy_file(DEFAULT_CONFIG_PATH, USER_CONFIG_PATH)
         pp.info(
             f":rocket: [bold]Empty configuration created[/bold]. Edit before continuing: {USER_CONFIG_PATH}"
         )
@@ -236,7 +235,7 @@ comment_placement = "{comment_placement}"
 
         # Create and update config file
         USER_CONFIG_PATH.parent.mkdir(parents=True, exist_ok=True)
-        shutil.copy(DEFAULT_CONFIG_PATH, USER_CONFIG_PATH)
+        copy_file(DEFAULT_CONFIG_PATH, USER_CONFIG_PATH)
         update_config_file(
             file_globs, file_exclude_regex, command_name_ignore_regex, comment_placement
         )

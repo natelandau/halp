@@ -3,10 +3,11 @@
 import re
 from pathlib import Path
 
+from nclutils import pp
 from parsy import ParseError
 
 from halper.constants import UNCATEGORIZED_NAME
-from halper.utils import pp, settings
+from halper.utils import settings
 from halper.utils.text_parsers import parse_file
 
 from .category import Category

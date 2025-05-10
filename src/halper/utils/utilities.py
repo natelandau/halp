@@ -1,19 +1,6 @@
 """Utility functions."""
 
-import sys
-
 import sh
-
-
-def check_python_version() -> bool:
-    """Verify that the current Python version meets minimum requirements.
-
-    Check if the running Python interpreter version is >= 3.10. This validation is important for ensuring the application has access to required language features like pattern matching and other 3.10+ functionality.
-
-    Returns:
-        bool: True if Python version is >= 3.10, False otherwise.
-    """
-    return sys.version_info >= (3, 10)
 
 
 def strip_last_two_lines(multiline_string: str) -> str:

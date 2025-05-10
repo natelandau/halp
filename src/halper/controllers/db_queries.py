@@ -1,10 +1,10 @@
 """Database queries."""
 
 import cappa
+from nclutils import pp
 from peewee import PeeweeException
 
 from halper.models import Category, Command, CommandCategory
-from halper.utils import pp
 
 
 def fetch_categories(search_string: str) -> list[Category]:

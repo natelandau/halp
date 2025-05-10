@@ -1,12 +1,12 @@
 """List subcommand."""
 
 import cappa
+from nclutils import console, pp
 from rich.table import Table
 
 from halper.controllers import fetch_categories, fetch_commands_from_category
 from halper.halp import Halp, ListCommand
 from halper.models import Command
-from halper.utils import console, pp
 from halper.views import column_view, command_table_view
 
 from .helpers import initialize_subcommand
