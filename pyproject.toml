@@ -1,5 +1,11 @@
 [project]
     authors = [{ name = "Nate Landau", email = "github@natenate.org" }]
+    classifiers = [
+        "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.11",
+        "Programming Language :: Python :: 3.12",
+        "Programming Language :: Python :: 3.13",
+    ]
     dependencies = [
         "cappa>=0.27.2",
         "dynaconf>=3.2.10",
@@ -16,7 +22,7 @@
     license = { file = "LICENSE" }
     name = "halper"
     readme = "README.md"
-    requires-python = ">=3.11"
+    requires-python = ">=3.10"
     version = "2.0.2"
 
     [project.urls]
