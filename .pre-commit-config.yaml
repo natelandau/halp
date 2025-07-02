@@ -5,7 +5,7 @@ default_stages: [pre-commit, manual]
 fail_fast: true
 repos:
   - repo: "https://github.com/commitizen-tools/commitizen"
-    rev: v4.7.0
+    rev: v4.8.3
     hooks:
       - id: commitizen
       - id: commitizen-branch
@@ -60,17 +60,18 @@ repos:
         files: ^.*\.(yaml|yml)$
         entry: yamllint --strict --config-file .yamllint.yml
 
-  - repo: "https://github.com/charliermarsh/ruff-pre-commit"
-    rev: "v0.11.9"
+  - repo: "https://github.com/astral-sh/ruff-pre-commit"
+    rev: "v0.12.1"
     hooks:
-      - id: ruff
+      - id: ruff-check
         exclude: tests/
         args: [--no-fix]
       - id: ruff-format
         args: [--check]
 
-  - repo: "https://github.com/crate-ci/typos"
-    rev: v1.32.0
+  # mirrors-typos is a fork of typos that removes the v.1 mutable tag
+  - repo: "https://github.com/adhtruong/mirrors-typos"
+    rev: v1.34.0
     hooks:
       - id: typos
         args: ["--force-exclude"]
@@ -83,7 +84,7 @@ repos:
         stages: [commit-msg]
 
   - repo: "https://github.com/gitleaks/gitleaks"
-    rev: v8.25.1
+    rev: v8.27.2
     hooks:
       - id: gitleaks
 

@@ -32,7 +32,7 @@ def search_command(halp: Halp, cmd: SearchCommand) -> None:
     if " " in cmd.input_string:
         try:
             console.print(get_mankier_table(cmd.input_string))
-            raise cappa.Exit()
+            raise cappa.Exit(code=0)
         except errors.MankierCommandNotFoundError:
             (cmd.input_string) = cmd.input_string.split(" ")[0]
 

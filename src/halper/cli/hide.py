@@ -11,7 +11,7 @@ from .helpers import initialize_subcommand
 
 
 def hide_command(halp: Halp, cmd: HideCommand) -> None:
-    """Hide subcommand."""  # noqa: DOC501
+    """Hide subcommand."""
     initialize_subcommand(halp=halp, subcommand=cmd, require_db_content=False)
 
     try:

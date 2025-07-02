@@ -1,6 +1,9 @@
 # Temporary files
 scratch/
 tmp/
+.dev
+.cursor/
+GEMINI.md
 
 # Caches and environments
 *_cache/

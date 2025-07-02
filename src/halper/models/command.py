@@ -70,7 +70,7 @@ class Command(Model):
         # Construct the list of category names
         return [category.name for category in category_query]
 
-    def table(self, found_in_tldr: bool = False) -> Table:
+    def table(self, *, found_in_tldr: bool = False) -> Table:
         """Create a rich table displaying command details in a formatted layout.
 
         Generate a table containing comprehensive information about a command, including its name,
@@ -106,7 +106,7 @@ class Command(Model):
         grid.add_row("Code:", self.code_syntax(padding=True))
         return grid
 
-    def code_syntax(self, padding: bool = False) -> Syntax:
+    def code_syntax(self, *, padding: bool = False) -> Syntax:
         """Return rich syntax for command code."""
         pad = (1, 2) if padding else (0, 0)
 

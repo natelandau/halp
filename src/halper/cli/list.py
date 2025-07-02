@@ -28,7 +28,7 @@ def list_command(halp: Halp, cmd: ListCommand) -> None:
     The function supports two main modes:
         1. Category-based listing: Filter and display commands by category, or show category statistics
         2. Full listing: Display all commands in a single table with configurable detail levels
-    """  # noqa: DOC502
+    """
     initialize_subcommand(halp=halp, subcommand=cmd, require_db_content=True)
     if cmd.category or cmd.list_categories:
         categories = fetch_categories(cmd.category)

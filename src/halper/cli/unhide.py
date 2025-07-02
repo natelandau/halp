@@ -11,7 +11,7 @@ from .helpers import initialize_subcommand
 
 
 def unhide_command(halp: Halp, cmd: UnhideCommand) -> None:
-    """Unhide subcommand."""  # noqa: DOC501
+    """Unhide subcommand."""
     initialize_subcommand(halp=halp, subcommand=cmd, require_db_content=False)
 
     try:
