@@ -66,7 +66,7 @@ def parse_alias() -> Generator[None, None, dict[str, str | None]]:
 
     yield NEWLINE.optional()
 
-    return {"name": name, "code": value, "description": inline_comment or above_comment}  # noqa: B901
+    return {"name": name, "code": value, "description": inline_comment or above_comment}
 
 
 @generate
@@ -118,7 +118,7 @@ def parse_export() -> Generator[None, None, dict[str, str | None]]:
 
     yield NEWLINE.optional()
 
-    return {"name": name, "code": value, "description": inline_comment or above_comment}  # noqa: B901
+    return {"name": name, "code": value, "description": inline_comment or above_comment}
 
 
 @generate
@@ -162,7 +162,7 @@ def parse_function() -> Generator[None, None, dict[str, str | None]]:
 
     yield func_end
 
-    return {  # noqa: B901
+    return {
         "name": name,
         "args": args,
         "code": body,
@@ -200,7 +200,7 @@ def parse_function_body_comment() -> Generator[None, None, str]:
     comment = yield comment.optional()
     yield any_further_text
 
-    return comment  # noqa: B901
+    return comment
 
 
 @generate
@@ -252,4 +252,4 @@ def parse_file() -> Generator[None, None, dict[str, str | CommandType]]:
     yield non_matching_line.many().optional()
     yield NEWLINE.optional()
 
-    return result  # noqa: B901
+    return result

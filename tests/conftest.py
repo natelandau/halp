@@ -109,7 +109,7 @@ def debug() -> Callable[[str | Path, str, bool, int], bool]:
     """
 
     def _debug_inner(
-        value: str | Path, label: str = "", breakpoint: bool = False, width: int = 80
+        value: str | Path, label: str = "", *, breakpoint: bool = False, width: int = 80
     ) -> bool:
         """Print debug information during test development and debugging sessions.
 
