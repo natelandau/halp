@@ -29,7 +29,7 @@ runs:
         echo "Input python-version: ${{ inputs.python-version }}"
         echo "Python version: $(python --version)"
         echo "Python location: $(which python)"
-        echo "uv Python version: $(uv python --version)"
+        echo "uv Python version: $(uv run python --version)"
 
     - name: Minimize uv cache
       shell: bash
@@ -39,9 +39,6 @@ runs:
       shell: bash
       run: sudo apt install -y sqlite3
 
-    # ----------------------------------------------
-    #    copy config file to runner
-    # ----------------------------------------------
     - name: Create empty configuration file
       shell: bash
       run: mkdir -p /home/runner/.config/halp && cp ./src/halper/default_config.toml /home/runner/.config/halp/config.toml

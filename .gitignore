@@ -1,9 +1,10 @@
 # Temporary files
 scratch/
 tmp/
-.dev
 .cursor/
 GEMINI.md
+.dev/
+dev-config.toml
 
 # Caches and environments
 *_cache/
@@ -18,4 +19,3 @@ bin/act
 # Other
 .DS_Store
 .devdbrc
-dev-config.toml

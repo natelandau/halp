@@ -7,14 +7,14 @@
         "Programming Language :: Python :: 3.13",
     ]
     dependencies = [
-        "cappa>=0.28.0",
+        "cappa>=0.28.1",
         "dynaconf>=3.2.11",
         "httpx>=0.28.1",
         "inflect>=7.5.0",
         "markdownify>=1.1.0",
-        "nclutils>=1.0.1",
+        "nclutils>=1.1.0",
         "parsy>=2.1",
-        "peewee>=3.18.1",
+        "peewee>=3.18.2",
         "rich>=14.0.0",
         "semver>=3.0.4",
         "sh>=2.2.2",
@@ -40,7 +40,7 @@
 [dependency-groups]
     dev = [
         "commitizen>=4.8.3",
-        "coverage>=7.9.1",
+        "coverage>=7.9.2",
         "duty>=1.6.0",
         "mypy>=1.16.1",
         "pre-commit>=4.2.0",
@@ -52,7 +52,7 @@
         "pytest-sugar>=1.0.0",
         "pytest-xdist>=3.8.0",
         "pytest>=8.4.1",
-        "ruff>=0.12.1",
+        "ruff>=0.12.3",
         "typos>=1.34.0",
     ]
 
@@ -119,29 +119,7 @@
     xfail_strict   = true
 
 [tool.ruff] # https://github.com/charliermarsh/ruff
-    exclude = [
-        ".bzr",
-        ".direnv",
-        ".eggs",
-        ".git",
-        ".hg",
-        ".mypy_cache",
-        ".nox",
-        ".pants.d",
-        ".pytype",
-        ".ruff_cache",
-        ".svn",
-        ".tox",
-        ".venv",
-        "__pypackages__",
-        "_build",
-        "buck-out",
-        "build",
-        "dist",
-        "node_modules",
-        "venv",
-    ]
-
+    exclude        = [".cache", ".dev", ".git", ".venv", "_build", "build", "dist", "tmp"]
     fix            = true
     line-length    = 100
     output-format  = "grouped"
@@ -161,31 +139,6 @@
             "S311",   # suspicious-non-cryptographic-random-usage
             "TD002",  # Missing author in TODO
             "TD003",  # Missing issue link on the line following this TODO
-            # "B006",    # mutable-argument-default
-            # "B008",    # function-call-in-default-argument
-            # "COM812",  # Trailing comma missing"
-            # "CPY001",  # Missing copyright notice at top of file
-
-            # "D213",    # multi-line-summary-second-line
-            # "D215",    # section-underline-not-over-indented
-            # "D406",    # new-line-after-section-name
-            # "D407",    # dashed-underline-after-section
-            # "D408",    # section-underline-after-name
-            # "D409",    # section-underline-matches-section-length
-            # "D413",    # blank-line-after-last-section
-            # "E501",    # line-too-long
-            # "FBT001",  # Boolean default positional argument in function definition
-            # "FBT002",  # Boolean default positional argument in function definition
-            # "FIX002",  # Line contains TODO, consider resolving the issue
-            # "ISC001",  # single-line-implicit-string-concatenation
-            # "N805",    # invalid-first-argument-name-for-method
-            # "PLR0913", # too-many-arguments
-            # "PLR0917", # too many positional arguments
-            # "RSE102",  # Unnecessary parentheses on raised exception"
-            # "S311",    # suspicious-non-cryptographic-random-usage
-            # "TD002",   # Missing author in TODO
-            # "TD003",   # Missing ticket in TODO
-            # "UP007",   # non-pep604-annotation
         ]
         per-file-ignores = { "halp.py" = [
             "DOC501",
