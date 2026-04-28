@@ -4,11 +4,14 @@ __pycache__/
 .dev/
 .devdbrc
 .DS_Store
-.github/copilot-instructions.md
-.github/instructions/
 .venv/
 # Temporary files
 dev-config.toml
-GEMINI.md
 scratch/
 tmp/
+dist/
+.claude/
+docs/superpowers
+docs/specs/
+docs/plans
+.worktrees/
