@@ -1,3 +1,14 @@
+## v2.0.3 (2026-04-28)
+
+### Fix
+
+- **build**: support python v3.14 (#56)
+- **deps**: support peewee v4.0 sqllite engine (#55)
+
+### Refactor
+
+- migrate to nclutils (#50)
+
 ## v2.0.2 (2025-04-30)
 
 ### Fix
