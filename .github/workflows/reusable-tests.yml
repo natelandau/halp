@@ -16,7 +16,7 @@ jobs:
         strategy:
             fail-fast: true
             matrix:
-                python-version: ["3.10", "3.11", "3.12", "3.13"]
+                python-version: [ "3.11", "3.12", "3.13" ]
         steps:
             - name: Checkout repository
               uses: actions/checkout@v6
@@ -32,7 +32,7 @@ jobs:
 
             - name: Upload coverage to Codecov
               if: ${{ inputs.run-coverage && matrix.python-version == '3.13' }}
-              uses: codecov/codecov-action@v5
+              uses: codecov/codecov-action@v6
               with:
                   files: .cache/coverage.xml
               env:
@@ -46,8 +46,8 @@ jobs:
 
             - uses: actions/cache@v5
               with:
-                  path: ~/.cache/pre-commit
-                  key: pre-commit-${{ hashFiles('.pre-commit-config.yaml') }}
+                  path: ~/.cache/prek
+                  key: prek-${{ hashFiles('.pre-commit-config.yaml') }}
 
             - name: Setup Python, uv, and the package
               uses: ./.github/actions/setup_python_env

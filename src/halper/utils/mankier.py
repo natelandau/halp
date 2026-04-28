@@ -48,7 +48,7 @@ def get_mankier_description(input_string: str) -> str:  # pragma: no cover
         errors.MankierCommandNotFoundError: If the command is not found on mankier.com.
     """
     # Get the command description as markdown
-    url = f"https://www.mankier.com/api/v2/mans/{input_string.split(' ')[0]}.1/sections/Description"
+    url = f"https://www.mankier.com/api/v2/mans/{input_string.split(' ', maxsplit=1)[0]}.1/sections/Description"
 
     try:
         response = httpx.get(url, timeout=15)

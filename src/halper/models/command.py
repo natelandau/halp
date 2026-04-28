@@ -1,7 +1,6 @@
 """Representation of a command."""
 
-from peewee import BooleanField, ForeignKeyField, Model, TextField
-from playhouse.sqlite_ext import SqliteExtDatabase
+from peewee import BooleanField, ForeignKeyField, Model, SqliteDatabase, TextField
 from rich.syntax import Syntax
 from rich.table import Table
 
@@ -26,7 +25,7 @@ class TempCommand(Model):
     class Meta:
         """Meta class for base model."""
 
-        database = SqliteExtDatabase(settings.db_path, regexp_function=True)
+        database = SqliteDatabase(settings.db_path, regexp_function=True)
 
 
 class Command(Model):
@@ -127,4 +126,4 @@ class Command(Model):
     class Meta:
         """Meta class for base model."""
 
-        database = SqliteExtDatabase(settings.db_path, regexp_function=True)
+        database = SqliteDatabase(settings.db_path, regexp_function=True)

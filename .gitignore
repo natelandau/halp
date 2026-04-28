@@ -1,21 +1,14 @@
+__pycache__/
+.cache/
+.cursor/
+.dev/
+.devdbrc
+.DS_Store
+.github/copilot-instructions.md
+.github/instructions/
+.venv/
 # Temporary files
+dev-config.toml
+GEMINI.md
 scratch/
 tmp/
-.cursor/
-GEMINI.md
-.dev/
-dev-config.toml
-
-# Caches and environments
-*_cache/
-__pycache__/
-.reports/
-.mypy_cache/
-.venv/
-*.py[cdo]
-bin/act
-.cache/
-
-# Other
-.DS_Store
-.devdbrc

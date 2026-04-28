@@ -5,9 +5,9 @@ from peewee import (
     DeferredForeignKey,
     ForeignKeyField,
     Model,
+    SqliteDatabase,
     TextField,
 )
-from playhouse.sqlite_ext import SqliteExtDatabase
 
 from halper.utils import settings
 
@@ -29,7 +29,7 @@ class Category(Model):
     class Meta:
         """Meta class for base model."""
 
-        database = SqliteExtDatabase(settings.db_path, regexp_function=True)
+        database = SqliteDatabase(settings.db_path, regexp_function=True)
 
 
 class TempCategory(Model):
@@ -45,7 +45,7 @@ class TempCategory(Model):
     class Meta:
         """Meta class for base model."""
 
-        database = SqliteExtDatabase(settings.db_path, regexp_function=True)
+        database = SqliteDatabase(settings.db_path, regexp_function=True)
 
 
 class CommandCategory(Model):
@@ -62,7 +62,7 @@ class CommandCategory(Model):
     class Meta:
         """Meta class for base model."""
 
-        database = SqliteExtDatabase(settings.db_path, regexp_function=True)
+        database = SqliteDatabase(settings.db_path, regexp_function=True)
 
 
 class TempCommandCategory(Model):
@@ -75,4 +75,4 @@ class TempCommandCategory(Model):
     class Meta:
         """Meta class for base model."""
 
-        database = SqliteExtDatabase(settings.db_path, regexp_function=True)
+        database = SqliteDatabase(settings.db_path, regexp_function=True)

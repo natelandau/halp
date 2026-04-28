@@ -3,8 +3,7 @@
 import os
 
 from nclutils import pp
-from peewee import Model, PeeweeException, TextField
-from playhouse.sqlite_ext import SqliteExtDatabase
+from peewee import Model, PeeweeException, SqliteDatabase, TextField
 
 from halper.models import Category, Command, CommandCategory, File
 
@@ -23,7 +22,7 @@ class HalpInfo(Model):
     class Meta:
         """Meta class for base model."""
 
-        database = SqliteExtDatabase(settings.db_path, regexp_function=True)
+        database = SqliteDatabase(settings.db_path, regexp_function=True)
 
 
 def init_database(current_version: str) -> None:
@@ -54,7 +53,7 @@ def init_database(current_version: str) -> None:
         msg = f"Write permission is not available on {settings.db_path.parent}"
         raise AppDirectoryError(msg)
 
-    db = SqliteExtDatabase(settings.db_path, regexp_function=True)
+    db = SqliteDatabase(settings.db_path, regexp_function=True)
     db.connect()
 
     db.create_tables([Category, Command, CommandCategory, File, HalpInfo])
