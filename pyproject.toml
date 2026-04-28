@@ -7,15 +7,15 @@
         "Programming Language :: Python :: 3.13",
     ]
     dependencies = [
-        "cappa>=0.28.1",
-        "dynaconf>=3.2.11",
+        "cappa>=0.31.0",
+        "dynaconf>=3.2.13",
         "httpx>=0.28.1",
         "inflect>=7.5.0",
-        "markdownify>=1.1.0",
-        "nclutils>=1.1.0",
-        "parsy>=2.1",
-        "peewee>=3.18.2",
-        "rich>=14.0.0",
+        "markdownify>=1.2.2",
+        "nclutils>=2.1.0",
+        "parsy>=2.2",
+        "peewee>=4.0.5",
+        "rich>=15.0.0",
         "semver>=3.0.4",
         "sh>=2.2.2",
     ]
@@ -34,26 +34,26 @@
         halp = "halper.halp:main"
 
 [build-system]
-    build-backend = "hatchling.build"
-    requires      = ["hatchling"]
+    build-backend = "uv_build"
+    requires      = ["uv_build>=0.8.4,<0.9.0"]
 
 [dependency-groups]
     dev = [
-        "commitizen>=4.8.3",
-        "coverage>=7.9.2",
-        "duty>=1.6.0",
-        "mypy>=1.16.1",
-        "pre-commit>=4.2.0",
+        "commitizen>=4.13.10",
+        "coverage>=7.13.5",
+        "duty>=1.9.0",
+        "mypy>=1.20.2",
+        "prek>=0.3.11",
         "pytest-clarity>=1.0.1",
-        "pytest-cov>=6.2.1",
-        "pytest-env>=1.1.5",
-        "pytest-mock>=3.14.1",
+        "pytest-cov>=7.1.0",
+        "pytest-env>=1.6.0",
+        "pytest-mock>=3.15.1",
         "pytest-pretty-terminal>=1.1.0",
-        "pytest-sugar>=1.0.0",
+        "pytest-sugar>=1.1.1",
         "pytest-xdist>=3.8.0",
-        "pytest>=8.4.1",
-        "ruff>=0.12.3",
-        "typos>=1.34.0",
+        "pytest>=9.0.3",
+        "ruff>=0.15.12",
+        "typos>=1.45.2",
     ]
 
 [tool.commitizen]
@@ -171,7 +171,11 @@
             "ANN001",
         ] }
         select = ["ALL"]
-        unfixable = ["E712", "ERA001", "F401", "F841", "UP007"]
+        unfixable = [
+            "ERA001", # Commented out code
+            "F401",   # unused-import
+            "F841",   # unused-variable
+        ]
         [tool.ruff.lint.mccabe]
             # Unlike Flake8, default to a complexity level of 10.
             max-complexity = 10

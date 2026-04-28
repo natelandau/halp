@@ -7,7 +7,7 @@ from textwrap import dedent
 
 import pytest
 from nclutils.pytest_fixtures import clean_stderr, clean_stdout, debug  # noqa: F401
-from playhouse.sqlite_ext import SqliteExtDatabase
+from peewee import SqliteDatabase
 
 from halper.utils.database import HalpInfo  # isort: skip
 from halper.models import (
@@ -151,7 +151,7 @@ def populate_db():
 
 
 @pytest.fixture(autouse=True)
-def mock_db(request) -> SqliteExtDatabase | None:
+def mock_db(request) -> SqliteDatabase | None:
     """Create and manage an isolated in-memory SQLite test database.
 
     Create a temporary SQLite database in memory that automatically resets between test runs. This fixture provides a clean, isolated database environment for each test to prevent test pollution and avoid modifying the production database.
@@ -172,7 +172,7 @@ def mock_db(request) -> SqliteExtDatabase | None:
         request (pytest.FixtureRequest): Pytest fixture request object to check for no_db marker
 
     Yields:
-        SqliteExtDatabase | None: Configured database connection with tables:
+        SqliteDatabase | None: Configured database connection with tables:
             - Category: Store command categories
             - Command: Store shell commands
             - CommandCategory: Map commands to categories
@@ -206,7 +206,7 @@ def mock_db(request) -> SqliteExtDatabase | None:
             TempFile,
         ]
 
-        db = SqliteExtDatabase(":memory:", regexp_function=True)
+        db = SqliteDatabase(":memory:", regexp_function=True)
         db.bind(models, bind_refs=False, bind_backrefs=False)
         # Ensure we start with a fresh connection
         if not db.is_closed():

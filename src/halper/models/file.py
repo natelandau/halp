@@ -1,7 +1,6 @@
 """Representation of a file."""
 
-from peewee import Model, TextField
-from playhouse.sqlite_ext import SqliteExtDatabase
+from peewee import Model, SqliteDatabase, TextField
 
 from halper.utils import settings
 
@@ -19,7 +18,7 @@ class File(Model):
     class Meta:
         """Meta class for base model."""
 
-        database = SqliteExtDatabase(settings.db_path, regexp_function=True)
+        database = SqliteDatabase(settings.db_path, regexp_function=True)
 
 
 class TempFile(Model):
@@ -31,4 +30,4 @@ class TempFile(Model):
     class Meta:
         """Meta class for base model."""
 
-        database = SqliteExtDatabase(settings.db_path, regexp_function=True)
+        database = SqliteDatabase(settings.db_path, regexp_function=True)

@@ -97,16 +97,16 @@ def typos(ctx: Context) -> None:
     )
 
 
-@duty(skip_if=CI, skip_reason="skip pre-commit in CI environments")
-def precommit(ctx: Context) -> None:
-    """Run pre-commit hooks."""
+@duty(skip_if=CI, skip_reason="skip prek in CI environments")
+def prek(ctx: Context) -> None:
+    """Run prek hooks."""
     ctx.run(
-        "SKIP=mypy,pytest,ruff pre-commit run --all-files",
-        title=pyprefix("pre-commit hooks"),
+        "SKIP=mypy,pytest,ruff prek run --all-files",
+        title=pyprefix("prek hooks"),
     )
 
 
-@duty(pre=[ruff, mypy, typos, precommit], capture=CI)
+@duty(pre=[ruff, mypy, typos, prek], capture=CI)
 def lint(ctx: Context) -> None:
     """Run all linting duties."""
 
@@ -115,7 +115,8 @@ def lint(ctx: Context) -> None:
 def update(ctx: Context) -> None:
     """Update the project."""
     ctx.run(["uv", "lock", "--upgrade"], title="update uv lock")
-    ctx.run(["pre-commit", "autoupdate"], title="pre-commit autoupdate", capture=CI)
+    ctx.run(["uv", "sync"], title="sync uv environment")
+    ctx.run(["prek", "autoupdate"], title="prek autoupdate", capture=CI)
 
 
 @duty()

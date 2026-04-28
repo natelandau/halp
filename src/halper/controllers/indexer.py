@@ -6,7 +6,7 @@ from pathlib import Path
 
 import cappa
 from nclutils import pp
-from playhouse.sqlite_ext import SqliteExtDatabase
+from peewee import SqliteDatabase
 from rich.progress import track
 
 from halper.models import (
@@ -34,7 +34,7 @@ class Indexer:
     """
 
     def __init__(self, *, rebuild: bool = False) -> None:
-        self.database = SqliteExtDatabase(settings.db_path, regexp_function=True)
+        self.database = SqliteDatabase(settings.db_path, regexp_function=True)
         self.result = IndexResult()
 
         # Set rebuild flag
