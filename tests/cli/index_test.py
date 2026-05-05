@@ -57,7 +57,7 @@ def mock_initialize_subcommand(mocker, tmp_path):
     mocker.patch("halper.cli.helpers.USER_CONFIG_PATH", path_to_config)
 
 
-def test_index_no_matching_files(mock_files, mock_config, clean_stdout, debug) -> None:
+def test_index_no_matching_files(mock_files, mock_config, capsys, debug) -> None:
     """Verify that index command handles missing files gracefully."""
     # Given: Configure test environment with non-existent file pattern
     settings.update(mock_config(file_globs=[f"{mock_files}/**/*.txt"]))
@@ -67,14 +67,14 @@ def test_index_no_matching_files(mock_files, mock_config, clean_stdout, debug) -
         cappa.invoke(obj=Halp, argv=["index"])
 
     # Then: Verify error message and empty database state
-    output = clean_stdout()
+    output = capsys.readouterr().out
     assert "No files found " in output
     assert File.select().count() == 0
     assert Category.select().count() == 0
     assert Command.select().count() == 0
 
 
-def test_index_no_categories(mock_files, mock_config, clean_stdout, debug) -> None:
+def test_index_no_categories(mock_files, mock_config, capsys, debug) -> None:
     """Verify that index command displays all non-hidden commands with default formatting."""
     # Given: Configure test environment with populated database
     settings.update(mock_config(file_globs=[f"{mock_files}/**/*.sh"]))
@@ -84,7 +84,7 @@ def test_index_no_categories(mock_files, mock_config, clean_stdout, debug) -> No
         cappa.invoke(obj=Halp, argv=["index"])
 
     # Then: Verify output shows all non-hidden commands
-    output = clean_stdout()
+    output = capsys.readouterr().out
     assert "3 Files found" in output
     assert "9 Commands indexed" in output
     assert "No categories found" in output
@@ -100,7 +100,7 @@ def test_index_no_categories(mock_files, mock_config, clean_stdout, debug) -> No
     assert inline_alias_command.code == 'echo "Hello, Inline!"'
 
 
-def test_index_with_categories(mock_files, mock_config, clean_stdout, debug) -> None:
+def test_index_with_categories(mock_files, mock_config, capsys, debug) -> None:
     """Verify that index command correctly categorizes commands and displays category statistics."""
     # Given: Configure test environment with categories and shell script files
     settings.update(mock_config(file_globs=[f"{mock_files}/**/*.sh"], categories=STUB_CATEGORIES))
@@ -110,7 +110,7 @@ def test_index_with_categories(mock_files, mock_config, clean_stdout, debug) -> 
         cappa.invoke(obj=Halp, argv=["index"])
 
     # Then: Verify correct number of files, commands and categories were indexed
-    output = clean_stdout()
+    output = capsys.readouterr().out
     assert "3 Files found" in output
     assert "9 Commands indexed" in output
     assert "4 Categories indexed" in output
@@ -133,7 +133,7 @@ def test_index_with_categories(mock_files, mock_config, clean_stdout, debug) -> 
         cappa.invoke(obj=Halp, argv=["list", "--cats"])
 
     # Then: Verify each category shows correct command count
-    output = clean_stdout()
+    output = capsys.readouterr().out
     assert re.search(r"code_regex +3", output)
     assert re.search(r"command_name_regex +3", output)
     assert re.search(r"comment_regex +3", output)
@@ -141,7 +141,7 @@ def test_index_with_categories(mock_files, mock_config, clean_stdout, debug) -> 
     assert re.search(rf"{UNCATEGORIZED_NAME} +4", output)
 
 
-def test_index_with_categories_verbose(mock_files, mock_config, clean_stdout, debug) -> None:
+def test_index_with_categories_verbose(mock_files, mock_config, capsys, debug) -> None:
     """Verify that index command correctly categorizes commands and displays category statistics."""
     # Given: Configure test environment with categories and shell script files
     settings.update(mock_config(file_globs=[f"{mock_files}/**/*.sh"], categories=STUB_CATEGORIES))
@@ -151,7 +151,7 @@ def test_index_with_categories_verbose(mock_files, mock_config, clean_stdout, de
         cappa.invoke(obj=Halp, argv=["-v", "index"])
 
     # Then: Verify correct number of files, commands and categories were indexed
-    output = clean_stdout()
+    output = capsys.readouterr().out
     debug(output)
     assert "3 Files found" in output
     assert "9 Commands indexed" in output
@@ -175,7 +175,7 @@ def test_index_with_categories_verbose(mock_files, mock_config, clean_stdout, de
         cappa.invoke(obj=Halp, argv=["list", "--cats"])
 
     # Then: Verify each category shows correct command count
-    output = clean_stdout()
+    output = capsys.readouterr().out
     assert re.search(r"code_regex +3", output)
     assert re.search(r"command_name_regex +3", output)
     assert re.search(r"comment_regex +3", output)
@@ -183,7 +183,7 @@ def test_index_with_categories_verbose(mock_files, mock_config, clean_stdout, de
     assert re.search(rf"{UNCATEGORIZED_NAME} +4", output)
 
 
-def test_index_with_rebuild(mock_files, mock_config, clean_stdout, debug) -> None:
+def test_index_with_rebuild(mock_files, mock_config, capsys, debug) -> None:
     """Verify that rebuild flag resets hidden state of all commands."""
     # Given: Configure test environment and index initial commands
     settings.update(mock_config(file_globs=[f"{mock_files}/**/*.sh"]))
@@ -233,4 +233,4 @@ def test_index_with_rebuild(mock_files, mock_config, clean_stdout, debug) -> Non
     assert Command.select().where(Command.hidden == True).count() == 0
     assert Command.select().where(Command.has_custom_description == True).count() == 0
 
-    clean_stdout()  # Only here to suppress output
+    capsys.readouterr().out  # Only here to suppress output  # noqa: B018

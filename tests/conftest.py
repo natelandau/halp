@@ -6,7 +6,6 @@ from pathlib import Path
 from textwrap import dedent
 
 import pytest
-from nclutils.pytest_fixtures import clean_stderr, clean_stdout, debug  # noqa: F401
 from peewee import SqliteDatabase
 
 from halper.utils.database import HalpInfo  # isort: skip
