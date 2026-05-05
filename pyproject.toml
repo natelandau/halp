@@ -9,16 +9,16 @@
     ]
     dependencies = [
         "cappa>=0.31.0",
-        "dynaconf>=3.2.13",
+        "dynaconf>=3.2.13, <4.0.0",
         "httpx>=0.28.1",
         "inflect>=7.5.0",
         "markdownify>=1.2.2",
         "nclutils>=2.1.0",
-        "parsy>=2.2",
+        "parsy>=2.2, <3.0.0",
         "peewee>=4.0.5, <5.0.0",
-        "rich>=15.0.0",
-        "semver>=3.0.4",
-        "sh>=2.2.2",
+        "rich>=15.0.0, <16.0.0",
+        "semver>=3.0.4, <4.0.0",
+        "sh>=2.2.2, <3.0.0",
     ]
     description = "One stop shop for command line help."
     license = { file = "LICENSE" }
@@ -40,13 +40,14 @@
 
 [dependency-groups]
     dev = [
-        "commitizen>=4.13.10",
+        "commitizen>=4.15.0",
         "coverage>=7.13.5",
         "duty>=1.9.0",
         "mypy>=1.20.2",
-        "prek>=0.3.11",
+        "prek>=0.3.13",
         "pytest-clarity>=1.0.1",
         "pytest-cov>=7.1.0",
+        "pytest-devtools>=1.1.0",
         "pytest-env>=1.6.0",
         "pytest-mock>=3.15.1",
         "pytest-pretty-terminal>=1.1.0",
@@ -54,7 +55,7 @@
         "pytest-xdist>=3.8.0",
         "pytest>=9.0.3",
         "ruff>=0.15.12",
-        "typos>=1.45.2",
+        "typos>=1.46.0",
     ]
 
 [tool.commitizen]

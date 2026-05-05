@@ -19,7 +19,7 @@ def mock_initialize_subcommand(mocker, tmp_path):
     mocker.patch("halper.cli.helpers.USER_CONFIG_PATH", path_to_config)
 
 
-def test_hide_command(mock_config, clean_stdout, populate_db, debug, mocker, tmp_path) -> None:
+def test_hide_command(mock_config, capsys, populate_db, debug, mocker, tmp_path) -> None:
     """Verify that the hide and unhide CLI commands correctly toggle command visibility."""
     # Given: A command that exists in the database and is visible
     test_command = Command.get(1)
@@ -44,4 +44,4 @@ def test_hide_command(mock_config, clean_stdout, populate_db, debug, mocker, tmp
     assert not test_command.hidden
 
     # Suppress CLI output to keep test output clean
-    clean_stdout()
+    capsys.readouterr().out  # noqa: B018
