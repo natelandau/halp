@@ -5,7 +5,7 @@ from pathlib import Path
 import cappa
 from dynaconf import Dynaconf, ValidationError, Validator
 from dynaconf.utils.boxing import DynaBox
-from nclutils import console
+from nclutils import pp
 
 from halper.constants import (
     DB_PATH,
@@ -59,10 +59,10 @@ def validate_settings() -> Dynaconf:
         settings.validators.validate_all()
     except ValidationError as e:
         accumulative_errors = e.details
-        console.print(accumulative_errors)
+        pp.console().print(accumulative_errors)
         raise cappa.Exit(code=1) from e
     except ValueError as e:
-        console.print(e)
+        pp.console().print(e)
         raise cappa.Exit(code=1) from e
 
     return settings

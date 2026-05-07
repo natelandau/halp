@@ -4,7 +4,8 @@ import re
 from pathlib import Path
 
 import cappa
-from nclutils import console, copy_file, pp
+from nclutils import pp
+from nclutils.fs import copy_file
 from rich.markdown import Markdown
 from rich.panel import Panel
 from rich.prompt import Confirm, Prompt
@@ -61,7 +62,7 @@ def display_section_panel(title: str, content: str, width: int = 100) -> None:
         configuration process. The markdown content will be rendered with proper formatting.
     """
     panel = Panel(Markdown(content), width=width, title=title)
-    console.print("\n", panel)
+    pp.console().print("\n", panel)
 
 
 def get_config_input() -> tuple[list[str], str, str, str]:
@@ -195,7 +196,7 @@ def config_command(halp: Halp, cmd: ConfigCommand) -> None:
     )
 
     if USER_CONFIG_PATH.exists() and not Confirm.ask(
-        f"Configuration file already exists: [code]{USER_CONFIG_PATH}[/code]\nOverwrite?"
+        f"Configuration file already exists: {USER_CONFIG_PATH}\nOverwrite?"
     ):
         pp.info("Exiting...")
         raise cappa.Exit(code=0)
@@ -204,12 +205,10 @@ def config_command(halp: Halp, cmd: ConfigCommand) -> None:
     if not cmd.interactive:
         USER_CONFIG_PATH.parent.mkdir(parents=True, exist_ok=True)
         copy_file(DEFAULT_CONFIG_PATH, USER_CONFIG_PATH)
-        pp.info(
-            f":rocket: [bold]Empty configuration created[/bold]. Edit before continuing: {USER_CONFIG_PATH}"
-        )
+        pp.info(f":rocket: Empty configuration created. Edit before continuing: {USER_CONFIG_PATH}")
         raise cappa.Exit(code=0)
 
-    console.rule("[bold]Create new configuration file[/bold]")
+    pp.header("Create new configuration file")
     try:
         # Get all config inputs
         file_globs, file_exclude_regex, command_name_ignore_regex, comment_placement = (
@@ -235,14 +234,14 @@ comment_placement = "{comment_placement}"
 
         # Create and update config file
         USER_CONFIG_PATH.parent.mkdir(parents=True, exist_ok=True)
-        copy_file(DEFAULT_CONFIG_PATH, USER_CONFIG_PATH)
+        copy_file(DEFAULT_CONFIG_PATH, USER_CONFIG_PATH, console=pp.console())
         update_config_file(
             file_globs, file_exclude_regex, command_name_ignore_regex, comment_placement
         )
 
-        pp.info(f"\n:rocket: [bold]Config created successfully[/bold]: {USER_CONFIG_PATH}")
+        pp.info(f"\n:rocket: Config created successfully: {USER_CONFIG_PATH}")
         raise cappa.Exit(code=0)
 
     except KeyboardInterrupt as e:
-        pp.info("\n[red]Exiting...[/red]")
+        pp.error("\nExiting...")
         raise cappa.Exit(code=0) from e

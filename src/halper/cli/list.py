@@ -1,7 +1,7 @@
 """List subcommand."""
 
 import cappa
-from nclutils import console, pp
+from nclutils import pp
 from rich.table import Table
 
 from halper.controllers import fetch_categories, fetch_commands_from_category
@@ -38,7 +38,7 @@ def list_command(halp: Halp, cmd: ListCommand) -> None:
             raise cappa.Exit(code=1)
 
         if cmd.list_categories:
-            console.print("")
+            pp.console().print("")
             table = Table.grid(expand=False, padding=(0, 5))
             table.add_column()
             table.add_column()
@@ -47,15 +47,15 @@ def list_command(halp: Halp, cmd: ListCommand) -> None:
                 commands = fetch_commands_from_category(category, show_hidden=cmd.show_hidden)
                 count = len(commands)
                 table.add_row(category.name, f"{count}")
-            console.print(table)
+            pp.console().print(table)
             raise cappa.Exit(code=0)
 
         for category in categories:
             cat_commands = fetch_commands_from_category(category, show_hidden=cmd.show_hidden)
             if cmd.short:
                 columns = column_view([x.name for x in cat_commands], f"{category.name} command")
-                console.print(columns)
-                console.print("")
+                pp.console().print(columns)
+                pp.console().print("")
                 continue
 
             table = command_table_view(
@@ -66,7 +66,7 @@ def list_command(halp: Halp, cmd: ListCommand) -> None:
                 if category.description
                 else category.name,
             )
-            console.print(table)
+            pp.console().print(table)
 
         raise cappa.Exit(code=0)
 
@@ -78,7 +78,7 @@ def list_command(halp: Halp, cmd: ListCommand) -> None:
 
     if cmd.short:
         columns = column_view([x.name for x in results], "command")
-        console.print(columns)
+        pp.console().print(columns)
         raise cappa.Exit(code=0)
 
     table = command_table_view(
@@ -87,5 +87,5 @@ def list_command(halp: Halp, cmd: ListCommand) -> None:
         show_categories=True,
         show_hidden=cmd.show_hidden,
     )
-    console.print(table)
+    pp.console().print(table)
     raise cappa.Exit(code=0)

@@ -1,7 +1,8 @@
 """Helpers for CLI subcommands."""
 
 import cappa
-from nclutils import check_python_version, pp
+from nclutils import pp
+from nclutils.utils import check_python_version
 
 from halper.constants import USER_CONFIG_PATH, VERSION, PrintLevel
 from halper.halp import (
@@ -53,8 +54,11 @@ def initialize_subcommand(
         When require_db_content is True, this function will check if commands have been indexed and provide guidance to run the index command if needed. This is useful for subcommands that depend on having commands in the database to function.
     """
     pp.configure(
-        debug=halp.verbosity in {PrintLevel.DEBUG, PrintLevel.TRACE},
-        trace=halp.verbosity == PrintLevel.TRACE,
+        verbosity=1
+        if halp.verbosity == PrintLevel.DEBUG
+        else 2
+        if halp.verbosity == PrintLevel.TRACE
+        else 0
     )
     validate_settings()
 
@@ -63,14 +67,13 @@ def initialize_subcommand(
         raise cappa.Exit(code=1)
 
     if require_config and not USER_CONFIG_PATH.exists():
-        pp.error("No configuration file found, create one with [code]halp config[/code]")
+        pp.error("No configuration file found, create one with halp config")
         raise cappa.Exit(code=1)
 
-    if halp.verbosity == PrintLevel.TRACE:
-        pp.trace(f"Halper v{VERSION} Trace")
-        pp.trace(f"Propagated Args: {halp.__dict__}")
-        pp.trace(f"Subcommand Args: {subcommand.__dict__}")
-        pp.trace(f"Settings: {settings.to_dict()}")
+    pp.trace(f"Halper v{VERSION} Trace")
+    pp.trace(f"Propagated Args: {halp.__dict__}")
+    pp.trace(f"Subcommand Args: {subcommand.__dict__}")
+    pp.trace(f"Settings: {settings.to_dict()}")
 
     if not no_db:
         init_database(VERSION)
@@ -78,6 +81,6 @@ def initialize_subcommand(
     if require_db_content and not db_tables_have_data([Command]):
         pp.warning("No indexed commands found in database.")
         pp.info(
-            "Make sure your configuration file is up to date and run [code]halp --index[/code] to index your commands."
+            "Make sure your configuration file is up to date and run `halp --index` to index your commands."
         )
         raise cappa.Exit(code=1)

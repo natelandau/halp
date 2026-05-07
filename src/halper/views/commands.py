@@ -1,6 +1,6 @@
 """Views for commands."""
 
-from nclutils import console, pp
+from nclutils import pp
 
 from halper.models import Command
 
@@ -23,13 +23,13 @@ def command_detail_view(commands: list[Command], input_string: str, *, found_in_
     print_separator = len(commands) > 1
 
     if print_separator:
-        pp.info(f"Found {len(commands)} commands matching: [code]{input_string}[/code]")
+        pp.info(f"Found {len(commands)} commands matching: {input_string}")
 
     for command in commands:
         if print_separator:
-            console.rule()
+            pp.console().rule()
 
-        console.print(command.table(found_in_tldr=found_in_tldr))
+        pp.console().print(command.table(found_in_tldr=found_in_tldr))
 
     if print_separator:
-        console.rule()
+        pp.console().rule()

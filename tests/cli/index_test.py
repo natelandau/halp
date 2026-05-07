@@ -67,8 +67,8 @@ def test_index_no_matching_files(mock_files, mock_config, capsys, debug) -> None
         cappa.invoke(obj=Halp, argv=["index"])
 
     # Then: Verify error message and empty database state
-    output = capsys.readouterr().out
-    assert "No files found " in output
+    _, stderr = capsys.readouterr()
+    assert "No files found " in stderr
     assert File.select().count() == 0
     assert Category.select().count() == 0
     assert Command.select().count() == 0

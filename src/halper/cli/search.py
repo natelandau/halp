@@ -5,7 +5,7 @@ import sys
 
 import cappa
 import sh
-from nclutils import console, pp
+from nclutils import pp
 from peewee import PeeweeException, fn
 
 from halper.halp import Halp, SearchCommand
@@ -31,7 +31,7 @@ def search_command(halp: Halp, cmd: SearchCommand) -> None:
     # The database of commands and tldr pages only contains commands without arguments. We check the online help database from mankier for commands with arguments to print contextually relevant information.
     if " " in cmd.input_string:
         try:
-            console.print(get_mankier_table(cmd.input_string))
+            pp.console().print(get_mankier_table(cmd.input_string))
             raise cappa.Exit(code=0)
         except errors.MankierCommandNotFoundError:
             (cmd.input_string) = cmd.input_string.split(" ")[0]
@@ -68,5 +68,5 @@ def search_command(halp: Halp, cmd: SearchCommand) -> None:
             tldr(cmd.input_string, _out=sys.stdout, _err=sys.stderr)
             raise cappa.Exit(code=0)
 
-    pp.error(f"No command found matching: [code]{cmd.input_string}[/code]")
+    pp.error(f"No command found matching: {cmd.input_string}")
     raise cappa.Exit(code=1)

@@ -32,5 +32,5 @@ def hide_command(halp: Halp, cmd: HideCommand) -> None:
 
         pp.success(f"Hide {command.name} (#{command.id})")
 
-    pp.notice("Done!")
+    pp.info("Done!")
     raise cappa.Exit(code=0)
