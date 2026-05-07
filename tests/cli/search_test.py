@@ -65,7 +65,7 @@ def test_non_existent_command(mock_config, capsys, populate_db, debug, caplog) -
         cappa.invoke(obj=Halp, argv=["search", "nonexistent"])
 
     # Then: Display "not found" message
-    output = capsys.readouterr().out
+    output = capsys.readouterr().err
     # debug(output)
     assert "No command found matching: nonexistent" in output
 

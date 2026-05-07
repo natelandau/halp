@@ -13,7 +13,7 @@
         "httpx>=0.28.1",
         "inflect>=7.5.0",
         "markdownify>=1.2.2",
-        "nclutils>=2.1.0",
+        "nclutils>=3.0.1",
         "parsy>=2.2, <3.0.0",
         "peewee>=4.0.5, <5.0.0",
         "rich>=15.0.0, <16.0.0",
@@ -40,14 +40,14 @@
 
 [dependency-groups]
     dev = [
-        "commitizen>=4.15.0",
+        "commitizen>=4.15.1",
         "coverage>=7.13.5",
         "duty>=1.9.0",
-        "mypy>=1.20.2",
+        "mypy>=2.0.0",
         "prek>=0.3.13",
         "pytest-clarity>=1.0.1",
         "pytest-cov>=7.1.0",
-        "pytest-devtools>=1.1.0",
+        "pytest-devtools>=1.2.0",
         "pytest-env>=1.6.0",
         "pytest-mock>=3.15.1",
         "pytest-pretty-terminal>=1.1.0",

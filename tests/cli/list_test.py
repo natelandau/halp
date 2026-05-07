@@ -105,7 +105,7 @@ def test_list_no_commands(mock_config, capsys, debug) -> None:
         cappa.invoke(obj=Halp, argv=["list"])
 
     # Then: Verify appropriate message is displayed
-    output = capsys.readouterr().out
+    output = capsys.readouterr().err
     assert "No indexed commands found in database" in output
 
 
@@ -119,7 +119,7 @@ def test_list_category_not_found(mock_config, capsys, populate_db, debug) -> Non
         cappa.invoke(obj=Halp, argv=["list", "category1"])
 
     # Then: Verify error message is displayed
-    output = capsys.readouterr().out
+    output = capsys.readouterr().err
     assert "No category found matching: 'category1'" in output
 
 
