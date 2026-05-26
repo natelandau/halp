@@ -2,34 +2,30 @@
 version: 2
 
 updates:
-    - package-ecosystem: github-actions
-      directory: /
-      schedule:
-          interval: monthly
-      commit-message:
-          prefix: "ci"
-          prefix-development: "ci"
-          include: scope
-      groups:
-          ci-deps:
-              patterns:
-                  - "*"
-      reviewers:
-          - "natelandau"
-    - package-ecosystem: pip
-      directory: /
-      schedule:
-          interval: monthly
-      commit-message:
-          prefix: "chore"
-          prefix-development: "build"
-          include: scope
-      versioning-strategy: increase
-      allow:
-          - dependency-type: production
-      groups:
-          runtime-deps:
-              patterns:
-                  - "*"
-      reviewers:
-          - "natelandau"
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
+    commit-message:
+      prefix: "ci"
+      prefix-development: "ci"
+      include: scope
+    groups:
+      ci-deps:
+        patterns:
+          - "*"
+  - package-ecosystem: uv
+    directory: /
+    schedule:
+      interval: monthly
+    commit-message:
+      prefix: "build"
+      prefix-development: "build"
+      include: scope
+    versioning-strategy: increase
+    allow:
+      - dependency-type: production
+    groups:
+      runtime-deps:
+        patterns:
+          - "*"
