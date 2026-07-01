@@ -19,7 +19,7 @@ jobs:
                 python-version: [ "3.11", "3.12", "3.13", "3.14" ]
         steps:
             - name: Checkout repository
-              uses: actions/checkout@v6
+              uses: actions/checkout@v7
 
             - name: Setup Python, uv, and the package
               uses: ./.github/actions/setup_python_env
@@ -32,7 +32,7 @@ jobs:
 
             - name: Upload coverage to Codecov
               if: ${{ inputs.run-coverage && matrix.python-version == '3.13' }}
-              uses: codecov/codecov-action@v6
+              uses: codecov/codecov-action@v7
               with:
                   files: .cache/coverage.xml
               env:
@@ -42,9 +42,9 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - name: Checkout repository
-              uses: actions/checkout@v6
+              uses: actions/checkout@v7
 
-            - uses: actions/cache@v5
+            - uses: actions/cache@v6
               with:
                   path: ~/.cache/prek
                   key: prek-${{ hashFiles('.pre-commit-config.yaml') }}
