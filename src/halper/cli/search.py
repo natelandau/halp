@@ -59,7 +59,7 @@ def search_command(halp: Halp, cmd: SearchCommand) -> None:
 
     if db_commands:
         command_detail_view(
-            commands=db_commands, input_string=cmd.input_string, found_in_tldr=found_in_tldr
+            commands=list(db_commands), input_string=cmd.input_string, found_in_tldr=found_in_tldr
         )
         raise cappa.Exit(code=0)
 

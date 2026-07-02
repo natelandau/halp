@@ -1,6 +1,7 @@
 """Representations of a category."""
 
 from peewee import (
+    AutoField,
     BooleanField,
     DeferredForeignKey,
     ForeignKeyField,
@@ -15,6 +16,7 @@ from halper.utils import settings
 class Category(Model):
     """Categories model."""
 
+    id = AutoField()  # Explicit PK so type checkers see Peewee's auto-created primary key
     name = TextField(unique=True)
     description = TextField(null=True)
     code_regex = TextField(null=True)

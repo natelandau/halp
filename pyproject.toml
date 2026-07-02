@@ -8,17 +8,17 @@
         "Programming Language :: Python :: 3.14",
     ]
     dependencies = [
-        "cappa>=0.31.0",
-        "dynaconf>=3.2.13, <4.0.0",
+        "cappa>=0.32.1",
+        "dynaconf>=3.3.2,<4.0.0",
         "httpx>=0.28.1",
         "inflect>=7.5.0",
-        "markdownify>=1.2.2",
-        "nclutils>=3.0.1",
+        "markdownify>=1.2.3",
+        "nclutils>=3.4.1",
         "parsy>=2.2, <3.0.0",
-        "peewee>=4.0.5, <5.0.0",
+        "peewee>=4.1.1,<5.0.0",
         "rich>=15.0.0, <16.0.0",
         "semver>=3.0.4, <4.0.0",
-        "sh>=2.2.2, <3.0.0",
+        "sh>=2.3.0,<3.0.0",
     ]
     description = "One stop shop for command line help."
     license = { file = "LICENSE" }
@@ -40,11 +40,11 @@
 
 [dependency-groups]
     dev = [
-        "commitizen>=4.15.1",
-        "coverage>=7.13.5",
+        "commitizen>=4.16.4",
+        "coverage>=7.15.0",
         "duty>=1.9.0",
-        "mypy>=2.0.0",
-        "prek>=0.3.13",
+        "mypy>=2.1.0",
+        "prek>=0.4.6",
         "pytest-clarity>=1.0.1",
         "pytest-cov>=7.1.0",
         "pytest-devtools>=1.2.0",
@@ -53,9 +53,9 @@
         "pytest-pretty-terminal>=1.1.0",
         "pytest-sugar>=1.1.1",
         "pytest-xdist>=3.8.0",
-        "pytest>=9.0.3",
-        "ruff>=0.15.12",
-        "typos>=1.46.0",
+        "pytest>=9.1.1",
+        "ruff>=0.15.20",
+        "typos>=1.48.0",
     ]
 
 [tool.commitizen]
@@ -115,7 +115,7 @@
 [tool.pytest.ini_options]
     addopts        = "--color=yes --doctest-modules --exitfirst --failed-first --strict-config --strict-markers --junitxml=.cache/pytest.xml"
     cache_dir      = ".cache/pytest"
-    filterwarnings = ["error", "ignore::DeprecationWarning", "ignore::ResourceWarning"]
+    filterwarnings = ["error", "ignore::DeprecationWarning", "ignore::ResourceWarning", "ignore:unclosed database in <sqlite3.Connection object at:ResourceWarning"]
     markers        = ["no_db: marks tests as not needing a database"]
     testpaths      = ["src", "tests"]
     xfail_strict   = true

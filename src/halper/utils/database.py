@@ -69,13 +69,13 @@ def init_database(current_version: str) -> None:
         raise
 
 
-def db_tables_have_data(tables: list[Model]) -> bool:
+def db_tables_have_data(tables: list[type[Model]]) -> bool:
     """Check if any database tables contain records.
 
     Verify if any of the provided database tables have at least one record. This is useful for determining if a database needs initialization or if it already contains data, which helps prevent unnecessary reindexing or rebuilding of the database.
 
     Args:
-        tables (list[Model]): List of Peewee Model classes representing database tables to check
+        tables (list[type[Model]]): List of Peewee Model classes representing database tables to check
 
     Returns:
         bool: True if any table contains at least one record, False if all tables are empty
@@ -90,13 +90,13 @@ def db_tables_have_data(tables: list[Model]) -> bool:
         raise
 
 
-def db_clear_table_data(tables: list[Model]) -> None:
+def db_clear_table_data(tables: list[type[Model]]) -> None:
     """Delete all records from specified database tables to reset their state.
 
     Clear all data from the provided Peewee ORM tables while maintaining the table structure. This is useful when rebuilding or reindexing the database, or when needing to start with a clean slate without dropping the tables themselves. Logs the number of records deleted from each table for auditing purposes.
 
     Args:
-        tables (list[Model]): List of Peewee Model classes representing database tables to clear.
+        tables (list[type[Model]]): List of Peewee Model classes representing database tables to clear.
             Each Model class should correspond to a table in the database.
 
     Raises:

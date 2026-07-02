@@ -82,7 +82,7 @@ def list_command(halp: Halp, cmd: ListCommand) -> None:
         raise cappa.Exit(code=0)
 
     table = command_table_view(
-        commands=results,
+        commands=list(results),
         full_output=cmd.full,
         show_categories=True,
         show_hidden=cmd.show_hidden,

@@ -1,6 +1,6 @@
 """Representation of a command."""
 
-from peewee import BooleanField, ForeignKeyField, Model, SqliteDatabase, TextField
+from peewee import AutoField, BooleanField, ForeignKeyField, Model, SqliteDatabase, TextField
 from rich.syntax import Syntax
 from rich.table import Table
 
@@ -31,6 +31,7 @@ class TempCommand(Model):
 class Command(Model):
     """Commands model."""
 
+    id = AutoField()  # Explicit PK so type checkers see Peewee's auto-created primary key
     code = TextField()
     command_type = TextField()  # CommandType enum value
     description = TextField(null=True)

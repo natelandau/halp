@@ -145,16 +145,16 @@ class Indexer:
             TempCommandCategory.is_custom == True  # noqa: E712
         )
 
-        for c in command_cats_to_persist:
+        for command_cat in command_cats_to_persist:
             command = Command.get_or_none(
-                (Command.name == c.command.name)
-                & (Command.code == c.command.code)
-                & (Command.file == c.command.file)
-                & (Command.description == c.command.description)
-                & (Command.hidden == c.command.hidden)
-                & (Command.has_custom_description == c.command.has_custom_description)
+                (Command.name == command_cat.command.name)
+                & (Command.code == command_cat.command.code)
+                & (Command.file == command_cat.command.file)
+                & (Command.description == command_cat.command.description)
+                & (Command.hidden == command_cat.command.hidden)
+                & (Command.has_custom_description == command_cat.command.has_custom_description)
             )
-            category = Category.get_or_none(name=c.category.name)
+            category = Category.get_or_none(name=command_cat.category.name)
 
             if not command or not category:
                 continue
@@ -167,7 +167,7 @@ class Indexer:
             # Add custom category
             CommandCategory.create(command=command, category=category, is_custom=True)
 
-            pp.trace(f"Persist custom category for: {c.command.name}")
+            pp.trace(f"Persist custom category for: {command_cat.command.name}")
 
         pp.debug("Merged old and new data")
 
