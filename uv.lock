@@ -97,16 +97,16 @@ wheels = [
 
 [[package]]
 name = "cappa"
-version = "0.32.1"
+version = "0.32.2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "rich" },
     { name = "type-lens" },
     { name = "typing-extensions" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/ef/6e/4e8d5723ae417a050ff2aa0c827c1d4044da1a422182e1fb20f303a0d60f/cappa-0.32.1.tar.gz", hash = "sha256:fc8c9cb98ee042580224f4d9f1bf05482d452c40b1c8f5aa7fb9c980870899f2", size = 360249, upload-time = "2026-06-09T19:57:11.834Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/29/7b/774e19eed22f97deee7c2f3eb66bf1e9709374ef510c7ef1e71dae1ba27e/cappa-0.32.2.tar.gz", hash = "sha256:933b411a186d41c5b2f983e6b06a36de8b19078dd6b66732e7895893908952c2", size = 361403, upload-time = "2026-07-27T17:53:32.472Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/85/c8/b156c2087c70f10c71ccc874c3e2cf484240775c818a006686553f61bd2a/cappa-0.32.1-py3-none-any.whl", hash = "sha256:a79236cc2e7068a04f8b16cfce090975b6dda5b26602dbf9d82a3c1d93ce5ae1", size = 77596, upload-time = "2026-06-09T19:57:10.655Z" },
+    { url = "https://files.pythonhosted.org/packages/5b/1e/8b1765e848adca77e79e0743078bb56866af68f77b5cd7dc8fd3a200f06e/cappa-0.32.2-py3-none-any.whl", hash = "sha256:2f07a0c76c598307423909e13beb5582ce8927edaf42dcb019593ffbb8b3a594", size = 77903, upload-time = "2026-07-27T17:53:31.093Z" },
 ]
 
 [[package]]
@@ -395,11 +395,11 @@ wheels = [
 
 [[package]]
 name = "dynaconf"
-version = "3.3.2"
+version = "3.3.3"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/2e/fa/351d165f6f9fe493a92a2e155f3097a4379dbe23e731b68543ce9988ee19/dynaconf-3.3.2.tar.gz", hash = "sha256:3b50232b774142702c3d4623633bcd76bb9951abf8567b7f1340d73a30a80899", size = 327805, upload-time = "2026-06-29T20:55:41.706Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/da/8e/79e2ab9718fa632b764ca08cf7321690819a01fad523e2b70cbd5591e99c/dynaconf-3.3.3.tar.gz", hash = "sha256:1740ca23ff9da042531f507f664cb5b79b0e5120b65f98b74e1387491b6d078a", size = 328391, upload-time = "2026-07-22T21:26:55.135Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/bb/7d/1e50069bb7d9774acbcb7d9509a4be95348e6476009f083d46cca67c5dbc/dynaconf-3.3.2-py3-none-any.whl", hash = "sha256:4bb8ac4222af0bb4315e3da40022c283ed140bafb80c36282a7973404a67cd8a", size = 270081, upload-time = "2026-06-29T20:55:40.066Z" },
+    { url = "https://files.pythonhosted.org/packages/bb/f3/8ddb29d4f710d3b2f67ed289f3c108ca10a4d3ed7574a424fe6a5c0295a3/dynaconf-3.3.3-py3-none-any.whl", hash = "sha256:1fc189416e7ddadc0c3bbebad8390d15219a68bb07d24d051478233f08f272a6", size = 270319, upload-time = "2026-07-22T21:26:53.511Z" },
 ]
 
 [[package]]
@@ -407,7 +407,7 @@ name = "exceptiongroup"
 version = "1.3.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "typing-extensions" },
+    { name = "typing-extensions", marker = "python_full_version < '3.13'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/50/79/66800aadf48771f6b62f7eb014e352e5d06856655206165d775e675a02c9/exceptiongroup-1.3.1.tar.gz", hash = "sha256:8b412432c6055b0b7d14c310000ae93352ed6754f70fa8f7c34141f91c4e3219", size = 30371, upload-time = "2025-11-21T23:01:54.787Z" }
 wheels = [
@@ -875,15 +875,15 @@ wheels = [
 
 [[package]]
 name = "nclutils"
-version = "3.4.1"
+version = "3.4.2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "questionary" },
     { name = "rich" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/59/66/6f5aa791e8f39b46494ab0430090f0c849e71f68cf05afae7738fcc1a21e/nclutils-3.4.1.tar.gz", hash = "sha256:f17bc807b9cd7ddac5634f13cfc0dd454b20e2ecf792a12b74778b7510ef273a", size = 60234, upload-time = "2026-05-12T18:20:34.886Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/61/94/a5cbb87784fd500cb5826c8e2b50c7887f5990c1c366cc8301690809ea01/nclutils-3.4.2.tar.gz", hash = "sha256:28d06c8d5ad5e1ac5235d11e7b63c00826febb056358852154692745f591ddb3", size = 60137, upload-time = "2026-07-09T14:33:20.125Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/84/ee/2ef40c27485320def8cd7ed4d982130ddc82208ce9b0785f0d3ff43c32f2/nclutils-3.4.1-py3-none-any.whl", hash = "sha256:0875da7d74710ca1c072b17f757c5abde82a7ab5d1848039db44bf0abbe46d98", size = 71278, upload-time = "2026-05-12T18:20:33.777Z" },
+    { url = "https://files.pythonhosted.org/packages/19/60/9084affcec03b9eaa61e85aad79991b7f2b9f3f38531a400fb62194768eb/nclutils-3.4.2-py3-none-any.whl", hash = "sha256:446cb46b166bc7f0fe791a286e7b4c3e9fdad56c23dc2c7810a00d1eae7ab0ca", size = 71363, upload-time = "2026-07-09T14:33:19.221Z" },
 ]
 
 [[package]]
@@ -915,11 +915,11 @@ wheels = [
 
 [[package]]
 name = "peewee"
-version = "4.1.1"
+version = "4.2.6"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/5d/bf/6bbce77d98d2239b0be427f1c41af039388b6288b93ac1ec0123479eda8a/peewee-4.1.1.tar.gz", hash = "sha256:6fb1782252046e088599ed005342d7db6d17d48cacea27bc3c9a74f04646224d", size = 772233, upload-time = "2026-06-28T13:52:49.638Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/2b/6d/45b139fba589e185dcee447414c2e0efaebb0a247c06329fdc9bd84ba4aa/peewee-4.2.6.tar.gz", hash = "sha256:f40655c64a62eaa447af228e4b84a5e80d3c812d2de34c7b9c621a3ef0c6555c", size = 779493, upload-time = "2026-07-17T18:11:21.3Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/a5/ab/fc0f2f735acb85aa1707b9bde9f21c2a9a64d3c80b5076c3b56c3865431e/peewee-4.1.1-py3-none-any.whl", hash = "sha256:f9a2d16463d5c9208ac7c6eb8aa64cddd98e2f4da8ced8983d4869d5202aa0ce", size = 170332, upload-time = "2026-06-28T13:52:48.166Z" },
+    { url = "https://files.pythonhosted.org/packages/c0/63/26ec789e68e994d64ed957dd6ee5a08bb78c2f401c40e46fc142669cd8b0/peewee-4.2.6-py3-none-any.whl", hash = "sha256:b54c0f6e09c987465f8268bb2b4c1cba2e1b2788fcc0974c8e2233af1fd5af8f", size = 173774, upload-time = "2026-07-17T18:11:19.787Z" },
 ]
 
 [[package]]
@@ -1248,11 +1248,11 @@ wheels = [
 
 [[package]]
 name = "sh"
-version = "2.3.0"
+version = "2.4.0"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/fa/56/6cedf4704590ac9c8ab57089ffa95895c21e82499981008ad369c43c9cc4/sh-2.3.0.tar.gz", hash = "sha256:402af9087bf8a5557562913ca83d715bfa0646cb93865c5d60c5578b07b17871", size = 135995, upload-time = "2026-06-09T04:22:34.431Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/e9/c8/137093889a8b8c9a66c9b46079cf2a0e155a8be027df212a4041e3b7b09c/sh-2.4.0.tar.gz", hash = "sha256:a250aef68509ed93419c9a1d90b0647cd5cbe26107ba94d3717ef5b6d595ffd9", size = 136950, upload-time = "2026-07-25T21:44:42.705Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/47/85/d06247fc88ba278227397da5604287e4762f130347dc968f6d205eb15ee6/sh-2.3.0-py3-none-any.whl", hash = "sha256:9b9c51f988fa91ba09e2a78edc48810d0b5a34c8cf383408e4e8c4352169f26e", size = 48045, upload-time = "2026-06-09T04:22:33.069Z" },
+    { url = "https://files.pythonhosted.org/packages/23/dd/6b9aceecddbb3df894003d6a5005bd90bce3cf4743c28c406ebecc8d80f6/sh-2.4.0-py3-none-any.whl", hash = "sha256:98eba32eeb5ecdd310668737d7461e668afc42b273550d0bc198a1c5c2b1ab36", size = 48619, upload-time = "2026-07-25T21:44:41.216Z" },
 ]
 
 [[package]]
