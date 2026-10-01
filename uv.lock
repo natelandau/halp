@@ -97,16 +97,16 @@ wheels = [
 
 [[package]]
 name = "cappa"
-version = "0.32.1"
+version = "0.32.2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "rich" },
     { name = "type-lens" },
     { name = "typing-extensions" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/ef/6e/4e8d5723ae417a050ff2aa0c827c1d4044da1a422182e1fb20f303a0d60f/cappa-0.32.1.tar.gz", hash = "sha256:fc8c9cb98ee042580224f4d9f1bf05482d452c40b1c8f5aa7fb9c980870899f2", size = 360249, upload-time = "2026-06-09T19:57:11.834Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/29/7b/774e19eed22f97deee7c2f3eb66bf1e9709374ef510c7ef1e71dae1ba27e/cappa-0.32.2.tar.gz", hash = "sha256:933b411a186d41c5b2f983e6b06a36de8b19078dd6b66732e7895893908952c2", size = 361403, upload-time = "2026-07-27T17:53:32.472Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/85/c8/b156c2087c70f10c71ccc874c3e2cf484240775c818a006686553f61bd2a/cappa-0.32.1-py3-none-any.whl", hash = "sha256:a79236cc2e7068a04f8b16cfce090975b6dda5b26602dbf9d82a3c1d93ce5ae1", size = 77596, upload-time = "2026-06-09T19:57:10.655Z" },
+    { url = "https://files.pythonhosted.org/packages/5b/1e/8b1765e848adca77e79e0743078bb56866af68f77b5cd7dc8fd3a200f06e/cappa-0.32.2-py3-none-any.whl", hash = "sha256:2f07a0c76c598307423909e13beb5582ce8927edaf42dcb019593ffbb8b3a594", size = 77903, upload-time = "2026-07-27T17:53:31.093Z" },
 ]
 
 [[package]]
@@ -395,11 +395,11 @@ wheels = [
 
 [[package]]
 name = "dynaconf"
-version = "3.3.2"
+version = "3.3.5"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/2e/fa/351d165f6f9fe493a92a2e155f3097a4379dbe23e731b68543ce9988ee19/dynaconf-3.3.2.tar.gz", hash = "sha256:3b50232b774142702c3d4623633bcd76bb9951abf8567b7f1340d73a30a80899", size = 327805, upload-time = "2026-06-29T20:55:41.706Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/71/e4/723ba469856bb493c948985e5bd562c8a65f2b93e70c896e9764ab76de00/dynaconf-3.3.5.tar.gz", hash = "sha256:a08f6ab44025034ef3c9f86b32548ab01efd4039094a74bd9f028a43c63d016f", size = 333426, upload-time = "2026-08-05T19:50:25.16Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/bb/7d/1e50069bb7d9774acbcb7d9509a4be95348e6476009f083d46cca67c5dbc/dynaconf-3.3.2-py3-none-any.whl", hash = "sha256:4bb8ac4222af0bb4315e3da40022c283ed140bafb80c36282a7973404a67cd8a", size = 270081, upload-time = "2026-06-29T20:55:40.066Z" },
+    { url = "https://files.pythonhosted.org/packages/95/41/b38501c34c40c3261868a2af8ed5fffe3e6d889c680638708de27eb57788/dynaconf-3.3.5-py3-none-any.whl", hash = "sha256:b3b4a753d5c866fc85466b65fc58d4954f6ed7dc8aa67f2b15bcbfd85d184687", size = 271426, upload-time = "2026-08-05T19:50:23.802Z" },
 ]
 
 [[package]]
@@ -875,15 +875,15 @@ wheels = [
 
 [[package]]
 name = "nclutils"
-version = "3.4.1"
+version = "3.4.4"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "questionary" },
     { name = "rich" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/59/66/6f5aa791e8f39b46494ab0430090f0c849e71f68cf05afae7738fcc1a21e/nclutils-3.4.1.tar.gz", hash = "sha256:f17bc807b9cd7ddac5634f13cfc0dd454b20e2ecf792a12b74778b7510ef273a", size = 60234, upload-time = "2026-05-12T18:20:34.886Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/7e/f0/95349210d681bc1a36e188cbb1e1763c5334e819f0939da065fc38712a2d/nclutils-3.4.4.tar.gz", hash = "sha256:51caa14b9db06fe4097a8a7ca463dee05c51d40e5b6d5425e7717763452acad2", size = 62085, upload-time = "2026-08-15T13:26:23.374Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/84/ee/2ef40c27485320def8cd7ed4d982130ddc82208ce9b0785f0d3ff43c32f2/nclutils-3.4.1-py3-none-any.whl", hash = "sha256:0875da7d74710ca1c072b17f757c5abde82a7ab5d1848039db44bf0abbe46d98", size = 71278, upload-time = "2026-05-12T18:20:33.777Z" },
+    { url = "https://files.pythonhosted.org/packages/21/ef/f1ffddfb00ed54ebc05dbb0843d342ab98695ca962e20f085901db3daa48/nclutils-3.4.4-py3-none-any.whl", hash = "sha256:0183795883b2b35523e3746a151fb8dc296323c663fa093a2ed52b85a04d93c7", size = 72732, upload-time = "2026-08-15T13:26:22.158Z" },
 ]
 
 [[package]]
@@ -915,11 +915,11 @@ wheels = [
 
 [[package]]
 name = "peewee"
-version = "4.1.1"
+version = "4.5.2"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/5d/bf/6bbce77d98d2239b0be427f1c41af039388b6288b93ac1ec0123479eda8a/peewee-4.1.1.tar.gz", hash = "sha256:6fb1782252046e088599ed005342d7db6d17d48cacea27bc3c9a74f04646224d", size = 772233, upload-time = "2026-06-28T13:52:49.638Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/38/84/bd871d2a3d8a7a1eac8cdb586aacd9e89c52f57cc360c1e565cb52433f66/peewee-4.5.2.tar.gz", hash = "sha256:10724cf1a6bda2bcdc4da17c376e6ed1d875f16dcabbb42594123cba1304d598", size = 823227, upload-time = "2026-09-27T19:20:13.562Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/a5/ab/fc0f2f735acb85aa1707b9bde9f21c2a9a64d3c80b5076c3b56c3865431e/peewee-4.1.1-py3-none-any.whl", hash = "sha256:f9a2d16463d5c9208ac7c6eb8aa64cddd98e2f4da8ced8983d4869d5202aa0ce", size = 170332, upload-time = "2026-06-28T13:52:48.166Z" },
+    { url = "https://files.pythonhosted.org/packages/c7/9d/7ce9daf923fbe2a61069a7ffc8907f1207d667bb04169f0a97fa049be41e/peewee-4.5.2-py3-none-any.whl", hash = "sha256:a7765c76834c84799b533aeaa0afeebdcd123b894faefbcebe495fbf4c7548ba", size = 194163, upload-time = "2026-09-27T19:20:11.977Z" },
 ]
 
 [[package]]
@@ -1239,20 +1239,20 @@ wheels = [
 
 [[package]]
 name = "semver"
-version = "3.0.4"
+version = "3.1.0"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/72/d1/d3159231aec234a59dd7d601e9dd9fe96f3afff15efd33c1070019b26132/semver-3.0.4.tar.gz", hash = "sha256:afc7d8c584a5ed0a11033af086e8af226a9c0b206f313e0301f8dd7b6b589602", size = 269730, upload-time = "2025-01-24T13:19:27.617Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/92/f5/e1dfe8e1d91c54ce212fd93916eb01fd1c590f413be0a0978c39a97aa1bb/semver-3.1.0.tar.gz", hash = "sha256:14bc073439513d7773662a338f4db9829cf16c12b74b9568e2d2689975fbd7fc", size = 304162, upload-time = "2026-09-12T18:38:14.045Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/a6/24/4d91e05817e92e3a61c8a21e08fd0f390f5301f1c448b137c57c4bc6e543/semver-3.0.4-py3-none-any.whl", hash = "sha256:9c824d87ba7f7ab4a1890799cec8596f15c1241cb473404ea1cb0c55e4b04746", size = 17912, upload-time = "2025-01-24T13:19:24.949Z" },
+    { url = "https://files.pythonhosted.org/packages/be/02/bce7a1d70e9d0f6ea8623c16386138c251b5855af6cd3a11433d3fba4e66/semver-3.1.0-py3-none-any.whl", hash = "sha256:6e4998f8b4762acdfea85f9bfd5b4032e0bb50038dc04bf82011b42d5d1145c5", size = 18783, upload-time = "2026-09-12T18:38:12.457Z" },
 ]
 
 [[package]]
 name = "sh"
-version = "2.3.0"
+version = "2.4.0"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/fa/56/6cedf4704590ac9c8ab57089ffa95895c21e82499981008ad369c43c9cc4/sh-2.3.0.tar.gz", hash = "sha256:402af9087bf8a5557562913ca83d715bfa0646cb93865c5d60c5578b07b17871", size = 135995, upload-time = "2026-06-09T04:22:34.431Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/e9/c8/137093889a8b8c9a66c9b46079cf2a0e155a8be027df212a4041e3b7b09c/sh-2.4.0.tar.gz", hash = "sha256:a250aef68509ed93419c9a1d90b0647cd5cbe26107ba94d3717ef5b6d595ffd9", size = 136950, upload-time = "2026-07-25T21:44:42.705Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/47/85/d06247fc88ba278227397da5604287e4762f130347dc968f6d205eb15ee6/sh-2.3.0-py3-none-any.whl", hash = "sha256:9b9c51f988fa91ba09e2a78edc48810d0b5a34c8cf383408e4e8c4352169f26e", size = 48045, upload-time = "2026-06-09T04:22:33.069Z" },
+    { url = "https://files.pythonhosted.org/packages/23/dd/6b9aceecddbb3df894003d6a5005bd90bce3cf4743c28c406ebecc8d80f6/sh-2.4.0-py3-none-any.whl", hash = "sha256:98eba32eeb5ecdd310668737d7461e668afc42b273550d0bc198a1c5c2b1ab36", size = 48619, upload-time = "2026-07-25T21:44:41.216Z" },
 ]
 
 [[package]]
