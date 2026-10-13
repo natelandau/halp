@@ -2,18 +2,17 @@
 # Find full documentation at: https://yamllint.readthedocs.io/en/stable/index.html
 extends: default
 
-ignore: |
-  .venv
+ignore-from-file: .gitignore
 
 rules:
   braces:
     level: error
     max-spaces-inside: 1
-    min-spaces-inside: 1
+    min-spaces-inside: 0
   brackets:
     level: error
     max-spaces-inside: 1
-    min-spaces-inside: 1
+    min-spaces-inside: 0
   comments-indentation: disable
   comments:
     min-spaces-from-content: 1
@@ -29,7 +28,7 @@ rules:
       - "^http://"
       - "^https://"
       - "ftp://"
-      - "ssh \\w.*"
+      - 'ssh \w.*'
   truthy:
     level: error
     check-keys: false

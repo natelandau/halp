@@ -1,7 +1,7 @@
 """Constants for halper."""
 
 import os
-from enum import Enum
+from enum import Enum, StrEnum
 from pathlib import Path
 
 PACKAGE_NAME = "halp"
@@ -33,7 +33,7 @@ class PrintLevel(Enum):
     TRACE = 2
 
 
-class CommandType(str, Enum):
+class CommandType(StrEnum):
     """Command types for halp."""
 
     ALIAS = "alias"
@@ -42,7 +42,7 @@ class CommandType(str, Enum):
     EXPORT = "export"
 
 
-class CommentPlacement(str, Enum):
+class CommentPlacement(StrEnum):
     """Comment placement for halp."""
 
     ABOVE = "above"
