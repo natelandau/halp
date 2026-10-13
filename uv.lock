@@ -517,7 +517,7 @@ wheels = [
 
 [[package]]
 name = "halper"
-version = "2.0.4"
+version = "3.0.0"
 source = { editable = "." }
 dependencies = [
     { name = "cappa" },

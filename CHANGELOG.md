@@ -1,3 +1,13 @@
+## v3.0.0 (2026-10-13)
+
+### BREAKING CHANGE
+
+- Python 3.10 is end of life and support for it has been dropped
+
+### Feat
+
+- support python 3.15 and drop 3.10 (#65)
+
 ## v2.0.4 (2026-05-07)
 
 ### Fix
